@@ -1,5 +1,5 @@
 {
-  "name": "core-m2",
+  "name": "mageplaza/core-m2",
   "description": "Mageplaza Core M2",
   "require": {
     "php": "~5.5.0|~5.6.0|~7.0.0"
