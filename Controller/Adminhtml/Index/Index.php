@@ -50,6 +50,6 @@ class Index extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Mageplaza_Core::index');
+        return $this->_authorization->isAllowed('Mageplaza_Core::partners');
     }
 }

@@ -13,8 +13,7 @@
  *                     @copyright Copyright (c) 2016
  *                     @license   https://www.mageplaza.com/LICENSE.txt Mageplaza License
  */
-?>
-<?php
+
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
     'Mageplaza_Core',

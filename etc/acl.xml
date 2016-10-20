@@ -19,14 +19,12 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Mageplaza_Core::partners" title="Mageplaza Partners" />
-                <resource id="Magento_Backend::stores">
-                    <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_Config::config">
-                            <resource id="Mageplaza_Core::setting" title="Mageplaza Settings"/>
-                        </resource>
+                <resource id="Mageplaza_Core::menu" title="Mageplaza Extensions" sortOrder="50" >
+                    <resource id="Mageplaza_Core::documentation" title="Documentations" sortOrder="50" >
+                        <resource id="Mageplaza_Core::userguide" title="User Guides" sortOrder="50" />
                     </resource>
                 </resource>
+                <resource id="Mageplaza_Core::partners" title="Mageplaza Partners" sortOrder="10"/>
             </resource>
         </resources>
     </acl>

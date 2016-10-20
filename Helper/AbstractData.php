@@ -33,10 +33,8 @@ class AbstractData extends AbstractHelper
 		);
 	}
 
-
 	public function getCurrentUrl(){
 		$model=$this->objectManager->get('Magento\Framework\UrlInterface');
 		return $model->getCurrentUrl();
 	}
-
 }
