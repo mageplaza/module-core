@@ -10,31 +10,32 @@ use Magento\Store\Model\ScopeInterface;
 
 class AbstractData extends AbstractHelper
 {
-	protected $storeManager;
-	protected $objectManager;
+    protected $storeManager;
+    protected $objectManager;
 
-	public function __construct(
-		Context $context,
-		ObjectManagerInterface $objectManager,
-		StoreManagerInterface $storeManager
-	)
-	{
-		$this->objectManager   = $objectManager;
-		$this->storeManager    = $storeManager;
-		parent::__construct($context);
-	}
+    public function __construct(
+        Context $context,
+        ObjectManagerInterface $objectManager,
+        StoreManagerInterface $storeManager
+    ) {
+    
+        $this->objectManager   = $objectManager;
+        $this->storeManager    = $storeManager;
+        parent::__construct($context);
+    }
 
-	public function getConfigValue($field, $storeId = null)
-	{
-		return $this->scopeConfig->getValue(
-			$field,
-			ScopeInterface::SCOPE_STORE,
-			$storeId
-		);
-	}
+    public function getConfigValue($field, $storeId = null)
+    {
+        return $this->scopeConfig->getValue(
+            $field,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+    }
 
-	public function getCurrentUrl(){
-		$model=$this->objectManager->get('Magento\Framework\UrlInterface');
-		return $model->getCurrentUrl();
-	}
+    public function getCurrentUrl()
+    {
+        $model=$this->objectManager->get('Magento\Framework\UrlInterface');
+        return $model->getCurrentUrl();
+    }
 }

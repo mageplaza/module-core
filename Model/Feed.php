@@ -25,5 +25,4 @@ class Feed extends \Magento\AdminNotification\Model\Feed
         $this->_cacheManager->save(time(), 'mageplaza_notifications_lastcheck');
         return $this;
     }
-
 }
