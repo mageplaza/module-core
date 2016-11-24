@@ -12,14 +12,8 @@ var config = {
         }
     },
     shim: {
-        "mageplaza/core/jquery/popup": {
-            "deps": ["jquery"]
-        },
-        "mageplaza/core/owl.carousel": {
-            "deps": ["jquery"]
-        },
-        "mageplaza/core/bootstrap": {
-            "deps": ["jquery"]
-        }
+        "mageplaza/core/jquery/popup": ["jquery"],
+        "mageplaza/core/owl.carousel": ["jquery"],
+        "mageplaza/core/bootstrap": ["jquery"]
     }
 };
