@@ -28,6 +28,7 @@ class Userguide extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->getResultPageFactory()->create();
         return $resultPage;
+
     }
 
     /**
