@@ -19,8 +19,8 @@ class AbstractData extends AbstractHelper
 		StoreManagerInterface $storeManager
 	)
 	{
-		$this->objectManager   = $objectManager;
-		$this->storeManager    = $storeManager;
+		$this->objectManager = $objectManager;
+		$this->storeManager  = $storeManager;
 		parent::__construct($context);
 	}
 
@@ -33,8 +33,20 @@ class AbstractData extends AbstractHelper
 		);
 	}
 
-	public function getCurrentUrl(){
-		$model=$this->objectManager->get('Magento\Framework\UrlInterface');
+	public function getCurrentUrl()
+	{
+		$model = $this->objectManager->get('Magento\Framework\UrlInterface');
+
 		return $model->getCurrentUrl();
+	}
+
+	public function createObject($path, $arguments = [])
+	{
+		return $this->objectManager->create($path, $arguments);
+	}
+
+	public function getObject($path)
+	{
+		return $this->objectManager->get($path);
 	}
 }
