@@ -10,6 +10,8 @@ use Magento\Store\Model\ScopeInterface;
 
 class AbstractData extends AbstractHelper
 {
+	protected $_data = [];
+
 	protected $storeManager;
 	protected $objectManager;
 
@@ -31,6 +33,22 @@ class AbstractData extends AbstractHelper
 			ScopeInterface::SCOPE_STORE,
 			$storeId
 		);
+	}
+
+	public function setData($name, $value)
+	{
+		$this->_data[$name] = $value;
+
+		return $this;
+	}
+
+	public function getData($name)
+	{
+		if (array_key_exists($name, $this->_data)) {
+			return $this->_data[$name];
+		}
+
+		return null;
 	}
 
 	public function getCurrentUrl()
