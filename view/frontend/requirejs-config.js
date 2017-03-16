@@ -4,12 +4,10 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            'mageplaza/core/jquery/popup': 'Mageplaza_Core/js/jquery.magnific-popup.min',
-            'mageplaza/core/owl.carousel': 'Mageplaza_Core/js/owl.carousel.min',
-            'mageplaza/core/bootstrap': 'Mageplaza_Core/js/bootstrap.min'
-        }
+    paths: {
+        'mageplaza/core/jquery/popup': 'Mageplaza_Core/js/jquery.magnific-popup.min',
+        'mageplaza/core/owl.carousel': 'Mageplaza_Core/js/owl.carousel.min',
+        'mageplaza/core/bootstrap': 'Mageplaza_Core/js/bootstrap.min'
     },
     shim: {
         "mageplaza/core/jquery/popup": ["jquery"],
