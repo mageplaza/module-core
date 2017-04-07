@@ -1,19 +1,35 @@
 <?php
 /**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Mageplaza\Core\Block\Adminhtml\System\Config;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-
+/**
+ * Class Head
+ * @package Mageplaza\Core\Block\Adminhtml\System\Config
+ */
 class Head extends \Magento\Config\Block\System\Config\Form\Field
 {
-
-
+	/**
+	 * @param \Magento\Backend\Block\Template\Context $context
+	 * @param array $data
+	 */
 	public function __construct(
 		\Magento\Backend\Block\Template\Context $context,
 		array $data = []
@@ -39,14 +55,12 @@ class Head extends \Magento\Config\Block\System\Config\Form\Field
 	 */
 	public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
 	{
-
 		$html = '';
 		if ($element->getComment()) {
 			$html .= '<div style="margin: auto; width: 40%;padding: 10px;">' . $element->getComment() . '</div>';
 		}
 
 		return $html;
-		
 	}
 
 	/**
