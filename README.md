@@ -3,7 +3,7 @@
 ## How to install Mageplaza_Core
 
 
-## Install via composer
+#### Install via composer
 
 Run the following command in Magento 2 root folder
 
