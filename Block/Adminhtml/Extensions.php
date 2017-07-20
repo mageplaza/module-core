@@ -67,11 +67,12 @@ class Extensions extends \Magento\Framework\View\Element\Template
 
 	public function getAvailableModules()
 	{
+		$url = 'https://www.mageplaza.com/api/getVersions.json';
 	    $result = $this->_cache->load('mageplaza_extensions');
 	    if ($result)
 	    {
 	    	try {
-	    		$jsonData = file_get_contents('https://www.mageplaza.com/api/getVersions.json');
+	    		$jsonData = file_get_contents($url);
 	    	} catch (\Exception $e) {
 	            return false;
 	        }
