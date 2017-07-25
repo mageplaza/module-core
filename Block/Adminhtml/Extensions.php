@@ -38,20 +38,14 @@ class Extensions extends \Magento\Framework\View\Element\Template
 	 * @param moduleList $moduleList
 	 */
 
-	/**
-	 * @var \Magento\Framework\App\CacheInterface
-	 */
-	protected $cache;
 
 	public function __construct(
 		\Magento\Framework\View\Element\Template\Context $context,
 		\Magento\Framework\Module\FullModuleList $moduleList,
-		\Magento\Framework\App\CacheInterface $cache,
 		array $data = []
 	) {
 		parent::__construct($context, $data);
 		$this->moduleList = $moduleList;
-		$this->cache = $cache;
 	}
 
 	public function getInstalledModules()
