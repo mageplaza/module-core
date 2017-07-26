@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Core\Controller\Adminhtml\Index;
 
 /**
@@ -26,6 +27,11 @@ namespace Mageplaza\Core\Controller\Adminhtml\Index;
  */
 class Userguide extends \Magento\Backend\App\Action
 {
+	/**
+	 * Authorization level of a basic admin session
+	 */
+	const ADMIN_RESOURCE = 'Mageplaza_Core::userguide';
+
 	/**
 	 * @var \Magento\Framework\View\Result\PageFactory
 	 */
@@ -51,16 +57,5 @@ class Userguide extends \Magento\Backend\App\Action
 		$resultPage = $this->resultPageFactory->create();
 
 		return $resultPage;
-
-	}
-
-	/**
-	 * Check for is allowed
-	 *
-	 * @return boolean
-	 */
-	protected function _isAllowed()
-	{
-		return $this->_authorization->isAllowed('Mageplaza_Core::userguide');
 	}
 }

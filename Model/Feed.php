@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Core\Model;
 
 /**
@@ -26,38 +27,40 @@ namespace Mageplaza\Core\Model;
  */
 class Feed extends \Magento\AdminNotification\Model\Feed
 {
-    /**
-     * @inheritdoc
-     */
-    const MAGEPLAZA_FEED_URL = 'www.mageplaza.com/notifications.xml';
+	/**
+	 * @inheritdoc
+	 */
+	const MAGEPLAZA_FEED_URL = 'www.mageplaza.com/notifications.xml';
 
-    /**
-     * @inheritdoc
-     */
-    public function getFeedUrl()
-    {
-        $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
-        if ($this->_feedUrl === null) {
-            $this->_feedUrl = $httpPath . self::MAGEPLAZA_FEED_URL;
-        }
-        return $this->_feedUrl;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function getFeedUrl()
+	{
+		$httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
+		if ($this->_feedUrl === null) {
+			$this->_feedUrl = $httpPath . self::MAGEPLAZA_FEED_URL;
+		}
 
-    /**
-     * @inheritdoc
-     */
-    public function getLastUpdate()
-    {
-        return $this->_cacheManager->load('mageplaza_notifications_lastcheck');
-    }
+		return $this->_feedUrl;
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function setLastUpdate()
-    {
-        $this->_cacheManager->save(time(), 'mageplaza_notifications_lastcheck');
-        return $this;
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function getLastUpdate()
+	{
+		return $this->_cacheManager->load('mageplaza_notifications_lastcheck');
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function setLastUpdate()
+	{
+		$this->_cacheManager->save(time(), 'mageplaza_notifications_lastcheck');
+
+		return $this;
+	}
 
 }

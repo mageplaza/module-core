@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Core\Block\Adminhtml\System\Config;
 
 /**
@@ -26,27 +27,6 @@ namespace Mageplaza\Core\Block\Adminhtml\System\Config;
  */
 class Head extends \Magento\Config\Block\System\Config\Form\Field
 {
-	/**
-	 * @param \Magento\Backend\Block\Template\Context $context
-	 * @param array $data
-	 */
-	public function __construct(
-		\Magento\Backend\Block\Template\Context $context,
-		array $data = []
-	) {
-		parent::__construct($context, $data);
-	}
-
-	/**
-	 * Set template
-	 *
-	 * @return void
-	 */
-	protected function _construct()
-	{
-		parent::_construct();
-	}
-
 	/**
 	 * Render text
 	 *

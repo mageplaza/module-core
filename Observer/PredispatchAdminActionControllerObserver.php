@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Core\Observer;
 
 use Magento\Framework\Event\ObserverInterface;

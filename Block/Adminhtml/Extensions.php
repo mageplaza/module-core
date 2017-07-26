@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Core\Block\Adminhtml;
 
 /**
@@ -26,60 +27,66 @@ namespace Mageplaza\Core\Block\Adminhtml;
 class Extensions extends \Magento\Framework\View\Element\Template
 {
 	/**
-	 * @param \Magento\Framework\View\Element\Template\Context $context
-	 * @param array $data
+	 * @var \Magento\Framework\Module\FullModuleList
 	 */
-
 	private $moduleList;
-
-	/**
-	 * Inject dependencies
-	 *
-	 * @param moduleList $moduleList
-	 */
 
 	/**
 	 * @var \Magento\Framework\App\CacheInterface
 	 */
-	protected $cache;
+	protected $_cache;
 
+	/**
+	 * Extensions constructor.
+	 * @param \Magento\Framework\View\Element\Template\Context $context
+	 * @param \Magento\Framework\Module\FullModuleList $moduleList
+	 * @param array $data
+	 */
 	public function __construct(
 		\Magento\Framework\View\Element\Template\Context $context,
 		\Magento\Framework\Module\FullModuleList $moduleList,
-		\Magento\Framework\App\CacheInterface $cache,
 		array $data = []
-	) {
+	)
+	{
 		parent::__construct($context, $data);
+
 		$this->moduleList = $moduleList;
-		$this->cache = $cache;
+		$this->_cache     = $context->getCache();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getInstalledModules()
 	{
 		$mageplza_modules = array();
 		foreach ($this->moduleList->getAll() as $moduleName => $info) {
-		 if (strpos($moduleName, 'Mageplaza') !== FALSE) {
-		 	$mageplza_modules[$moduleName] = $info['setup_version'];
-		 }
+			if (strpos($moduleName, 'Mageplaza') !== false) {
+				$mageplza_modules[$moduleName] = $info['setup_version'];
+			}
 		}
+
 		return $mageplza_modules;
 	}
 
+	/**
+	 * @return bool|mixed|string
+	 */
 	public function getAvailableModules()
 	{
-		$url = 'https://www.mageplaza.com/api/getVersions.json';
-	    $result = $this->_cache->load('mageplaza_extensions');
-	    if ($result)
-	    {
-	    	try {
-	    		$jsonData = file_get_contents($url);
-	    	} catch (\Exception $e) {
-	            return false;
-	        }
-	        $this->_cache->save($jsonData, 'mageplaza_extensions');
-	        $result = $this->_cache->load('mageplaza_extensions');
-	    }
-	    $result = json_decode($result, true); //true return array otherwise object
-	    return $result;
+		$url    = 'https://www.mageplaza.com/api/getVersions.json';
+		$result = $this->_cache->load('mageplaza_extensions');
+		if ($result) {
+			try {
+				$jsonData = file_get_contents($url);
+			} catch (\Exception $e) {
+				return false;
+			}
+			$this->_cache->save($jsonData, 'mageplaza_extensions');
+			$result = $this->_cache->load('mageplaza_extensions');
+		}
+		$result = json_decode($result, true); //true return array otherwise object
+
+		return $result;
 	}
 }
