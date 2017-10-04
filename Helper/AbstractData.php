@@ -22,6 +22,7 @@
 namespace Mageplaza\Core\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Helper\Context;
@@ -47,6 +48,11 @@ class AbstractData extends AbstractHelper
 	 * @type \Magento\Framework\ObjectManagerInterface
 	 */
 	protected $objectManager;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    protected static $_jsonHelper;
 
 	/**
 	 * @param \Magento\Framework\App\Helper\Context $context
@@ -113,6 +119,53 @@ class AbstractData extends AbstractHelper
 
 		return $model->getCurrentUrl();
 	}
+
+    /**
+     * @return \Magento\Framework\Json\Helper\Data|mixed
+     */
+    public static function getJsonHelper()
+    {
+        if (!self::$_jsonHelper) {
+            self::$_jsonHelper = ObjectManager::getInstance()->get(\Magento\Framework\Json\Helper\Data::class);
+        }
+
+        return self::$_jsonHelper;
+    }
+
+    /**
+     * Encode the mixed $valueToEncode into the JSON format
+     *
+     * @param mixed $valueToEncode
+     * @return string
+     */
+    public static function jsonEncode($valueToEncode)
+    {
+        try {
+            $encodeValue = self::getJsonHelper()->jsonEncode($valueToEncode);
+        } catch (\Exception $e) {
+            $encodeValue = '{}';
+        }
+
+        return $encodeValue;
+    }
+
+    /**
+     * Decodes the given $encodedValue string which is
+     * encoded in the JSON format
+     *
+     * @param string $encodedValue
+     * @return mixed
+     */
+    public static function jsonDecode($encodedValue)
+    {
+        try {
+            $decodeValue = self::getJsonHelper()->jsonDecode($encodedValue);
+        } catch (\Exception $e) {
+            $decodeValue = [];
+        }
+
+        return $decodeValue;
+    }
 
 	/**
 	 * @param $path
