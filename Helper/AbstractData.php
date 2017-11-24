@@ -21,12 +21,16 @@
 
 namespace Mageplaza\Core\Helper;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class AbstractData
@@ -34,6 +38,8 @@ use Magento\Store\Model\ScopeInterface;
  */
 class AbstractData extends AbstractHelper
 {
+    const CONFIG_MODULE_PATH = 'core';
+
     /**
      * @type array
      */
@@ -86,6 +92,27 @@ class AbstractData extends AbstractHelper
     }
 
     /**
+     * @param null $storeId
+     * @return bool
+     */
+    public function isEnabled($storeId = null)
+    {
+        return $this->getGeneralConfig('enable', $storeId) && $this->isModuleOutputEnabled();
+    }
+
+    /**
+     * @param string $code
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getGeneralConfig($code = '', $storeId = null)
+    {
+        $code = ($code !== '') ? '/' . $code : '';
+
+        return $this->getConfigValue(static::CONFIG_MODULE_PATH . '/general' . $code, $storeId);
+    }
+
+    /**
      * @param $name
      * @param $value
      * @return $this
@@ -115,7 +142,7 @@ class AbstractData extends AbstractHelper
      */
     public function getCurrentUrl()
     {
-        $model = $this->objectManager->get('Magento\Framework\UrlInterface');
+        $model = $this->objectManager->get(UrlInterface::class);
 
         return $model->getCurrentUrl();
     }
@@ -126,7 +153,7 @@ class AbstractData extends AbstractHelper
     public static function getJsonHelper()
     {
         if (!self::$_jsonHelper) {
-            self::$_jsonHelper = ObjectManager::getInstance()->get(\Magento\Framework\Json\Helper\Data::class);
+            self::$_jsonHelper = ObjectManager::getInstance()->get(JsonHelper::class);
         }
 
         return self::$_jsonHelper;
@@ -200,10 +227,23 @@ class AbstractData extends AbstractHelper
      */
     public function versionCompare($ver)
     {
-        $productMetadata = $this->objectManager->get(\Magento\Framework\App\ProductMetadataInterface::class);
+        $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
         $version         = $productMetadata->getVersion(); //will return the magento version
 
         return version_compare($version, $ver, '>=');
+    }
+
+    /**
+     * Is Admin Store
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        /** @var \Magento\Framework\App\State $state */
+        $state = $this->objectManager->get('Magento\Framework\App\State');
+
+        return $state->getAreaCode() == Area::AREA_ADMINHTML;
     }
 
     /**
