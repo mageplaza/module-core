@@ -21,72 +21,98 @@
 
 namespace Mageplaza\Core\Block\Adminhtml;
 
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\Module\FullModuleList;
+use Magento\Framework\View\Element\Template\Context;
+
 /**
  * Class Extensions
  */
 class Extensions extends \Magento\Framework\View\Element\Template
 {
-	/**
-	 * @var \Magento\Framework\Module\FullModuleList
-	 */
-	private $moduleList;
+    /**
+     * Cache group Tag
+     */
+    const CACHE_GROUP = Config::TYPE_IDENTIFIER;
 
-	/**
-	 * @var \Magento\Framework\App\CacheInterface
-	 */
-	protected $_cache;
+    /**
+     * Prefix for cache key of block
+     */
+    const CACHE_KEY_PREFIX = 'MAGEPLAZA_';
 
-	/**
-	 * Extensions constructor.
-	 * @param \Magento\Framework\View\Element\Template\Context $context
-	 * @param \Magento\Framework\Module\FullModuleList $moduleList
-	 * @param array $data
-	 */
-	public function __construct(
-		\Magento\Framework\View\Element\Template\Context $context,
-		\Magento\Framework\Module\FullModuleList $moduleList,
-		array $data = []
-	)
-	{
-		parent::__construct($context, $data);
+    /**
+     * Cache tag
+     */
+    const CACHE_TAG = 'extensions';
 
-		$this->moduleList = $moduleList;
-		$this->_cache     = $context->getCache();
-	}
+    /**
+     * Mageplaza api url to get extension json
+     */
+    const API_URL = 'https://www.mageplaza.com/api/getVersions.json';
 
-	/**
-	 * @return array
-	 */
-	public function getInstalledModules()
-	{
-		$mageplza_modules = array();
-		foreach ($this->moduleList->getAll() as $moduleName => $info) {
-			if (strpos($moduleName, 'Mageplaza') !== false) {
-				$mageplza_modules[$moduleName] = $info['setup_version'];
-			}
-		}
+    /**
+     * @var string
+     */
+    protected $_template = 'extensions.phtml';
 
-		return $mageplza_modules;
-	}
+    /**
+     * @var \Magento\Framework\Module\FullModuleList
+     */
+    private $moduleList;
 
-	/**
-	 * @return bool|mixed|string
-	 */
-	public function getAvailableModules()
-	{
-		$url    = 'https://www.mageplaza.com/api/getVersions.json';
-		$result = $this->_cache->load('mageplaza_extensions');
-		if ($result) {
-			try {
-				$jsonData = file_get_contents($url);
-			} catch (\Exception $e) {
-				return false;
-			}
-			$this->_cache->save($jsonData, 'mageplaza_extensions');
-			$result = $this->_cache->load('mageplaza_extensions');
-		}
-		$result = json_decode($result, true); //true return array otherwise object
+    /**
+     * Extensions constructor.
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Module\FullModuleList $moduleList
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        FullModuleList $moduleList,
+        array $data = []
+    )
+    {
+        parent::__construct($context, $data);
 
-		return $result;
-	}
+        $this->moduleList = $moduleList;
+
+        $this->addData(
+            ['cache_lifetime' => 86400, 'cache_tags' => [self::CACHE_TAG]]
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getInstalledModules()
+    {
+        $mageplza_modules = array();
+        foreach ($this->moduleList->getAll() as $moduleName => $info) {
+            if (strpos($moduleName, 'Mageplaza') !== false) {
+                $mageplza_modules[$moduleName] = $info['setup_version'];
+            }
+        }
+
+        return $mageplza_modules;
+    }
+
+    /**
+     * @return bool|mixed|string
+     */
+    public function getAvailableModules()
+    {
+        $result = $this->_loadCache();
+        if (!$result) {
+            try {
+                $result = file_get_contents(self::API_URL);
+                $this->_saveCache($result);
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+
+        $result = json_decode($result, true); //true return array otherwise object
+
+        return $result;
+    }
 }

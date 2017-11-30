@@ -25,5 +25,29 @@
         <tab id="mageplaza" translate="label" sortOrder="1">
             <label>Mageplaza Extensions</label>
         </tab>
+        <section id="mageplaza" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Core</label>
+            <tab>mageplaza</tab>
+            <resource>Mageplaza_Core::configuration</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="notice_enable" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Notifications</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Select Yes to get latest updates from Mageplaza.</comment>
+                </field>
+                <field id="notice_type" translate="label comment" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Category</label>
+                    <source_model>Mageplaza\Core\Model\Config\Source\NoticeType</source_model>
+                    <comment>Select categories that you want to receive notifications</comment>
+                    <depends>
+                        <field id="notice_enable">1</field>
+                    </depends>
+                </field>
+                <!--<field id="extensions" translate="label" type="button" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">-->
+                    <!--<frontend_model>Mageplaza\Core\Block\Adminhtml\Extensions</frontend_model>-->
+                <!--</field>-->
+            </group>
+        </section>
     </system>
 </config>
