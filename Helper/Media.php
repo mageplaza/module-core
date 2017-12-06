@@ -90,7 +90,7 @@ class Media extends AbstractData
     {
         if (isset($data[$fileName]) && isset($data[$fileName]['delete']) && $data[$fileName]['delete']) {
             if ($oldImage) {
-                $this->removeImage($oldImage);
+                $this->removeImage($oldImage, $type);
             }
             $data['image'] = '';
         } else {
@@ -108,10 +108,10 @@ class Media extends AbstractData
                 );
 
                 if ($oldImage) {
-                    $this->removeImage($oldImage);
+                    $this->removeImage($oldImage, $type);
                 }
 
-                $data['image'] = $path . '/' . $this->_prepareFile($image['file']);
+                $data['image'] = $this->_prepareFile($image['file']);
             } catch (\Exception $e) {
                 $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
             }
@@ -121,48 +121,79 @@ class Media extends AbstractData
     }
 
     /**
-     * Resize Image Function
-     * @param $image
-     * @param null $width
-     * @param null $height
+     * @param $file
+     * @param $size
+     * @param string $type
+     * @param bool $keepRatio
      * @return string
      */
-    public function resizeImage($image, $width = null, $height = null)
+    public function resizeImage($file, $size, $type = '', $keepRatio = true)
     {
+        $image = $this->getMediaPath($file, $type);
+        if (!($imageSize = $this->correctImageSize($size))) {
+            return $this->getMediaUrl($image);
+        }
+        list($width, $height) = $imageSize;
+
+        $resizeImage = $this->getMediaPath($file, ($type ? $type . '/' : '') . 'resize/' . $width . 'x' . $height);
+
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $this->getMediaDirectory();
-        $imageFile      = $this->getMediaPath($image, 'resize/' . $width . 'x' . $height);
-        if (!$mediaDirectory->isFile($imageFile)) {
+        if (!$mediaDirectory->isFile($resizeImage)) {
             try {
                 $imageResize = $this->imageFactory->create();
                 $imageResize->open($mediaDirectory->getAbsolutePath($image));
                 $imageResize->constrainOnly(true);
                 $imageResize->keepTransparency(true);
                 $imageResize->keepFrame(false);
-                $imageResize->keepAspectRatio(true);
+                $imageResize->keepAspectRatio($keepRatio);
                 $imageResize->resize($width, $height);
-                $imageResize->save($mediaDirectory->getAbsolutePath($imageFile));
+                $imageResize->save($mediaDirectory->getAbsolutePath($resizeImage));
 
-                $image = $imageFile;
+                $image = $resizeImage;
             } catch (\Exception $e) {
                 $this->objectManager->get(LoggerInterface::class)->critical($e->getMessage());
             }
         } else {
-            $image = $imageFile;
+            $image = $resizeImage;
         }
 
         return $this->getMediaUrl($image);
     }
 
     /**
-     * @param $imageFile
+     * @param $size
+     * @return array|bool
+     */
+    protected function correctImageSize($size)
+    {
+        if (!$size) {
+            return false;
+        }
+
+        if (strpos($size, 'x') === false) {
+            $width = $height = (int)$size;
+        } else {
+            list($width, $height) = explode('x', $size);
+        }
+
+        if (!$width && !$height) {
+            return false;
+        }
+
+        return [(int)$width ?: null, (int)$height ?: null];
+    }
+
+    /**
+     * @param $file
+     * @param $type
      * @return $this
      */
-    public function removeImage($imageFile)
+    public function removeImage($file, $type)
     {
-        $file = $this->mediaDirectory->getRelativePath($imageFile);
-        if ($this->mediaDirectory->isFile($file)) {
-            $this->mediaDirectory->delete($imageFile);
+        $image = $this->getMediaPath($file, $type);
+        if ($this->mediaDirectory->isFile($image)) {
+            $this->mediaDirectory->delete($image);
         }
 
         return $this;
