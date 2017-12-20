@@ -97,7 +97,7 @@ class AbstractData extends AbstractHelper
      */
     public function isEnabled($storeId = null)
     {
-        return $this->getConfigGeneral('enabled', $storeId) && $this->isModuleOutputEnabled();
+        return $this->getConfigGeneral('enabled', $storeId);
     }
 
     /**
