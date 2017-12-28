@@ -28,6 +28,7 @@
                     <resource id="Mageplaza_Core::documentation" title="Documentations" sortOrder="50" >
                         <resource id="Mageplaza_Core::userguide" title="User Guides" sortOrder="50" />
                     </resource>
+                    <resource id="Mageplaza_Core::activate" title="Active Module" sortOrder="70" />
                 </resource>
                 <resource id="Mageplaza_Core::partners" title="Mageplaza Partners" sortOrder="10"/>
                 <resource id="Magento_Backend::stores">

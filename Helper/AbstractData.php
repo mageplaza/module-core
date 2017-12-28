@@ -38,7 +38,7 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class AbstractData extends AbstractHelper
 {
-    const CONFIG_MODULE_PATH = 'core';
+    const CONFIG_MODULE_PATH = 'mageplaza';
 
     /**
      * @type array

@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) 2017 Mageplaza (https://www.mageplaza.com/)
+ * @license     http://mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Notification\MessageList">
+        <arguments>
+            <argument name="messages" xsi:type="array">
+                <item name="mageplaza_validate_message" xsi:type="string">Mageplaza\Core\Model\Message\Validate</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config\Structure\Data">
+        <plugin name="mageplaza_module_activate" type="Mageplaza\Core\Model\Config\Structure\Data"/>
+    </type>
+</config>

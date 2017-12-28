@@ -1,0 +1,156 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Smtp
+ * @copyright   Copyright (c) 2017 Mageplaza (https://www.mageplaza.com/)
+ * @license     http://mageplaza.com/LICENSE.txt
+ */
+
+/** @var \Mageplaza\Core\Block\Adminhtml\System\Config\Button $block */
+?>
+
+<?php echo $block->getButtonHtml() ?>
+
+<script>
+    require([
+        'jquery',
+        'prototype'
+    ], function ($) {
+        var ajaxUrl = '<?php echo $block->getData('mp_active_url') ?>',
+            moduleType = '<?php echo $block->getData('mp_module_type') ?>',
+            defaultConfig = <?php echo $block->getData('mp_free_config') ?>,
+            activeButton = $('#mageplaza_module_active'),
+            updateButton = $('#mageplaza_module_update'),
+            fieldKey = $('.mageplaza-module-active-field-key'),
+            freeFields = $('.mageplaza-module-active-field-free'),
+            emailField = $('.mageplaza-module-active-email'),
+            nameField = $('.mageplaza-module-active-name'),
+            messageContainer = $('#mageplaza-module-messages'),
+            saveButton = $('#save');
+
+        var submitData = {
+            extension: '<?php echo $block->getData('mp_module_name') ?>',
+            domain: window.location.hostname
+        };
+
+        window.mageplazaModuleActive = function () {
+            messageContainer.hide();
+
+            if (freeFields.valid()) {
+                if (moduleType === 'free') {
+                    submitData.email = emailField.val();
+                    submitData.name = nameField.val();
+                } else {
+                    submitData.key = fieldKey.val();
+                }
+
+                $.ajax({
+                    url: ajaxUrl,
+                    data: submitData,
+                    dataType: 'json',
+                    showLoader: true,
+                    success: function (result) {
+                        if (result.key) {
+                            fieldKey.val(result.key);
+                        }
+
+                        updateMessage(result);
+                        activateProduct(result.active);
+                    }
+                });
+            }
+        };
+
+        window.mageplazaModuleUpdate = function () {
+            submitData.update = 1;
+
+            messageContainer.hide();
+            updateButton.hide();
+            activeButton.show();
+            activeButton.find('span').html('Submit');
+
+            fieldKey.closest('tr').hide();
+            freeFields.closest('tr').show();
+        };
+
+        function activateProduct(active) {
+            submitData.update = 0;
+
+            if (active) {
+                activeButton.hide();
+                updateButton.show();
+                saveButton.attr('disabled', false);
+
+                fieldKey.closest('tr').show();
+                freeFields.closest('tr').hide();
+            } else {
+                saveButton.attr('disabled', 'disabled');
+                updateButton.hide();
+                activeButton.show();
+
+                fieldKey.closest('tr').hide();
+                freeFields.closest('tr').show();
+            }
+        }
+
+        function updateMessage(result) {
+            if (result.message) {
+                messageContainer.show();
+                messageContainer.find('.message div').html(result.message);
+                messageContainer.find('.message')
+                    .removeClass('message-' + (result.success ? 'error' : 'success'))
+                    .addClass('message-' + (result.success ? 'success' : 'error'));
+            }
+        }
+
+        var isActive = <?php echo $block->getData('mp_is_active') ? 'true' : 'false' ?>;
+        activateProduct(isActive);
+
+        if (!isActive) {
+//            $(function () {
+//                var containerId = '<?php //echo $block->getData('mp_module_html_id') ?>//';
+//
+////                if ($(containerId + '-state')) {
+////                    collapsed = $(containerId + '-state').value == 1 ? 0 : 1;
+////                } else {
+////                    collapsed = $(containerId + '-head').collapsed;
+////                }
+//                console.log($(containerId + '-state').value);
+//                if (collapsed == 0) {
+//                    Fieldset.toggleCollapse(containerId);
+//                }
+//            });
+
+            updateMessage({
+                success: false,
+                message: 'You should activate this module before using.'
+            });
+        }
+
+        fieldKey.attr('readonly', true);
+        freeFields.removeAttr('name');
+
+        if (moduleType === 'free' && defaultConfig) {
+            if (!emailField.val() && defaultConfig.email) {
+                emailField.val(defaultConfig.email);
+            }
+            if (!nameField.val() && defaultConfig.name) {
+                nameField.val(defaultConfig.name);
+            }
+        }
+    })
+    ;
+</script>
