@@ -73,7 +73,7 @@ class Validate extends AbstractData
     public function needActive($moduleName)
     {
         $type = $this->getModuleType($moduleName);
-        if (!$type || !in_array($type, ['free', 'paid'])) {
+        if (!$type || !in_array($type, ['1', '2'])) {
             return false;
         }
 

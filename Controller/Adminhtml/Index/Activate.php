@@ -121,7 +121,7 @@ class Activate extends Action
                 $configSave['product_key'] = $result['key'];
             }
 
-            if ($this->_coreHelper->getModuleType($params['extension']) == 'free') {
+            if ($this->_coreHelper->getModuleType($params['extension']) == '1') {
                 $freeInfo = [
                     'email' => $params['email'],
                     'name'  => $params['name']

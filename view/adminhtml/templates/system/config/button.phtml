@@ -28,18 +28,18 @@
     require([
         'jquery',
         'prototype'
-    ], function ($) {
+    ], function ($j) {
         var ajaxUrl = '<?php echo $block->getData('mp_active_url') ?>',
             moduleType = '<?php echo $block->getData('mp_module_type') ?>',
             defaultConfig = <?php echo $block->getData('mp_free_config') ?>,
-            activeButton = $('#mageplaza_module_active'),
-            updateButton = $('#mageplaza_module_update'),
-            fieldKey = $('.mageplaza-module-active-field-key'),
-            freeFields = $('.mageplaza-module-active-field-free'),
-            emailField = $('.mageplaza-module-active-email'),
-            nameField = $('.mageplaza-module-active-name'),
-            messageContainer = $('#mageplaza-module-messages'),
-            saveButton = $('#save');
+            activeButton = $j('#mageplaza_module_active'),
+            updateButton = $j('#mageplaza_module_update'),
+            fieldKey = $j('.mageplaza-module-active-field-key'),
+            freeFields = $j('.mageplaza-module-active-field-free'),
+            emailField = $j('.mageplaza-module-active-email'),
+            nameField = $j('.mageplaza-module-active-name'),
+            messageContainer = $j('#mageplaza-module-messages'),
+            saveButton = $j('#save');
 
         var submitData = {
             extension: '<?php echo $block->getData('mp_module_name') ?>',
@@ -50,14 +50,14 @@
             messageContainer.hide();
 
             if (freeFields.valid()) {
-                if (moduleType === 'free') {
+                if (moduleType === '1') {
                     submitData.email = emailField.val();
                     submitData.name = nameField.val();
                 } else {
                     submitData.key = fieldKey.val();
                 }
 
-                $.ajax({
+                $j.ajax({
                     url: ajaxUrl,
                     data: submitData,
                     dataType: 'json',
@@ -120,19 +120,9 @@
         activateProduct(isActive);
 
         if (!isActive) {
-//            $(function () {
-//                var containerId = '<?php //echo $block->getData('mp_module_html_id') ?>//';
-//
-////                if ($(containerId + '-state')) {
-////                    collapsed = $(containerId + '-state').value == 1 ? 0 : 1;
-////                } else {
-////                    collapsed = $(containerId + '-head').collapsed;
-////                }
-//                console.log($(containerId + '-state').value);
-//                if (collapsed == 0) {
-//                    Fieldset.toggleCollapse(containerId);
-//                }
-//            });
+            var containerId = '<?php echo $block->getData('mp_module_html_id') ?>';
+            $(containerId + '-state').value = 0;
+            Fieldset.toggleCollapse(containerId);
 
             updateMessage({
                 success: false,
@@ -143,7 +133,7 @@
         fieldKey.attr('readonly', true);
         freeFields.removeAttr('name');
 
-        if (moduleType === 'free' && defaultConfig) {
+        if (moduleType === '1' && defaultConfig) {
             if (!emailField.val() && defaultConfig.email) {
                 emailField.val(defaultConfig.email);
             }
