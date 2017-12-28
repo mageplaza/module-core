@@ -32,7 +32,7 @@ class Activate extends \Magento\AdminNotification\Model\Feed
     /**
      * @inheritdoc
      */
-    const MAGEPLAZA_ACTIVE_URL = 'mageplaza.localhost.com/license/index/activate';
+    const MAGEPLAZA_ACTIVE_URL = 'store.mageplaza.com/license/index/activate';
 
     /**
      * @inheritdoc
