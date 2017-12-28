@@ -70,7 +70,7 @@ class Button extends Field
         )->setData(
             [
                 'id'      => 'mageplaza_module_active',
-                'label'   => __('Activate Product'),
+                'label'   => __('Activate Now'),
                 'onclick' => 'javascript:mageplazaModuleActive(); return false;',
             ]
         );

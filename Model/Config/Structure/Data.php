@@ -144,7 +144,8 @@ class Data
             'email'       => [
                 'label'          => __('Register Email'),
                 'validate'       => 'required-entry validate-email',
-                'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-email'
+                'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-email',
+                'comment'        => 'This email will be used to create a new account at Mageplaza support ticket system (premium support included), receive extension updates, offers.'
             ],
             'product_key' => [
                 'label'          => __('Product Key'),
