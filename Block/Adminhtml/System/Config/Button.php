@@ -112,6 +112,7 @@ class Button extends Field
     protected function _getElementHtml(AbstractElement $element)
     {
         $originalData = $element->getOriginalData();
+        $path = explode('/', $originalData['path']);
         $this->addData(
             [
                 'mp_is_active'      => $this->_helper->isModuleActive($originalData['module_name']),
@@ -119,7 +120,8 @@ class Button extends Field
                 'mp_module_type'    => $originalData['module_type'],
                 'mp_active_url'     => $this->getUrl('mageplaza_core/index/activate'),
                 'mp_free_config'    => Validate::jsonEncode($this->_helper->getConfigValue('free/module') ?: []),
-                'mp_module_html_id' => implode('_', explode('/', $originalData['path']))
+                'mp_module_html_id' => implode('_', $path),
+                'mp_module_checkbox' => Validate::jsonEncode($this->_helper->getModuleCheckbox($originalData['module_name']))
             ]
         );
 

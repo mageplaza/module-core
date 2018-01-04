@@ -22,6 +22,21 @@
 /** @var \Mageplaza\Core\Block\Adminhtml\System\Config\Button $block */
 ?>
 
+<div class="nested" style="font-size: 12px; margin-bottom: 20px">
+    <div class="field choice admin__field admin__field-option">
+        <input type="checkbox" id="mageplaza_module_create_account" class="admin__control-checkbox" />
+        <label for="mageplaza_module_create_account" class="admin__field-label">
+            <span><?php echo __('Create a new account at Mageplaza.com, Mageplaza help desk (premium support included)') ?></span>
+        </label>
+    </div>
+    <div class="field choice admin__field admin__field-option">
+        <input type="checkbox" id="mageplaza_module_subscribe" class="admin__control-checkbox"/>
+        <label for="mageplaza_module_subscribe" class="admin__field-label">
+            <span><?php echo __('Receive extension updates, offers') ?></span>
+        </label>
+    </div>
+</div>
+
 <?php echo $block->getButtonHtml() ?>
 
 <script>
@@ -32,12 +47,15 @@
         var ajaxUrl = '<?php echo $block->getData('mp_active_url') ?>',
             moduleType = '<?php echo $block->getData('mp_module_type') ?>',
             defaultConfig = <?php echo $block->getData('mp_free_config') ?>,
+            checkboxConfig = <?php echo $block->getData('mp_module_checkbox') ?>,
             activeButton = $j('#mageplaza_module_active'),
             updateButton = $j('#mageplaza_module_update'),
             fieldKey = $j('.mageplaza-module-active-field-key'),
             freeFields = $j('.mageplaza-module-active-field-free'),
             emailField = $j('.mageplaza-module-active-email'),
             nameField = $j('.mageplaza-module-active-name'),
+            createAccField = $j('#mageplaza_module_create_account'),
+            subscribeField = $j('#mageplaza_module_subscribe'),
             messageContainer = $j('#mageplaza-module-messages'),
             saveButton = $j('#save');
 
@@ -55,6 +73,8 @@
                 }
                 submitData.email = emailField.val();
                 submitData.name = nameField.val();
+                submitData.create = createAccField.prop('checked') ? 1 : 0;
+                submitData.subscribe = subscribeField.prop('checked') ? 1 : 0;
 
                 if (submitData.hasOwnProperty('update') && submitData.update) {
                     submitData.key = fieldKey.val();
@@ -92,6 +112,7 @@
 
             fieldKey.closest('tr').hide();
             freeFields.closest('tr').show();
+            createAccField.closest('.nested').show();
         };
 
         function activateProduct(active) {
@@ -104,6 +125,7 @@
 
                 fieldKey.closest('tr').show();
                 freeFields.closest('tr').hide();
+                createAccField.closest('.nested').hide();
             } else {
                 saveButton.attr('disabled', 'disabled');
                 updateButton.hide();
@@ -111,6 +133,7 @@
 
                 fieldKey.closest('tr').hide();
                 freeFields.closest('tr').show();
+                createAccField.closest('.nested').show();
             }
         }
 
@@ -141,12 +164,23 @@
         fieldKey.attr('readonly', true);
         freeFields.removeAttr('name');
 
-        if (moduleType === '1' && defaultConfig) {
-            if (!emailField.val() && defaultConfig.email) {
-                emailField.val(defaultConfig.email);
+        if (moduleType === '1') {
+            if(defaultConfig){
+                if (!emailField.val() && defaultConfig.email) {
+                    emailField.val(defaultConfig.email);
+                }
+                if (!nameField.val() && defaultConfig.name) {
+                    nameField.val(defaultConfig.name);
+                }
             }
-            if (!nameField.val() && defaultConfig.name) {
-                nameField.val(defaultConfig.name);
+
+            if(checkboxConfig){
+                if (checkboxConfig.create) {
+                    createAccField.prop("checked", true);
+                }
+                if (checkboxConfig.subscribe) {
+                    subscribeField.prop("checked", true);
+                }
             }
         }
     })

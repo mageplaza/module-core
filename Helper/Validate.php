@@ -105,6 +105,30 @@ class Validate extends AbstractData
 
     /**
      * @param $moduleName
+     * @return array
+     */
+    public function getModuleCheckbox($moduleName)
+    {
+        $configModulePath = $this->getConfigModulePath($moduleName);
+
+        $create = $this->getConfigValue($configModulePath . '/module/create');
+        if (is_null($create)) {
+            $create = 1;
+        }
+
+        $subscribe = $this->getConfigValue($configModulePath . '/module/subscribe');
+        if (is_null($subscribe)) {
+            $subscribe = 1;
+        }
+
+        return [
+            'create'    => (int) $create,
+            'subscribe' => (int) $subscribe
+        ];
+    }
+
+    /**
+     * @param $moduleName
      * @return bool
      */
     public function getConfigModulePath($moduleName)

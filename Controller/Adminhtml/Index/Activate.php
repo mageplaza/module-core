@@ -123,8 +123,10 @@ class Activate extends Action
 
             if ($this->_coreHelper->getModuleType($params['extension']) == '1') {
                 $freeInfo = [
-                    'email' => $params['email'],
-                    'name'  => $params['name']
+                    'email'     => $params['email'],
+                    'name'      => $params['name'],
+                    'create'    => $params['create'],
+                    'subscribe' => $params['subscribe']
                 ];
                 foreach ($freeInfo as $code => $value) {
                     $this->saveConfig('free/module/' . $code, $value, true);
