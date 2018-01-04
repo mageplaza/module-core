@@ -49,29 +49,37 @@
         window.mageplazaModuleActive = function () {
             messageContainer.hide();
 
-            if (freeFields.valid()) {
-                if (moduleType === '1') {
-                    submitData.email = emailField.val();
-                    submitData.name = nameField.val();
-                } else {
+            if (moduleType === '1') {
+                if (!freeFields.valid()) {
+                    return;
+                }
+                submitData.email = emailField.val();
+                submitData.name = nameField.val();
+
+                if (submitData.hasOwnProperty('update') && submitData.update) {
                     submitData.key = fieldKey.val();
                 }
-
-                $j.ajax({
-                    url: ajaxUrl,
-                    data: submitData,
-                    dataType: 'json',
-                    showLoader: true,
-                    success: function (result) {
-                        if (result.key) {
-                            fieldKey.val(result.key);
-                        }
-
-                        updateMessage(result);
-                        activateProduct(result.active);
-                    }
-                });
+            } else {
+                if (!fieldKey.valid()) {
+                    return;
+                }
+                submitData.key = fieldKey.val();
             }
+
+            $j.ajax({
+                url: ajaxUrl,
+                data: submitData,
+                dataType: 'json',
+                showLoader: true,
+                success: function (result) {
+                    if (result.key) {
+                        fieldKey.val(result.key);
+                    }
+
+                    updateMessage(result);
+                    activateProduct(result.active);
+                }
+            });
         };
 
         window.mageplazaModuleUpdate = function () {
