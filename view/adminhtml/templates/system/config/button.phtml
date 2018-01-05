@@ -23,12 +23,12 @@
 ?>
 
 <div class="nested" style="font-size: 12px; margin-bottom: 20px">
-    <div class="field choice admin__field admin__field-option">
-        <input type="checkbox" id="mageplaza_module_create_account" class="admin__control-checkbox" />
-        <label for="mageplaza_module_create_account" class="admin__field-label">
-            <span><?php echo __('Create a new account on Mageplaza and Mageplaza helpdesk (to get premium support)') ?></span>
-        </label>
-    </div>
+<!--    <div class="field choice admin__field admin__field-option">-->
+<!--        <input type="checkbox" id="mageplaza_module_create_account" class="admin__control-checkbox" />-->
+<!--        <label for="mageplaza_module_create_account" class="admin__field-label">-->
+<!--            <span>--><?php //echo __('Create a new account on Mageplaza and Mageplaza helpdesk (to get premium support)') ?><!--</span>-->
+<!--        </label>-->
+<!--    </div>-->
     <div class="field choice admin__field admin__field-option">
         <input type="checkbox" id="mageplaza_module_subscribe" class="admin__control-checkbox"/>
         <label for="mageplaza_module_subscribe" class="admin__field-label">
@@ -54,7 +54,7 @@
             freeFields = $j('.mageplaza-module-active-field-free'),
             emailField = $j('.mageplaza-module-active-email'),
             nameField = $j('.mageplaza-module-active-name'),
-            createAccField = $j('#mageplaza_module_create_account'),
+//            createAccField = $j('#mageplaza_module_create_account'),
             subscribeField = $j('#mageplaza_module_subscribe'),
             messageContainer = $j('#mageplaza-module-messages'),
             saveButton = $j('#save');
@@ -73,7 +73,7 @@
                 }
                 submitData.email = emailField.val();
                 submitData.name = nameField.val();
-                submitData.create = createAccField.prop('checked') ? 1 : 0;
+                submitData.create = 1;//createAccField.prop('checked') ? 1 : 0;
                 submitData.subscribe = subscribeField.prop('checked') ? 1 : 0;
 
                 if (submitData.hasOwnProperty('update') && submitData.update) {
@@ -113,7 +113,7 @@
 
             fieldKey.closest('tr').hide();
             freeFields.closest('tr').show();
-            createAccField.closest('.nested').show();
+            subscribeField.closest('.nested').show();
         };
 
         function activateProduct(active) {
@@ -126,7 +126,7 @@
 
                 fieldKey.closest('tr').show();
                 freeFields.closest('tr').hide();
-                createAccField.closest('.nested').hide();
+                subscribeField.closest('.nested').hide();
             } else {
                 saveButton.attr('disabled', 'disabled');
                 updateButton.hide();
@@ -134,7 +134,7 @@
 
                 fieldKey.closest('tr').hide();
                 freeFields.closest('tr').show();
-                createAccField.closest('.nested').show();
+                subscribeField.closest('.nested').show();
             }
         }
 
@@ -176,9 +176,9 @@
             }
 
             if(checkboxConfig){
-                if (checkboxConfig.create) {
-                    createAccField.prop("checked", true);
-                }
+//                if (checkboxConfig.create) {
+//                    createAccField.prop("checked", true);
+//                }
                 if (checkboxConfig.subscribe) {
                     subscribeField.prop("checked", true);
                 }
