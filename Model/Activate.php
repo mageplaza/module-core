@@ -67,7 +67,7 @@ class Activate extends \Magento\AdminNotification\Model\Feed
                     $result['success'] = true;
                 }
             } else {
-                $result['message'] = __('Empty response.');
+                $result['message'] = __('Cannot connect to server. Please try again later.');
             }
         } catch (\Exception $e) {
             $result['message'] = $e->getMessage();
