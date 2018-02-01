@@ -32,19 +32,20 @@ class Activate extends \Magento\AdminNotification\Model\Feed
     /**
      * @inheritdoc
      */
-    const MAGEPLAZA_ACTIVE_URL = 'store.mageplaza.com/license/index/activate';
+    const MAGEPLAZA_ACTIVE_URL = 'http://store.mageplaza.com/license/index/activate';
 
     /**
      * @inheritdoc
      */
     public function getActiveUrl()
     {
-        $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
-        if ($this->_feedUrl === null) {
-            $this->_feedUrl = $httpPath . self::MAGEPLAZA_ACTIVE_URL;
-        }
-
-        return $this->_feedUrl;
+        return self::MAGEPLAZA_ACTIVE_URL;
+//        $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
+//        if ($this->_feedUrl === null) {
+//            $this->_feedUrl = $httpPath . self::MAGEPLAZA_ACTIVE_URL;
+//        }
+//
+//        return $this->_feedUrl;
     }
 
     /**
