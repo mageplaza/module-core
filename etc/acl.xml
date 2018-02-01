@@ -30,11 +30,11 @@
                     </resource>
                     <resource id="Mageplaza_Core::activate" title="Active Module" sortOrder="70" />
                 </resource>
-                <resource id="Mageplaza_Core::partners" title="Mageplaza Partners" sortOrder="10"/>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Mageplaza_Core::configuration" title="Mageplaza Core"/>
+                            <resource id="Mageplaza_Core::configuration" title="Mageplaza Information" sortOrder="10"/>
+                            <resource id="Mageplaza_Core::partners" title="Mageplaza Partners" sortOrder="10"/>
                         </resource>
                     </resource>
                 </resource>

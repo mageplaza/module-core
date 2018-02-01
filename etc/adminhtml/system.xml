@@ -22,11 +22,11 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="mageplaza" translate="label" sortOrder="1">
+        <tab id="mageplaza" translate="label" sortOrder="450">
             <label>Mageplaza Extensions</label>
         </tab>
-        <section id="mageplaza" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
-            <label>Core</label>
+        <section id="mageplaza" translate="label" type="text" sortOrder="8888" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Information</label>
             <tab>mageplaza</tab>
             <resource>Mageplaza_Core::configuration</resource>
             <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -44,9 +44,18 @@
                         <field id="notice_enable">1</field>
                     </depends>
                 </field>
-                <!--<field id="extensions" translate="label" type="button" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">-->
-                    <!--<frontend_model>Mageplaza\Core\Block\Adminhtml\Extensions</frontend_model>-->
-                <!--</field>-->
+            </group>
+        </section>
+        <section id="mageplaza_partners" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Marketplace</label>
+            <tab>mageplaza</tab>
+            <resource>Mageplaza_Core::partners</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Mageplaza Marketplace</label>
+                <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\Partners</frontend_model>
+                <comment><![CDATA[
+                <iframe id="mp-core-partners" src="https://www.mageplaza.com/core/partners.html" frameborder="0" scrolling="no" width="100%" height="1700px" style="min-height: 800px;"></iframe>
+                ]]></comment>
             </group>
         </section>
     </system>

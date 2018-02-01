@@ -22,6 +22,7 @@
 namespace Mageplaza\Core\Model\Config\Structure;
 
 use Magento\Config\Model\Config\Structure\Data as StructureData;
+use Magento\Framework\UrlInterface;
 use Mageplaza\Core\Helper\Validate as ConfigHelper;
 
 /**
@@ -32,6 +33,13 @@ use Mageplaza\Core\Helper\Validate as ConfigHelper;
  */
 class Data
 {
+    const DEV_ENV = ['localhost', 'dev', '127.0.0.1', '192.168.'];
+
+    /**
+     * @var UrlInterface
+     */
+    protected $_url;
+
     /**
      * @var \Mageplaza\Core\Helper\Validate
      */
@@ -39,10 +47,15 @@ class Data
 
     /**
      * Data constructor.
-     * @param \Mageplaza\Core\Helper\Validate $helper
+     * @param UrlInterface $url
+     * @param ConfigHelper $helper
      */
-    public function __construct(ConfigHelper $helper)
+    public function __construct(
+        UrlInterface $url,
+        ConfigHelper $helper
+    )
     {
+        $this->_url = $url;
         $this->_helper = $helper;
     }
 
@@ -54,16 +67,16 @@ class Data
     protected function getDynamicConfigGroups($moduleName, $sectionName)
     {
         $defaultFieldOptions = [
-            'type'          => 'text',
+            'type' => 'text',
             'showInDefault' => '1',
             'showInWebsite' => '0',
-            'showInStore'   => '0',
-            'sortOrder'     => 1,
-            'module_name'   => $moduleName,
-            'module_type'   => $this->_helper->getModuleType($moduleName),
-            'validate'      => 'required-entry',
-            '_elementType'  => 'field',
-            'path'          => $sectionName . '/module'
+            'showInStore' => '0',
+            'sortOrder' => 1,
+            'module_name' => $moduleName,
+            'module_type' => $this->_helper->getModuleType($moduleName),
+            'validate' => 'required-entry',
+            '_elementType' => 'field',
+            'path' => $sectionName . '/module'
         ];
 
         $fields = [];
@@ -72,15 +85,15 @@ class Data
         }
 
         $dynamicConfigGroups['module'] = [
-            'id'            => 'module',
-            'label'         => __('Module Information'),
+            'id' => 'module',
+            'label' => __('Module Information'),
             'showInDefault' => '1',
             'showInWebsite' => '0',
-            'showInStore'   => '0',
-            'sortOrder'     => 1000,
-            "_elementType"  => "group",
-            'path'          => $sectionName,
-            'children'      => $fields
+            'showInStore' => '0',
+            'sortOrder' => 1000,
+            "_elementType" => "group",
+            'path' => $sectionName,
+            'children' => $fields
         ];
 
         return $dynamicConfigGroups;
@@ -93,6 +106,13 @@ class Data
      */
     public function beforeMerge(StructureData $object, array $config)
     {
+        $hostName = $this->_url->getBaseUrl();
+        foreach (self::DEV_ENV as $env) {
+            if (strpos($hostName, $env) !== false) {
+                return [$config];
+            }
+        }
+
         if (isset($config['config']['system'])) {
             $sections = $config['config']['system']['sections'];
             foreach ($sections as $sectionId => $section) {
@@ -125,33 +145,33 @@ class Data
     protected function getFieldList()
     {
         return [
-            'notice'      => [
+            'notice' => [
                 'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Message'
             ],
-            'version'     => [
-                'type'           => 'label',
-                'label'          => __('Version'),
+            'version' => [
+                'type' => 'label',
+                'label' => __('Version'),
                 'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Form\Field\Version'
             ],
 //            'domain'      => [
 //                'label'          => __('Register Domain'),
 //                'frontend_class' => 'mageplaza-module-active-domain'
 //            ],
-            'name'        => [
-                'label'          => __('Register Name'),
+            'name' => [
+                'label' => __('Register Name'),
                 'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-name'
             ],
-            'email'       => [
-                'label'          => __('Register Email'),
-                'validate'       => 'required-entry validate-email',
+            'email' => [
+                'label' => __('Register Email'),
+                'validate' => 'required-entry validate-email',
                 'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-email',
-                'comment'        => 'This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get premium support).'
+                'comment' => 'This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get premium support).'
             ],
             'product_key' => [
-                'label'          => __('Product Key'),
+                'label' => __('Product Key'),
                 'frontend_class' => 'mageplaza-module-active-field-key'
             ],
-            'button'      => [
+            'button' => [
                 'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Button'
             ]
         ];
