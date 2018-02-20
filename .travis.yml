@@ -54,6 +54,7 @@ before_script:
 - echo "vendor/$COMPOSER_MODULE" > dev/tests/static/testsuite/Magento/Test/Less/_files/whitelist/common.txt
 - echo "vendor/$COMPOSER_MODULE" > dev/tests/static/testsuite/Magento/Test/Php/_files/whitelist/common.txt
 - echo "vendor/$COMPOSER_MODULE/**/*.js" > dev/tests/static/testsuite/Magento/Test/Js/_files/whitelist/magento.txt
+- echo "vendor/$COMPOSER_MODULE/**/*.min.js" > dev/tests/static/testsuite/Magento/Test/Js/_files/blacklist/magento.txt
 - bash ./dev/travis/before_script.sh
 script:
 - test $TEST_SUITE = "static" && TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"' || true
