@@ -1,0 +1,7 @@
+vendor/mageplaza/module-core/view/adminhtml/web/js/jscolor.min.js
+vendor/mageplaza/module-core/view/base/web/js/bootstrap.min.js
+vendor/mageplaza/module-core/view/base/web/js/ion.rangeSlider.min.js
+vendor/mageplaza/module-core/view/base/web/js/jquery.autocomplete.min.js
+vendor/mageplaza/module-core/view/base/web/js/jquery.magnific-popup.min.js
+vendor/mageplaza/module-core/view/base/web/js/jquery.ui.touch-punch.min.js
+vendor/mageplaza/module-core/view/base/web/js/owl.carousel.min.js
