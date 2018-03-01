@@ -32,7 +32,21 @@ class Activate extends \Magento\AdminNotification\Model\Feed
     /**
      * @inheritdoc
      */
-    const MAGEPLAZA_ACTIVE_URL = 'store.mageplaza.com/license/index/activate';
+    const MAGEPLAZA_ACTIVE_URL = 'http://store.mageplaza.com/license/index/activate';
+
+    /**
+     * @inheritdoc
+     */
+    public function getActiveUrl()
+    {
+        return self::MAGEPLAZA_ACTIVE_URL;
+//        $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
+//        if ($this->_feedUrl === null) {
+//            $this->_feedUrl = $httpPath . self::MAGEPLAZA_ACTIVE_URL;
+//        }
+//
+//        return $this->_feedUrl;
+    }
 
     /**
      * @param array $params
@@ -49,7 +63,7 @@ class Activate extends \Magento\AdminNotification\Model\Feed
             $resultCurl = $curl->read();
             if (!empty($resultCurl)) {
                 $responseBody = \Zend_Http_Response::extractBody($resultCurl);
-                $result += AbstractData::jsonDecode($responseBody);
+                $result       += AbstractData::jsonDecode($responseBody);
                 if (isset($result['status']) && in_array($result['status'], [200, 201])) {
                     $result['success'] = true;
                 }
@@ -63,18 +77,5 @@ class Activate extends \Magento\AdminNotification\Model\Feed
         $curl->close();
 
         return $result;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getActiveUrl()
-    {
-        $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
-        if ($this->_feedUrl === null) {
-            $this->_feedUrl = $httpPath . self::MAGEPLAZA_ACTIVE_URL;
-        }
-
-        return $this->_feedUrl;
     }
 }

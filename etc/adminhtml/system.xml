@@ -22,7 +22,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="mageplaza" translate="label" sortOrder="450">
+        <tab id="mageplaza" translate="label" sortOrder="401">
             <label>Mageplaza Extensions</label>
         </tab>
         <section id="mageplaza" translate="label" type="text" sortOrder="8888" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -46,10 +46,10 @@
                 </field>
             </group>
         </section>
-        <section id="mageplaza_partners" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
+        <section id="mpmarketplace" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
             <label>Marketplace</label>
             <tab>mageplaza</tab>
-            <resource>Mageplaza_Core::partners</resource>
+            <resource>Mageplaza_Core::marketplace</resource>
             <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Mageplaza Marketplace</label>
                 <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\Partners</frontend_model>
