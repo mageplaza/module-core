@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -61,8 +61,8 @@ class NoticeType implements ArrayInterface
     {
         return [
             self::TYPE_ANNOUNCEMENT => __('Announcement'),
-            self::TYPE_NEWUPDATE    => __('New & Update extensions'),
-            self::TYPE_MARKETING    => __('Promotions ')
+            self::TYPE_NEWUPDATE => __('New & Update extensions'),
+            self::TYPE_MARKETING => __('Promotions ')
         ];
     }
 }

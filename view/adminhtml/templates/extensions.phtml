@@ -15,42 +15,58 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-	$installedModules = $block->getInstalledModules();
-	$availableModules = $block->getAvailableModules();
+$installedModules = $block->getInstalledModules();
+$availableModules = $block->getAvailableModules();
 ?>
-<?php if($availableModules && count($availableModules)): ?>
-<div class="table-wrapper">
-    <table class="admin__table-secondary" id="extension-information">
-        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Installed Mageplaza Modules') ?></caption>
-        <thead>
+<?php if ($availableModules && count($availableModules)): ?>
+    <div class="table-wrapper">
+        <table class="admin__table-secondary" id="extension-information">
+            <caption class="table-caption"><?php /* @escapeNotVerified */
+                echo __('Installed Mageplaza Modules') ?></caption>
+            <thead>
             <tr>
-                <th scope="col" class="col name"><?php /* @escapeNotVerified */ echo __('Extension name') ?></th>
-                <th scope="col" class="col version"><?php /* @escapeNotVerified */ echo __('Current Version') ?></th>
-                <th scope="col" class="col store"><?php /* @escapeNotVerified */ echo __('Store Version') ?></th>
-                <th scope="col" class="col link"><?php /* @escapeNotVerified */ echo __('Extension Link') ?></th>
-                <th scope="col" class="col download"><?php /* @escapeNotVerified */ echo __('Download Link') ?></th>
+                <th scope="col" class="col name"><?php /* @escapeNotVerified */
+                    echo __('Extension name') ?></th>
+                <th scope="col" class="col version"><?php /* @escapeNotVerified */
+                    echo __('Current Version') ?></th>
+                <th scope="col" class="col store"><?php /* @escapeNotVerified */
+                    echo __('Store Version') ?></th>
+                <th scope="col" class="col link"><?php /* @escapeNotVerified */
+                    echo __('Extension Link') ?></th>
+                <th scope="col" class="col download"><?php /* @escapeNotVerified */
+                    echo __('Download Link') ?></th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             <?php foreach ($installedModules as $name => $version): ?>
-            	<?php if (!empty($availableModules[$name])): ?>
-            	<?php $storeInfo = $availableModules[$name];?>
-                <tr>
-                    <td data-th="<?php echo $block->escapeHtml(__('Extension name')) ?>" class="col name"><?php /* @escapeNotVerified */ echo $name; ?></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Current Version')) ?>" class="col version"><?php /* @escapeNotVerified */ echo $version; ?></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Latest version')) ?>" class="col store"><?php /* @escapeNotVerified */ echo $storeInfo['version']; ?></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Extension Link')) ?>" class="col link"><a target="_blank" href="<?php /* @escapeNotVerified */ echo $storeInfo['url'] ?>">Visit page</a></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Download Link')) ?>" class="col download"><a target="_blank" href="<?php /* @escapeNotVerified */ echo $storeInfo['download'] ?>">Download latest version</a></td>
-                </tr>
-            	<?php endif;?>
+                <?php if (!empty($availableModules[$name])): ?>
+                    <?php $storeInfo = $availableModules[$name]; ?>
+                    <tr>
+                        <td data-th="<?php echo $block->escapeHtml(__('Extension name')) ?>"
+                            class="col name"><?php /* @escapeNotVerified */
+                            echo $name; ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Current Version')) ?>"
+                            class="col version"><?php /* @escapeNotVerified */
+                            echo $version; ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Latest version')) ?>"
+                            class="col store"><?php /* @escapeNotVerified */
+                            echo $storeInfo['version']; ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Extension Link')) ?>" class="col link"><a
+                                    target="_blank" href="<?php /* @escapeNotVerified */
+                            echo $storeInfo['url'] ?>">Visit page</a></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Download Link')) ?>" class="col download"><a
+                                    target="_blank" href="<?php /* @escapeNotVerified */
+                            echo $storeInfo['download'] ?>">Download latest version</a></td>
+                    </tr>
+                <?php endif; ?>
             <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 <?php else: ?>
-<p>There maybe something wrong when connecting to server</p>
-<?php endif;?>
+    <p>There maybe something wrong when connecting to server</p>
+<?php endif; ?>

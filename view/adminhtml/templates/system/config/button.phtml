@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Smtp
- * @copyright   Copyright (c) 2017 Mageplaza (https://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (https://www.mageplaza.com/)
  * @license     http://mageplaza.com/LICENSE.txt
  */
 
@@ -23,12 +23,6 @@
 ?>
 
 <div class="nested" style="font-size: 12px; margin-bottom: 20px">
-<!--    <div class="field choice admin__field admin__field-option">-->
-<!--        <input type="checkbox" id="mageplaza_module_create_account" class="admin__control-checkbox" />-->
-<!--        <label for="mageplaza_module_create_account" class="admin__field-label">-->
-<!--            <span>--><?php //echo __('Create a new account on Mageplaza and Mageplaza helpdesk (to get premium support)') ?><!--</span>-->
-<!--        </label>-->
-<!--    </div>-->
     <div class="field choice admin__field admin__field-option">
         <input type="checkbox" id="mageplaza_module_subscribe" class="admin__control-checkbox"/>
         <label for="mageplaza_module_subscribe" class="admin__field-label">
@@ -166,7 +160,7 @@
         freeFields.removeAttr('name');
 
         if (moduleType === '1') {
-            if(defaultConfig){
+            if (defaultConfig) {
                 if (!emailField.val() && defaultConfig.email) {
                     emailField.val(defaultConfig.email);
                 }
@@ -175,7 +169,7 @@
                 }
             }
 
-            if(checkboxConfig){
+            if (checkboxConfig) {
 //                if (checkboxConfig.create) {
 //                    createAccField.prop("checked", true);
 //                }

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -55,13 +55,14 @@ class Media extends AbstractData
     protected $imageFactory;
 
     /**
-     * Image constructor.
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
-     * @param \Magento\Framework\Image\AdapterFactory $imageFactory
+     * Media constructor.
+     * @param Context $context
+     * @param ObjectManagerInterface $objectManager
+     * @param StoreManagerInterface $storeManager
+     * @param Filesystem $filesystem
+     * @param UploaderFactory $uploaderFactory
+     * @param AdapterFactory $imageFactory
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         Context $context,
@@ -74,9 +75,9 @@ class Media extends AbstractData
     {
         parent::__construct($context, $objectManager, $storeManager);
 
-        $this->mediaDirectory  = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
-        $this->imageFactory    = $imageFactory;
+        $this->imageFactory = $imageFactory;
     }
 
     /**
@@ -85,6 +86,7 @@ class Media extends AbstractData
      * @param string $type
      * @param null $oldImage
      * @return $this
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function uploadImage(&$data, $fileName = 'image', $type = '', $oldImage = null)
     {
@@ -118,6 +120,50 @@ class Media extends AbstractData
         }
 
         return $this;
+    }
+
+    /**
+     * @param $file
+     * @param $type
+     * @return $this
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function removeImage($file, $type)
+    {
+        $image = $this->getMediaPath($file, $type);
+        if ($this->mediaDirectory->isFile($image)) {
+            $this->mediaDirectory->delete($image);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $file
+     * @param string $type
+     * @return string
+     */
+    public function getMediaPath($file, $type = '')
+    {
+        return $this->getBaseMediaPath($type) . '/' . $this->_prepareFile($file);
+    }
+
+    /**
+     * @param string $type
+     * @return string
+     */
+    public function getBaseMediaPath($type = '')
+    {
+        return trim(static::TEMPLATE_MEDIA_PATH . '/' . $type, '/');
+    }
+
+    /**
+     * @param string $file
+     * @return string
+     */
+    protected function _prepareFile($file)
+    {
+        return ltrim(str_replace('\\', '/', $file), '/');
     }
 
     /**
@@ -185,59 +231,12 @@ class Media extends AbstractData
     }
 
     /**
-     * @param $file
-     * @param $type
-     * @return $this
-     */
-    public function removeImage($file, $type)
-    {
-        $image = $this->getMediaPath($file, $type);
-        if ($this->mediaDirectory->isFile($image)) {
-            $this->mediaDirectory->delete($image);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param $path
-     * @return $this
-     */
-    public function removePath($path)
-    {
-        $pathMedia = $this->mediaDirectory->getRelativePath($path);
-        if ($this->mediaDirectory->isDirectory($pathMedia)) {
-            $this->mediaDirectory->delete($path);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return \Magento\Framework\Filesystem\Directory\WriteInterface
-     */
-    public function getMediaDirectory()
-    {
-        return $this->mediaDirectory;
-    }
-
-    /**
-     * @param string $type
+     * @param string $file
      * @return string
      */
-    public function getBaseMediaPath($type = '')
+    public function getMediaUrl($file)
     {
-        return trim(static::TEMPLATE_MEDIA_PATH . '/' . $type, '/');
-    }
-
-    /**
-     * @param $file
-     * @param string $type
-     * @return string
-     */
-    public function getMediaPath($file, $type = '')
-    {
-        return $this->getBaseMediaPath($type) . '/' . $this->_prepareFile($file);
+        return $this->getBaseMediaUrl() . '/' . $this->_prepareFile($file);
     }
 
     /**
@@ -249,20 +248,25 @@ class Media extends AbstractData
     }
 
     /**
-     * @param string $file
-     * @return string
+     * @return \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    public function getMediaUrl($file)
+    public function getMediaDirectory()
     {
-        return $this->getBaseMediaUrl() . '/' . $this->_prepareFile($file);
+        return $this->mediaDirectory;
     }
 
     /**
-     * @param string $file
-     * @return string
+     * @param $path
+     * @return $this
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
-    protected function _prepareFile($file)
+    public function removePath($path)
     {
-        return ltrim(str_replace('\\', '/', $file), '/');
+        $pathMedia = $this->mediaDirectory->getRelativePath($path);
+        if ($this->mediaDirectory->isDirectory($pathMedia)) {
+            $this->mediaDirectory->delete($path);
+        }
+
+        return $this;
     }
 }

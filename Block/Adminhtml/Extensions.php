@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -86,7 +86,7 @@ class Extensions extends \Magento\Framework\View\Element\Template
      */
     public function getInstalledModules()
     {
-        $mageplza_modules = array();
+        $mageplza_modules = [];
         foreach ($this->moduleList->getAll() as $moduleName => $info) {
             if (strpos($moduleName, 'Mageplaza') !== false) {
                 $mageplza_modules[$moduleName] = $info['setup_version'];

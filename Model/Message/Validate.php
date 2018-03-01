@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -56,8 +56,23 @@ class Validate implements MessageInterface
         UrlInterface $urlBuilder
     )
     {
-        $this->_helper    = $helper;
+        $this->_helper = $helper;
         $this->urlBuilder = $urlBuilder;
+    }
+
+    /**
+     * Check whether all extensions are valid or not
+     *
+     * @return bool
+     */
+    public function isDisplayed()
+    {
+        $notActiveModules = $this->getModules();
+        if (sizeof($notActiveModules)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -75,21 +90,6 @@ class Validate implements MessageInterface
         }
 
         return $this->_needActiveModules;
-    }
-
-    /**
-     * Check whether all extensions are valid or not
-     *
-     * @return bool
-     */
-    public function isDisplayed()
-    {
-        $notActiveModules = $this->getModules();
-        if (sizeof($notActiveModules)) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -115,7 +115,7 @@ class Validate implements MessageInterface
         }
 
         $sectionName = $this->_helper->getConfigModulePath($modules[0]);
-        $url         = $this->urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => $sectionName]);
+        $url = $this->urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => $sectionName]);
 
         return __(
             'One or more Mageplaza extensions are not validated. Click <a href="%1">here</a> to validate them.',

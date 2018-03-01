@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -56,11 +56,6 @@ class AbstractData extends AbstractHelper
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
-     */
-    protected static $_jsonHelper;
-
-    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -72,23 +67,9 @@ class AbstractData extends AbstractHelper
     )
     {
         $this->objectManager = $objectManager;
-        $this->storeManager  = $storeManager;
+        $this->storeManager = $storeManager;
 
         parent::__construct($context);
-    }
-
-    /**
-     * @param $field
-     * @param null $storeId
-     * @return mixed
-     */
-    public function getConfigValue($field, $storeId = null)
-    {
-        return $this->scopeConfig->getValue(
-            $field,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
     }
 
     /**
@@ -113,15 +94,17 @@ class AbstractData extends AbstractHelper
     }
 
     /**
-     * @param $name
-     * @param $value
-     * @return $this
+     * @param $field
+     * @param null $storeId
+     * @return mixed
      */
-    public function setData($name, $value)
+    public function getConfigValue($field, $storeId = null)
     {
-        $this->_data[$name] = $value;
-
-        return $this;
+        return $this->scopeConfig->getValue(
+            $field,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     /**
@@ -138,6 +121,18 @@ class AbstractData extends AbstractHelper
     }
 
     /**
+     * @param $name
+     * @param $value
+     * @return $this
+     */
+    public function setData($name, $value)
+    {
+        $this->_data[$name] = $value;
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getCurrentUrl()
@@ -148,15 +143,29 @@ class AbstractData extends AbstractHelper
     }
 
     /**
-     * @return \Magento\Framework\Json\Helper\Data|mixed
+     * @param $data
+     * @return string
+     * @throws \Zend_Serializer_Exception
      */
-    public static function getJsonHelper()
+    public function serialize($data)
     {
-        if (!self::$_jsonHelper) {
-            self::$_jsonHelper = ObjectManager::getInstance()->get(JsonHelper::class);
+        if ($this->versionCompare('2.2.0')) {
+            return self::jsonEncode($data);
         }
 
-        return self::$_jsonHelper;
+        return $this->getSerializeClass()->serialize($data);
+    }
+
+    /**
+     * @param $ver
+     * @return mixed
+     */
+    public function versionCompare($ver)
+    {
+        $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
+        $version = $productMetadata->getVersion(); //will return the magento version
+
+        return version_compare($version, $ver, '>=');
     }
 
     /**
@@ -177,6 +186,36 @@ class AbstractData extends AbstractHelper
     }
 
     /**
+     * @return \Magento\Framework\Json\Helper\Data|mixed
+     */
+    public static function getJsonHelper()
+    {
+        return ObjectManager::getInstance()->get(JsonHelper::class);
+    }
+
+    /**
+     * @return \Zend_Serializer_Adapter_PhpSerialize|mixed
+     */
+    protected function getSerializeClass()
+    {
+        return $this->objectManager->get(\Zend_Serializer_Adapter_PhpSerialize::class);
+    }
+
+    /**
+     * @param $string
+     * @return mixed
+     * @throws \Zend_Serializer_Exception
+     */
+    public function unserialize($string)
+    {
+        if ($this->versionCompare('2.2.0')) {
+            return self::jsonDecode($string);
+        }
+
+        return $this->getSerializeClass()->unserialize($string);
+    }
+
+    /**
      * Decodes the given $encodedValue string which is
      * encoded in the JSON format
      *
@@ -194,45 +233,6 @@ class AbstractData extends AbstractHelper
         return $decodeValue;
     }
 
-
-    /**
-     * @param $data
-     * @return string
-     */
-    public function serialize($data)
-    {
-        if ($this->versionCompare('2.2.0')) {
-            return self::jsonEncode($data);
-        }
-
-        return serialize($data);
-    }
-
-    /**
-     * @param $string
-     * @return mixed
-     */
-    public function unserialize($string)
-    {
-        if ($this->versionCompare('2.2.0')) {
-            return self::jsonDecode($string);
-        }
-
-        return unserialize($string);
-    }
-
-    /**
-     * @param $ver
-     * @return mixed
-     */
-    public function versionCompare($ver)
-    {
-        $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
-        $version         = $productMetadata->getVersion(); //will return the magento version
-
-        return version_compare($version, $ver, '>=');
-    }
-
     /**
      * Is Admin Store
      *
@@ -243,7 +243,13 @@ class AbstractData extends AbstractHelper
         /** @var \Magento\Framework\App\State $state */
         $state = $this->objectManager->get('Magento\Framework\App\State');
 
-        return $state->getAreaCode() == Area::AREA_ADMINHTML;
+        try {
+            $areaCode = $state->getAreaCode();
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return $areaCode == Area::AREA_ADMINHTML;
     }
 
     /**

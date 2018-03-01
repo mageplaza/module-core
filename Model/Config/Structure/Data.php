@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -60,46 +60,6 @@ class Data
     }
 
     /**
-     * @param $moduleName
-     * @param $sectionName
-     * @return mixed
-     */
-    protected function getDynamicConfigGroups($moduleName, $sectionName)
-    {
-        $defaultFieldOptions = [
-            'type' => 'text',
-            'showInDefault' => '1',
-            'showInWebsite' => '0',
-            'showInStore' => '0',
-            'sortOrder' => 1,
-            'module_name' => $moduleName,
-            'module_type' => $this->_helper->getModuleType($moduleName),
-            'validate' => 'required-entry',
-            '_elementType' => 'field',
-            'path' => $sectionName . '/module'
-        ];
-
-        $fields = [];
-        foreach ($this->getFieldList() as $id => $option) {
-            $fields[$id] = array_merge($defaultFieldOptions, ['id' => $id], $option);
-        }
-
-        $dynamicConfigGroups['module'] = [
-            'id' => 'module',
-            'label' => __('Module Information'),
-            'showInDefault' => '1',
-            'showInWebsite' => '0',
-            'showInStore' => '0',
-            'sortOrder' => 1000,
-            "_elementType" => "group",
-            'path' => $sectionName,
-            'children' => $fields
-        ];
-
-        return $dynamicConfigGroups;
-    }
-
-    /**
      * @param \Magento\Config\Model\Config\Structure\Data $object
      * @param array $config
      * @return array
@@ -137,6 +97,46 @@ class Data
         }
 
         return [$config];
+    }
+
+    /**
+     * @param $moduleName
+     * @param $sectionName
+     * @return mixed
+     */
+    protected function getDynamicConfigGroups($moduleName, $sectionName)
+    {
+        $defaultFieldOptions = [
+            'type' => 'text',
+            'showInDefault' => '1',
+            'showInWebsite' => '0',
+            'showInStore' => '0',
+            'sortOrder' => 1,
+            'module_name' => $moduleName,
+            'module_type' => $this->_helper->getModuleType($moduleName),
+            'validate' => 'required-entry',
+            '_elementType' => 'field',
+            'path' => $sectionName . '/module'
+        ];
+
+        $fields = [];
+        foreach ($this->getFieldList() as $id => $option) {
+            $fields[$id] = array_merge($defaultFieldOptions, ['id' => $id], $option);
+        }
+
+        $dynamicConfigGroups['module'] = [
+            'id' => 'module',
+            'label' => __('Module Information'),
+            'showInDefault' => '1',
+            'showInWebsite' => '0',
+            'showInStore' => '0',
+            'sortOrder' => 1000,
+            "_elementType" => "group",
+            'path' => $sectionName,
+            'children' => $fields
+        ];
+
+        return $dynamicConfigGroups;
     }
 
     /**

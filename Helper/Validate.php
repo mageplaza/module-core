@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -95,6 +95,27 @@ class Validate extends AbstractData
      * @param $moduleName
      * @return bool
      */
+    public function getConfigModulePath($moduleName)
+    {
+        if (!isset($this->configModulePath[$moduleName])) {
+            $this->configModulePath[$moduleName] = false;
+
+            $helperClassName = str_replace('_', '\\', $moduleName) . '\Helper\Data';
+            if (class_exists($helperClassName)) {
+                $helper = $this->objectManager->get($helperClassName);
+                if ($helper instanceof AbstractData) {
+                    $this->configModulePath[$moduleName] = $helper::CONFIG_MODULE_PATH;
+                }
+            }
+        }
+
+        return $this->configModulePath[$moduleName];
+    }
+
+    /**
+     * @param $moduleName
+     * @return bool
+     */
     public function isModuleActive($moduleName)
     {
         $configModulePath = $this->getConfigModulePath($moduleName);
@@ -122,30 +143,9 @@ class Validate extends AbstractData
         }
 
         return [
-            'create'    => (int) $create,
-            'subscribe' => (int) $subscribe
+            'create' => (int)$create,
+            'subscribe' => (int)$subscribe
         ];
-    }
-
-    /**
-     * @param $moduleName
-     * @return bool
-     */
-    public function getConfigModulePath($moduleName)
-    {
-        if (!isset($this->configModulePath[$moduleName])) {
-            $this->configModulePath[$moduleName] = false;
-
-            $helperClassName = str_replace('_', '\\', $moduleName) . '\Helper\Data';
-            if (class_exists($helperClassName)) {
-                $helper = $this->objectManager->get($helperClassName);
-                if ($helper instanceof AbstractData) {
-                    $this->configModulePath[$moduleName] = $helper::CONFIG_MODULE_PATH;
-                }
-            }
-        }
-
-        return $this->configModulePath[$moduleName];
     }
 
     /**

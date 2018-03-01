@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Smtp
- * @copyright   Copyright (c) 2017 Mageplaza (https://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (https://www.mageplaza.com/)
  * @license     http://mageplaza.com/LICENSE.txt
  */
 
@@ -85,9 +85,9 @@ class Activate extends Action
     )
     {
         $this->activateFactory = $activateFactory;
-        $this->resourceConfig  = $resourceConfig;
-        $this->_appConfig      = $config;
-        $this->_coreHelper     = $helper;
+        $this->resourceConfig = $resourceConfig;
+        $this->_appConfig = $config;
+        $this->_coreHelper = $helper;
 
         parent::__construct($context);
     }
@@ -112,7 +112,7 @@ class Activate extends Action
         }
 
         $activateModel = $this->activateFactory->create();
-        $result        = $activateModel->activate($params);
+        $result = $activateModel->activate($params);
         if ($result['success']) {
             $result['active'] = true;
 
@@ -123,9 +123,9 @@ class Activate extends Action
 
             if ($this->_coreHelper->getModuleType($params['extension']) == '1') {
                 $freeInfo = [
-                    'email'     => $params['email'],
-                    'name'      => $params['name'],
-                    'create'    => $params['create'],
+                    'email' => $params['email'],
+                    'name' => $params['name'],
+                    'create' => $params['create'],
                     'subscribe' => $params['subscribe']
                 ];
                 foreach ($freeInfo as $code => $value) {
@@ -183,6 +183,15 @@ class Activate extends Action
 
     /**
      * @param $pathId
+     * @return string
+     */
+    protected function buildConfigPath($pathId)
+    {
+        return $this->_moduleConfigPath . '/module/' . $pathId;
+    }
+
+    /**
+     * @param $pathId
      * @param bool $isFullPath
      * @param string $scope
      * @param int $scopeId
@@ -205,14 +214,5 @@ class Activate extends Action
         );
 
         return $this;
-    }
-
-    /**
-     * @param $pathId
-     * @return string
-     */
-    protected function buildConfigPath($pathId)
-    {
-        return $this->_moduleConfigPath . '/module/' . $pathId;
     }
 }

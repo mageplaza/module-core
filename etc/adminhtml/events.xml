@@ -16,12 +16,12 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright © 2016-2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="controller_action_predispatch">
-        <observer name="mageplaza_core" instance="Mageplaza\Core\Observer\PredispatchAdminActionControllerObserver" />
+        <observer name="mageplaza_core" instance="Mageplaza\Core\Observer\PredispatchAdminActionControllerObserver"/>
     </event>
 </config>
