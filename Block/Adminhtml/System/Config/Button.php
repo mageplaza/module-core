@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright © 2016-2018 Mageplaza (https://www.mageplaza.com/)
+ * @copyright   Copyright (c) 2016-2018 Mageplaza (https://www.mageplaza.com/)
  * @license     http://mageplaza.com/LICENSE.txt
  */
 
