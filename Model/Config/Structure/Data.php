@@ -33,13 +33,6 @@ use Mageplaza\Core\Helper\Validate as ConfigHelper;
  */
 class Data
 {
-    const DEV_ENV = ['localhost', 'dev', '127.0.0.1', '192.168.'];
-
-    /**
-     * @var UrlInterface
-     */
-    protected $_url;
-
     /**
      * @var \Mageplaza\Core\Helper\Validate
      */
@@ -47,15 +40,12 @@ class Data
 
     /**
      * Data constructor.
-     * @param UrlInterface $url
      * @param ConfigHelper $helper
      */
     public function __construct(
-        UrlInterface $url,
         ConfigHelper $helper
     )
     {
-        $this->_url = $url;
         $this->_helper = $helper;
     }
 
@@ -66,13 +56,6 @@ class Data
      */
     public function beforeMerge(StructureData $object, array $config)
     {
-        $hostName = $this->_url->getBaseUrl();
-        foreach (self::DEV_ENV as $env) {
-            if (strpos($hostName, $env) !== false) {
-                return [$config];
-            }
-        }
-
         if (isset($config['config']['system'])) {
             $sections = $config['config']['system']['sections'];
             foreach ($sections as $sectionId => $section) {

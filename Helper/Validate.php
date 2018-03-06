@@ -32,6 +32,8 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Validate extends AbstractData
 {
+    const DEV_ENV = ['localhost', 'dev', '127.0.0.1', '192.168.'];
+
     /**
      * @var array
      */
@@ -156,13 +158,24 @@ class Validate extends AbstractData
         if (is_null($this->_mageplazaModules)) {
             $this->_mageplazaModules = [];
 
-            $moduleList = $this->_moduleList->getNames();
-            foreach ($moduleList as $name) {
-                if (strpos($name, 'Mageplaza_') === false) {
-                    continue;
+            $allowList = true;
+            $hostName = $this->_urlBuilder->getBaseUrl();
+            foreach (self::DEV_ENV as $env) {
+                if (strpos($hostName, $env) !== false) {
+                    $allowList = false;
+                    break;
                 }
+            }
 
-                $this->_mageplazaModules[] = $name;
+            if ($allowList) {
+                $moduleList = $this->_moduleList->getNames();
+                foreach ($moduleList as $name) {
+                    if (strpos($name, 'Mageplaza_') === false) {
+                        continue;
+                    }
+
+                    $this->_mageplazaModules[] = $name;
+                }
             }
         }
 
