@@ -32,7 +32,7 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Validate extends AbstractData
 {
-    const DEV_ENV = ['localhost', 'dev', '127.0.0.1', '192.168.'];
+    const DEV_ENV = ['localhost', 'dev', '127.0.0.1', '192.168.', 'demo.'];
 
     /**
      * @var array
