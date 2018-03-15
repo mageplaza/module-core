@@ -1,0 +1,68 @@
+{
+  "IcoMoonType": "selection",
+  "icons": [
+    {
+      "icon": {
+        "paths": [
+          "M298.459 176.078l-292.215 169.21v673.093l39.337-21.854c21.229-12.488 64.312-37.463 96.156-54.946l57.444-33.093 3.746-117.385 192.937-111.141c105.522-61.815 194.185-111.766 196.683-111.766 1.873 0 91.161 49.951 197.307 111.766l193.561 111.766 6.244 116.137 95.532 54.946 94.907 54.322v-671.22l-290.966-168.585c-160.468-92.41-292.839-168.585-295.337-169.21-1.873-0.624-134.868 74.927-295.337 167.961zM792.976 342.166l190.439 110.517 1.873 58.693c1.249 49.327 0 58.068-7.493 54.946-4.995-1.873-91.785-51.824-193.561-109.893-101.151-58.693-187.317-106.771-191.688-106.771s-92.41 49.327-196.683 109.268c-104.273 59.941-190.439 109.268-192.312 109.268-2.498 0-3.746-26.224-3.746-58.068l0.624-57.444 191.688-110.517c105.522-60.566 196.059-110.517 201.054-110.517s94.907 49.951 199.805 110.517z"
+        ],
+        "attrs": [
+          {}
+        ],
+        "width": 1180,
+        "isMulticolor": false,
+        "isMulticolor2": false,
+        "grid": 0,
+        "tags": [
+          "icon-white1"
+        ]
+      },
+      "attrs": [
+        {}
+      ],
+      "properties": {
+        "order": 10,
+        "id": 0,
+        "name": "icon-mageplaza",
+        "prevSize": 32,
+        "code": 59648
+      },
+      "setIdx": 0,
+      "setId": 3,
+      "iconIdx": 0
+    }
+  ],
+  "height": 1024,
+  "metadata": {
+    "name": "icomoon"
+  },
+  "preferences": {
+    "showGlyphs": true,
+    "showQuickUse": true,
+    "showQuickUse2": true,
+    "showSVGs": true,
+    "fontPref": {
+      "prefix": "icon-",
+      "metadata": {
+        "fontFamily": "icomoon"
+      },
+      "metrics": {
+        "emSize": 1024,
+        "baseline": 6.25,
+        "whitespace": 50
+      },
+      "embed": false
+    },
+    "imagePref": {
+      "prefix": "icon-",
+      "png": true,
+      "useClassSelector": true,
+      "color": 0,
+      "bgColor": 16777215,
+      "classSelector": ".icon"
+    },
+    "historySize": 50,
+    "showCodes": true,
+    "gridSize": 16
+  }
+}

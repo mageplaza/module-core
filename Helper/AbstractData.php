@@ -94,6 +94,18 @@ class AbstractData extends AbstractHelper
     }
 
     /**
+     * @param string $field
+     * @param null $storeId
+     * @return mixed
+     */
+    public function getModuleConfig($field = '', $storeId = null)
+    {
+        $field = ($field !== '') ? '/' . $field : '';
+
+        return $this->getConfigValue(static::CONFIG_MODULE_PATH . $field, $storeId);
+    }
+
+    /**
      * @param $field
      * @param null $storeId
      * @return mixed
