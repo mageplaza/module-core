@@ -56,6 +56,21 @@ class AbstractData extends AbstractHelper
     protected $objectManager;
 
     /**
+     * @var \Magento\Backend\App\Config
+     */
+    protected $backendConfig;
+
+    /**
+     * @var bool
+     */
+    protected $isAdminArea;
+
+    /**
+     * @var bool
+     */
+    protected $isFrontendArea;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -107,16 +122,22 @@ class AbstractData extends AbstractHelper
 
     /**
      * @param $field
-     * @param null $storeId
-     * @return mixed
+     * @param null $scopeValue
+     * @param string $scopeType
+     * @return array|mixed
      */
-    public function getConfigValue($field, $storeId = null)
+    public function getConfigValue($field, $scopeValue = null, $scopeType = ScopeInterface::SCOPE_STORE)
     {
-        return $this->scopeConfig->getValue(
-            $field,
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
+        if(!$this->isFrontend() && is_null($scopeValue)){
+            /** @var \Magento\Backend\App\Config $backendConfig */
+            if(!$this->backendConfig) {
+                $this->backendConfig = $this->objectManager->get('Magento\Backend\App\ConfigInterface');
+            }
+
+            return $this->backendConfig->getValue($field);
+        }
+
+        return $this->scopeConfig->getValue($field, $scopeType, $scopeValue);
     }
 
     /**
@@ -250,18 +271,45 @@ class AbstractData extends AbstractHelper
      *
      * @return bool
      */
-    public function isAdmin()
+    public function isFrontend()
     {
-        /** @var \Magento\Framework\App\State $state */
-        $state = $this->objectManager->get('Magento\Framework\App\State');
+        if(!isset($this->isFrontendArea)){
+            /** @var \Magento\Framework\App\State $state */
+            $state = $this->objectManager->get('Magento\Framework\App\State');
 
-        try {
-            $areaCode = $state->getAreaCode();
-        } catch (\Exception $e) {
-            return false;
+            try {
+                $areaCode = $state->getAreaCode();
+
+                $this->isFrontendArea = ($areaCode == Area::AREA_FRONTEND);
+            } catch (\Exception $e) {
+                $this->isFrontendArea = false;
+            }
         }
 
-        return $areaCode == Area::AREA_ADMINHTML;
+        return $this->isFrontendArea;
+    }
+
+    /**
+     * Is Admin Store
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        if(!isset($this->isAdminArea)){
+            /** @var \Magento\Framework\App\State $state */
+            $state = $this->objectManager->get('Magento\Framework\App\State');
+
+            try {
+                $areaCode = $state->getAreaCode();
+
+                $this->isAdminArea = ($areaCode == Area::AREA_ADMINHTML);
+            } catch (\Exception $e) {
+                $this->isAdminArea = false;
+            }
+        }
+
+        return $this->isAdminArea;
     }
 
     /**
