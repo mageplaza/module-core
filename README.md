@@ -1,6 +1,6 @@
 # Mageplaza Core for Magento 2
 
-## How to install Mageplaza_Core
+## How to install & upgrade Mageplaza_Core
 
 
 ### 1. Install via composer (recommend)
@@ -9,7 +9,7 @@ We recommend you to install Mageplaza_Core module via composer. It is easy to in
 
 Run the following command in Magento 2 root folder.
 
-#### Install
+#### 1.1 Install
 
 ```
 composer require mageplaza/module-core
@@ -17,7 +17,7 @@ php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
 ```
 
-#### Update
+#### 1.2 Upgrade
 
 ```
 composer update mageplaza/module-core
