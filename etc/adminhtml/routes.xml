@@ -16,14 +16,14 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="admin">
-        <route id="mageplaza_core" frontName="mageplaza_core">
-            <module name="Mageplaza_Core" before="Magento_Backend"/>
+        <route id="mpcore" frontName="mpcore">
+            <module name="Mageplaza_Core"/>
         </route>
     </router>
 </config>

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -69,7 +69,7 @@ class Feed extends \Magento\AdminNotification\Model\Feed
 
         $feedXml = parent::getFeedData();
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
-            $typeArray = explode(',', $type);
+            $typeArray    = explode(',', $type);
             $noteToRemove = [];
 
             foreach ($feedXml->channel->item as $item) {

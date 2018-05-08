@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Smtp
- * @copyright   Copyright (c) 2016-2018 Mageplaza (https://www.mageplaza.com/)
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     http://mageplaza.com/LICENSE.txt
  */
 
@@ -70,11 +70,11 @@ class Activate extends Action
 
     /**
      * Activate constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
-     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Mageplaza\Core\Helper\Validate $helper
-     * @param \Mageplaza\Core\Model\ActivateFactory $activateFactory
+     * @param Context $context
+     * @param Config $resourceConfig
+     * @param ReinitableConfigInterface $config
+     * @param Validate $helper
+     * @param ActivateFactory $activateFactory
      */
     public function __construct(
         Context $context,
@@ -85,9 +85,9 @@ class Activate extends Action
     )
     {
         $this->activateFactory = $activateFactory;
-        $this->resourceConfig = $resourceConfig;
-        $this->_appConfig = $config;
-        $this->_coreHelper = $helper;
+        $this->resourceConfig  = $resourceConfig;
+        $this->_appConfig      = $config;
+        $this->_coreHelper     = $helper;
 
         parent::__construct($context);
     }
@@ -112,7 +112,7 @@ class Activate extends Action
         }
 
         $activateModel = $this->activateFactory->create();
-        $result = $activateModel->activate($params);
+        $result        = $activateModel->activate($params);
         if ($result['success']) {
             $result['active'] = true;
 
@@ -123,9 +123,9 @@ class Activate extends Action
 
             if ($this->_coreHelper->getModuleType($params['extension']) == '1') {
                 $freeInfo = [
-                    'email' => $params['email'],
-                    'name' => $params['name'],
-                    'create' => $params['create'],
+                    'email'     => $params['email'],
+                    'name'      => $params['name'],
+                    'create'    => $params['create'],
                     'subscribe' => $params['subscribe']
                 ];
                 foreach ($freeInfo as $code => $value) {

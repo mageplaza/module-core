@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -75,9 +75,9 @@ class Media extends AbstractData
     {
         parent::__construct($context, $objectManager, $storeManager);
 
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->mediaDirectory  = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
-        $this->imageFactory = $imageFactory;
+        $this->imageFactory    = $imageFactory;
     }
 
     /**

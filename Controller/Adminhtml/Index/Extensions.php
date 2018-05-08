@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -38,6 +38,7 @@ class Extensions extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
+     * Extensions constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
@@ -57,6 +58,5 @@ class Extensions extends \Magento\Backend\App\Action
         $resultPage = $this->resultPageFactory->create();
 
         return $resultPage;
-
     }
 }

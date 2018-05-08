@@ -21,27 +21,37 @@
 
 namespace Mageplaza\Core\Model\Config\Source;
 
+use Magento\Framework\Option\ArrayInterface;
+
 /**
- * Class NoticeType
+ * Class AbstractSource
  * @package Mageplaza\Core\Model\Config\Source
  */
-class NoticeType extends AbstractSource
+abstract class AbstractSource implements ArrayInterface
 {
-    const TYPE_ANNOUNCEMENT = 'announcement';
-    const TYPE_NEWUPDATE    = 'new_update';
-    const TYPE_MARKETING    = 'marketing';
+    /**
+     * Options getter
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        $options = [];
+
+        foreach ($this->toArray() as $value => $label) {
+            $options[] = [
+                'value' => $value,
+                'label' => $label
+            ];
+        }
+
+        return $options;
+    }
 
     /**
      * Get options in "key-value" format
      *
      * @return array
      */
-    public function toArray()
-    {
-        return [
-            self::TYPE_ANNOUNCEMENT => __('Announcement'),
-            self::TYPE_NEWUPDATE    => __('New & Update extensions'),
-            self::TYPE_MARKETING    => __('Promotions ')
-        ];
-    }
+    abstract public function toArray();
 }

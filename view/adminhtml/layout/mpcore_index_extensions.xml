@@ -16,7 +16,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
  -->
@@ -24,7 +24,7 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Backend\Block\Template" name="mageplaza_core_index" template="Mageplaza_Core::index.phtml"/>
+            <block class="Mageplaza\Core\Block\Adminhtml\Extensions" name="mageplaza_core_index_extensions" template="Mageplaza_Core::extensions.phtml"/>
         </referenceContainer>
     </body>
 </page>

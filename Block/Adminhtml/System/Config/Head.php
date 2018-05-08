@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -30,8 +30,9 @@ class Head extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Render text
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

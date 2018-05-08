@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -71,9 +71,10 @@ class AbstractData extends AbstractHelper
     protected $isFrontendArea;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * AbstractData constructor.
+     * @param Context $context
+     * @param ObjectManagerInterface $objectManager
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
@@ -82,7 +83,7 @@ class AbstractData extends AbstractHelper
     )
     {
         $this->objectManager = $objectManager;
-        $this->storeManager = $storeManager;
+        $this->storeManager  = $storeManager;
 
         parent::__construct($context);
     }
@@ -128,9 +129,9 @@ class AbstractData extends AbstractHelper
      */
     public function getConfigValue($field, $scopeValue = null, $scopeType = ScopeInterface::SCOPE_STORE)
     {
-        if(!$this->isFrontend() && is_null($scopeValue)){
+        if (!$this->isFrontend() && is_null($scopeValue)) {
             /** @var \Magento\Backend\App\Config $backendConfig */
-            if(!$this->backendConfig) {
+            if (!$this->backendConfig) {
                 $this->backendConfig = $this->objectManager->get('Magento\Backend\App\ConfigInterface');
             }
 
@@ -196,7 +197,7 @@ class AbstractData extends AbstractHelper
     public function versionCompare($ver)
     {
         $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
-        $version = $productMetadata->getVersion(); //will return the magento version
+        $version         = $productMetadata->getVersion(); //will return the magento version
 
         return version_compare($version, $ver, '>=');
     }
@@ -273,7 +274,7 @@ class AbstractData extends AbstractHelper
      */
     public function isFrontend()
     {
-        if(!isset($this->isFrontendArea)){
+        if (!isset($this->isFrontendArea)) {
             /** @var \Magento\Framework\App\State $state */
             $state = $this->objectManager->get('Magento\Framework\App\State');
 
@@ -296,7 +297,7 @@ class AbstractData extends AbstractHelper
      */
     public function isAdmin()
     {
-        if(!isset($this->isAdminArea)){
+        if (!isset($this->isAdminArea)) {
             /** @var \Magento\Framework\App\State $state */
             $state = $this->objectManager->get('Magento\Framework\App\State');
 

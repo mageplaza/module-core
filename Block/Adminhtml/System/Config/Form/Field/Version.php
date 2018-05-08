@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -57,13 +57,14 @@ class Version extends Field
     /**
      * @param AbstractElement $element
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getElementHtml(AbstractElement $element)
     {
         $originalData = $element->getOriginalData();
 
         $packageInfo = $this->_packageInfoFactory->create();
-        $version = $packageInfo->getVersion($originalData['module_name']);
+        $version     = $packageInfo->getVersion($originalData['module_name']);
 
         $html = '<div class="control-value special">' . $version . '</div>';
 

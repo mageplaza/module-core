@@ -16,7 +16,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
  -->
@@ -54,7 +54,7 @@
                 <label>Mageplaza Marketplace</label>
                 <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\Partners</frontend_model>
                 <comment><![CDATA[
-                <iframe id="mp-core-partners" src="https://www.mageplaza.com/core/partners.html" frameborder="0" scrolling="no" width="100%" height="1700px" style="min-height: 800px;"></iframe>
+                <iframe id="mp-core-partners" src="https://www.mageplaza.com/core/partners.html" frameborder="0" scrolling="yes" width="100%" height="100%" style="min-height: 800px;"></iframe>
                 ]]></comment>
             </group>
         </section>

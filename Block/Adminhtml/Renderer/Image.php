@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -34,6 +34,7 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
      * Get image preview url
      *
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getUrl()
     {

@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -33,29 +33,12 @@ class Userguide extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Mageplaza_Core::userguide';
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
      */
-    protected $resultPageFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
-    )
-    {
-        $this->resultPageFactory = $resultPageFactory;
-
-        parent::__construct($context);
-    }
-
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
-        $resultPage = $this->resultPageFactory->create();
+        header("Location: https://docs.mageplaza.com/?utm_source=configuration&utm_medium=link&utm_content=user-guide");
 
-        return $resultPage;
+        exit;
     }
 }

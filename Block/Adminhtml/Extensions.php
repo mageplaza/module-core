@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -34,17 +34,14 @@ class Extensions extends \Magento\Framework\View\Element\Template
      * Cache group Tag
      */
     const CACHE_GROUP = Config::TYPE_IDENTIFIER;
-
     /**
      * Prefix for cache key of block
      */
     const CACHE_KEY_PREFIX = 'MAGEPLAZA_';
-
     /**
      * Cache tag
      */
     const CACHE_TAG = 'extensions';
-
     /**
      * Mageplaza api url to get extension json
      */

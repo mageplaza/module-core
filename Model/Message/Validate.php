@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -56,7 +56,7 @@ class Validate implements MessageInterface
         UrlInterface $urlBuilder
     )
     {
-        $this->_helper = $helper;
+        $this->_helper    = $helper;
         $this->urlBuilder = $urlBuilder;
     }
 
@@ -115,7 +115,7 @@ class Validate implements MessageInterface
         }
 
         $sectionName = $this->_helper->getConfigModulePath($modules[0]);
-        $url = $this->urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => $sectionName]);
+        $url         = $this->urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => $sectionName]);
 
         return __(
             'One or more Mageplaza extensions are not validated. Click <a href="%1">here</a> to validate them.',

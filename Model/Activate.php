@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -33,20 +33,7 @@ class Activate extends \Magento\AdminNotification\Model\Feed
      * @inheritdoc
      */
     const MAGEPLAZA_ACTIVE_URL = 'http://store.mageplaza.com/license/index/activate';
-
-    /**
-     * @inheritdoc
-     */
-    public function getActiveUrl()
-    {
-        return self::MAGEPLAZA_ACTIVE_URL;
-//        $httpPath = $this->_backendConfig->isSetFlag(self::XML_USE_HTTPS_PATH) ? 'https://' : 'http://';
-//        if ($this->_feedUrl === null) {
-//            $this->_feedUrl = $httpPath . self::MAGEPLAZA_ACTIVE_URL;
-//        }
-//
-//        return $this->_feedUrl;
-    }
+    //    const MAGEPLAZA_ACTIVE_URL = 'http://mageplaza.localhost.com/license/index/activate';
 
     /**
      * @param array $params
@@ -57,7 +44,7 @@ class Activate extends \Magento\AdminNotification\Model\Feed
         $result = ['success' => false];
 
         $curl = $this->curlFactory->create();
-        $curl->write(\Zend_Http_Client::POST, $this->getActiveUrl(), '1.1', [], http_build_query($params));
+        $curl->write(\Zend_Http_Client::POST, self::MAGEPLAZA_ACTIVE_URL, '1.1', [], http_build_query($params));
 
         try {
             $resultCurl = $curl->read();

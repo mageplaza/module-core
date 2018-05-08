@@ -15,14 +15,13 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Core\Model\Config\Structure;
 
 use Magento\Config\Model\Config\Structure\Data as StructureData;
-use Magento\Framework\UrlInterface;
 use Mageplaza\Core\Helper\Validate as ConfigHelper;
 
 /**
@@ -42,9 +41,7 @@ class Data
      * Data constructor.
      * @param ConfigHelper $helper
      */
-    public function __construct(
-        ConfigHelper $helper
-    )
+    public function __construct(ConfigHelper $helper)
     {
         $this->_helper = $helper;
     }
@@ -90,16 +87,16 @@ class Data
     protected function getDynamicConfigGroups($moduleName, $sectionName)
     {
         $defaultFieldOptions = [
-            'type' => 'text',
+            'type'          => 'text',
             'showInDefault' => '1',
             'showInWebsite' => '0',
-            'showInStore' => '0',
-            'sortOrder' => 1,
-            'module_name' => $moduleName,
-            'module_type' => $this->_helper->getModuleType($moduleName),
-            'validate' => 'required-entry',
-            '_elementType' => 'field',
-            'path' => $sectionName . '/module'
+            'showInStore'   => '0',
+            'sortOrder'     => 1,
+            'module_name'   => $moduleName,
+            'module_type'   => $this->_helper->getModuleType($moduleName),
+            'validate'      => 'required-entry',
+            '_elementType'  => 'field',
+            'path'          => $sectionName . '/module'
         ];
 
         $fields = [];
@@ -108,15 +105,15 @@ class Data
         }
 
         $dynamicConfigGroups['module'] = [
-            'id' => 'module',
-            'label' => __('Module Information'),
+            'id'            => 'module',
+            'label'         => __('Module Information'),
             'showInDefault' => '1',
             'showInWebsite' => '0',
-            'showInStore' => '0',
-            'sortOrder' => 1000,
-            "_elementType" => "group",
-            'path' => $sectionName,
-            'children' => $fields
+            'showInStore'   => '0',
+            'sortOrder'     => 1000,
+            "_elementType"  => "group",
+            'path'          => $sectionName,
+            'children'      => $fields
         ];
 
         return $dynamicConfigGroups;
@@ -128,33 +125,29 @@ class Data
     protected function getFieldList()
     {
         return [
-            'notice' => [
+            'notice'      => [
                 'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Message'
             ],
-            'version' => [
-                'type' => 'label',
-                'label' => __('Version'),
+            'version'     => [
+                'type'           => 'label',
+                'label'          => __('Version'),
                 'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Form\Field\Version'
             ],
-//            'domain'      => [
-//                'label'          => __('Register Domain'),
-//                'frontend_class' => 'mageplaza-module-active-domain'
-//            ],
-            'name' => [
-                'label' => __('Register Name'),
+            'name'        => [
+                'label'          => __('Register Name'),
                 'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-name'
             ],
-            'email' => [
-                'label' => __('Register Email'),
-                'validate' => 'required-entry validate-email',
+            'email'       => [
+                'label'          => __('Register Email'),
+                'validate'       => 'required-entry validate-email',
                 'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-email',
-                'comment' => 'This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get premium support).'
+                'comment'        => __('This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get premium support).')
             ],
             'product_key' => [
-                'label' => __('Product Key'),
+                'label'          => __('Product Key'),
                 'frontend_class' => 'mageplaza-module-active-field-key'
             ],
-            'button' => [
+            'button'      => [
                 'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Button'
             ]
         ];

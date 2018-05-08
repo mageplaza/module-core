@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Core
- * @copyright   Copyright (c) 2016-2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -33,6 +33,7 @@ use Magento\Store\Model\StoreManagerInterface;
 class Validate extends AbstractData
 {
     const DEV_ENV = ['localhost', 'dev', '127.0.0.1', '192.168.', 'demo.'];
+//    const DEV_ENV = [];
 
     /**
      * @var array
@@ -145,7 +146,7 @@ class Validate extends AbstractData
         }
 
         return [
-            'create' => (int)$create,
+            'create'    => (int)$create,
             'subscribe' => (int)$subscribe
         ];
     }
@@ -159,7 +160,7 @@ class Validate extends AbstractData
             $this->_mageplazaModules = [];
 
             $allowList = true;
-            $hostName = $this->_urlBuilder->getBaseUrl();
+            $hostName  = $this->_urlBuilder->getBaseUrl();
             foreach (self::DEV_ENV as $env) {
                 if (strpos($hostName, $env) !== false) {
                     $allowList = false;
