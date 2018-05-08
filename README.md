@@ -1,5 +1,11 @@
 # Mageplaza Core for Magento 2
 
+
+
+[![Latest Stable Version](https://poser.pugx.org/mageplaza/module-core/v/stable)](https://packagist.org/packages/mageplaza/module-core)
+[![Total Downloads](https://poser.pugx.org/mageplaza/module-core/downloads)](https://packagist.org/packages/mageplaza/module-core)
+
+
 ## How to install & upgrade Mageplaza_Core
 
 
