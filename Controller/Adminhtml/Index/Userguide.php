@@ -37,8 +37,6 @@ class Userguide extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        header("Location: https://docs.mageplaza.com/?utm_source=configuration&utm_medium=link&utm_content=user-guide");
-
-        exit;
+        $this->_response->setRedirect('https://docs.mageplaza.com/?utm_source=configuration&utm_medium=link&utm_content=user-guide');
     }
 }
