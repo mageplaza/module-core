@@ -61,14 +61,9 @@ class AbstractData extends AbstractHelper
     protected $backendConfig;
 
     /**
-     * @var bool
+     * @var array
      */
-    protected $isAdminArea;
-
-    /**
-     * @var bool
-     */
-    protected $isFrontendArea;
+    protected $isArea = [];
 
     /**
      * AbstractData constructor.
@@ -129,7 +124,7 @@ class AbstractData extends AbstractHelper
      */
     public function getConfigValue($field, $scopeValue = null, $scopeType = ScopeInterface::SCOPE_STORE)
     {
-        if (!$this->isFrontend() && is_null($scopeValue)) {
+        if (!$this->isArea() && is_null($scopeValue)) {
             /** @var \Magento\Backend\App\Config $backendConfig */
             if (!$this->backendConfig) {
                 $this->backendConfig = $this->objectManager->get('Magento\Backend\App\ConfigInterface');
@@ -177,6 +172,18 @@ class AbstractData extends AbstractHelper
     }
 
     /**
+     * @param $ver
+     * @return mixed
+     */
+    public function versionCompare($ver)
+    {
+        $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
+        $version         = $productMetadata->getVersion(); //will return the magento version
+
+        return version_compare($version, $ver, '>=');
+    }
+
+    /**
      * @param $data
      * @return string
      * @throws \Zend_Serializer_Exception
@@ -191,15 +198,17 @@ class AbstractData extends AbstractHelper
     }
 
     /**
-     * @param $ver
+     * @param $string
      * @return mixed
+     * @throws \Zend_Serializer_Exception
      */
-    public function versionCompare($ver)
+    public function unserialize($string)
     {
-        $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
-        $version         = $productMetadata->getVersion(); //will return the magento version
+        if ($this->versionCompare('2.2.0')) {
+            return self::jsonDecode($string);
+        }
 
-        return version_compare($version, $ver, '>=');
+        return $this->getSerializeClass()->unserialize($string);
     }
 
     /**
@@ -217,36 +226,6 @@ class AbstractData extends AbstractHelper
         }
 
         return $encodeValue;
-    }
-
-    /**
-     * @return \Magento\Framework\Json\Helper\Data|mixed
-     */
-    public static function getJsonHelper()
-    {
-        return ObjectManager::getInstance()->get(JsonHelper::class);
-    }
-
-    /**
-     * @return \Zend_Serializer_Adapter_PhpSerialize|mixed
-     */
-    protected function getSerializeClass()
-    {
-        return $this->objectManager->get(\Zend_Serializer_Adapter_PhpSerialize::class);
-    }
-
-    /**
-     * @param $string
-     * @return mixed
-     * @throws \Zend_Serializer_Exception
-     */
-    public function unserialize($string)
-    {
-        if ($this->versionCompare('2.2.0')) {
-            return self::jsonDecode($string);
-        }
-
-        return $this->getSerializeClass()->unserialize($string);
     }
 
     /**
@@ -272,45 +251,29 @@ class AbstractData extends AbstractHelper
      *
      * @return bool
      */
-    public function isFrontend()
+    public function isAdmin()
     {
-        if (!isset($this->isFrontendArea)) {
-            /** @var \Magento\Framework\App\State $state */
-            $state = $this->objectManager->get('Magento\Framework\App\State');
-
-            try {
-                $areaCode = $state->getAreaCode();
-
-                $this->isFrontendArea = ($areaCode == Area::AREA_FRONTEND);
-            } catch (\Exception $e) {
-                $this->isFrontendArea = false;
-            }
-        }
-
-        return $this->isFrontendArea;
+        return $this->isArea(Area::AREA_ADMINHTML);
     }
 
     /**
-     * Is Admin Store
-     *
-     * @return bool
+     * @param string $area
+     * @return mixed
      */
-    public function isAdmin()
+    public function isArea($area = Area::AREA_FRONTEND)
     {
-        if (!isset($this->isAdminArea)) {
+        if (!isset($this->isArea[$area])) {
             /** @var \Magento\Framework\App\State $state */
             $state = $this->objectManager->get('Magento\Framework\App\State');
 
             try {
-                $areaCode = $state->getAreaCode();
-
-                $this->isAdminArea = ($areaCode == Area::AREA_ADMINHTML);
+                $this->isArea[$area] = ($state->getAreaCode() == $area);
             } catch (\Exception $e) {
-                $this->isAdminArea = false;
+                $this->isArea[$area] = false;
             }
         }
 
-        return $this->isAdminArea;
+        return $this->isArea[$area];
     }
 
     /**
@@ -330,5 +293,21 @@ class AbstractData extends AbstractHelper
     public function getObject($path)
     {
         return $this->objectManager->get($path);
+    }
+
+    /**
+     * @return \Magento\Framework\Json\Helper\Data|mixed
+     */
+    public static function getJsonHelper()
+    {
+        return ObjectManager::getInstance()->get(JsonHelper::class);
+    }
+
+    /**
+     * @return \Zend_Serializer_Adapter_PhpSerialize|mixed
+     */
+    protected function getSerializeClass()
+    {
+        return $this->objectManager->get(\Zend_Serializer_Adapter_PhpSerialize::class);
     }
 }
