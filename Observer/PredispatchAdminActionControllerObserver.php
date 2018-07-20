@@ -21,7 +21,10 @@
 
 namespace Mageplaza\Core\Observer;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Mageplaza\Core\Helper\AbstractData;
 
 /**
  * Class PredispatchAdminActionControllerObserver
@@ -30,36 +33,39 @@ use Magento\Framework\Event\ObserverInterface;
 class PredispatchAdminActionControllerObserver implements ObserverInterface
 {
     /**
-     * @type \Mageplaza\Core\Model\FeedFactory
-     */
-    protected $_feedFactory;
-
-    /**
-     * @type \Magento\Backend\Model\Auth\Session
+     * @type Session
      */
     protected $_backendAuthSession;
 
     /**
-     * @param \Mageplaza\Core\Model\FeedFactory $feedFactory
-     * @param \Magento\Backend\Model\Auth\Session $backendAuthSession
+     * @var AbstractData
+     */
+    protected $helper;
+
+    /**
+     * PredispatchAdminActionControllerObserver constructor.
+     * @param Session $backendAuthSession
+     * @param AbstractData $helper
      */
     public function __construct(
-        \Mageplaza\Core\Model\FeedFactory $feedFactory,
-        \Magento\Backend\Model\Auth\Session $backendAuthSession
+        Session $backendAuthSession,
+        AbstractData $helper
     )
     {
-        $this->_feedFactory        = $feedFactory;
         $this->_backendAuthSession = $backendAuthSession;
+        $this->helper = $helper;
     }
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        if ($this->_backendAuthSession->isLoggedIn()) {
+        if ($this->_backendAuthSession->isLoggedIn()
+            && $this->helper->isModuleOutputEnabled('Magento_AdminNotification')
+        ) {
             /* @var $feedModel \Mageplaza\Core\Model\Feed */
-            $feedModel = $this->_feedFactory->create();
+            $feedModel = $this->helper->createObject(\Mageplaza\Core\Model\Feed::class);
             $feedModel->checkUpdate();
         }
     }

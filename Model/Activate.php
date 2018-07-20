@@ -21,19 +21,40 @@
 
 namespace Mageplaza\Core\Model;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Mageplaza\Core\Helper\AbstractData;
 
 /**
  * Class Activate
  * @package Mageplaza\Core\Model
  */
-class Activate extends \Magento\AdminNotification\Model\Feed
+class Activate extends DataObject
 {
     /**
      * @inheritdoc
      */
     const MAGEPLAZA_ACTIVE_URL = 'http://store.mageplaza.com/license/index/activate';
-    //    const MAGEPLAZA_ACTIVE_URL = 'http://mageplaza.localhost.com/license/index/activate';
+
+    /**
+     * @var CurlFactory
+     */
+    protected $curlFactory;
+
+    /**
+     * Activate constructor.
+     * @param CurlFactory $curlFactory
+     * @param array $data
+     */
+    public function __construct(
+        CurlFactory $curlFactory,
+        array $data = []
+    )
+    {
+        $this->curlFactory = $curlFactory;
+
+        parent::__construct($data);
+    }
 
     /**
      * @param array $params
@@ -50,7 +71,7 @@ class Activate extends \Magento\AdminNotification\Model\Feed
             $resultCurl = $curl->read();
             if (!empty($resultCurl)) {
                 $responseBody = \Zend_Http_Response::extractBody($resultCurl);
-                $result       += AbstractData::jsonDecode($responseBody);
+                $result += AbstractData::jsonDecode($responseBody);
                 if (isset($result['status']) && in_array($result['status'], [200, 201])) {
                     $result['success'] = true;
                 }
