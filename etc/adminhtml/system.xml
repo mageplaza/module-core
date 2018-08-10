@@ -44,6 +44,11 @@
                         <field id="notice_enable">1</field>
                     </depends>
                 </field>
+                <field id="store_helper" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Store Helper</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Provide helper links, tooltips to assist store owners in mataining the store</comment>
+                </field>
             </group>
         </section>
         <section id="mpmarketplace" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
