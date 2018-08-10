@@ -2,10 +2,10 @@
 var mpHelpDb = {
 	1: {
 		'path': 'admin/system_config/index',
-		'css_selector': '#general_locale_weekend',
+		'css_selector': '#general_single_store_mode_enabled',
 		'type': 'link',
-		'text': 'How to install an extension, {link}.',
-		'url': 'https://www.mageplaza.com/install-magento-2-extension/',
+		'text': 'How to enable Single Store Mode, {link}.',
+		'url': 'https://www.mageplaza.com/kb/how-enable-single-store-mode-magento-2.html',
 		'anchor': 'learn more',
 	}
 }
