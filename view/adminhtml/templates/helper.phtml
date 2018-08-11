@@ -24,7 +24,7 @@
 require([
     'jquery',
     'underscore'
-], function ($, _) {
+], function (jQuery, _) {
     'use strict';
 
     var mpHelpDb = {
@@ -36,7 +36,27 @@ require([
                 'url': 'https://www.mageplaza.com/kb/how-enable-single-store-mode-magento-2.html',
                 'anchor': 'learn more',
             }
-        ]
+        ],
+        'system_config/edit/section/trans_email' : [
+            {
+                'css_selector': '#trans_email_ident_general_email',
+                'type': 'link',
+                'text': 'How to change Store Email Addresses, {link}.',
+                'url': 'https://www.mageplaza.com/kb/how-change-store-email-addresses-magento-2.html',
+                'anchor': 'learn more',
+            }
+        ],
+        'theme/design_config/edit/scope/websites/scope_id' : [
+            {
+                'css_selector': '#LT71103',
+                'type': 'link',
+                'text': 'How to change the welcome message, {link}.',
+                'url': 'https://www.mageplaza.com/kb/how-change-welcome-message-magento-2.html',
+                'anchor': 'learn more',
+            }
+        ],
+
+        
     }
 
 
@@ -53,13 +73,16 @@ require([
 
     var url = window.location.href;
     for (var path in mpHelpDb){
-        if (mpHelpDb.hasOwnProperty(path) && url.search(path) === -1) return; //not found
-        var datas = mpHelpDb[path];
-        _.each(datas, function(data){
-            var html = buildHtml(data);
-            html && $(html).insertAfter(data.css_selector); //only insert if html is not empty
-        });
+        if (mpHelpDb.hasOwnProperty(path) && url.search(path)) {
+            var datas = mpHelpDb[path];
+            _.each(datas, function(data){
+                var html = buildHtml(data);
+                html && jQuery(html).insertAfter(data.css_selector); //only insert if html is not empty
+            });
+        }
+        
     }
+
 });
 </script>
 
