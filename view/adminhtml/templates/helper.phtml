@@ -24,7 +24,7 @@
 require([
     'jquery',
     'underscore'
-], function (jQuery, _) {
+], function ($, _) {
     'use strict';
 
     var mpHelpDb = {
@@ -77,7 +77,7 @@ require([
             var datas = mpHelpDb[path];
             _.each(datas, function(data){
                 var html = buildHtml(data);
-                html && jQuery(html).insertAfter(data.css_selector); //only insert if html is not empty
+                html && $(html).insertAfter(data.css_selector); //only insert if html is not empty
             });
         }
         

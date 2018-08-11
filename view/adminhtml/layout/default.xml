@@ -21,9 +21,12 @@
  */
  -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <body>
+	 <head>
+        <script src="Mageplaza_Core::js/help.js"/>
+    </head>
+    <!-- <body>
         <referenceBlock name="head.components">
-            <block name="mpcore_store_helper" template="Mageplaza_Core::helper.phtml" ifconfig="mageplaza/general/store_helper"/>
+            <block name="mpcore_store_helper" template="Mageplaza_Core::helper.phtml" ifconfig="mageplaza/general/store_helper" />
         </referenceBlock>
-    </body>
+    </body> -->
 </page>
