@@ -1,0 +1,88 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+?>
+<script>
+require([
+    'jquery',
+    'underscore'
+], function ($, _) {
+    'use strict';
+
+    var mpHelpDb = {
+        'admin/system_config/index' : [
+            {
+                'css_selector': '#general_single_store_mode_enabled',
+                'type': 'link',
+                'text': 'How to enable Single Store Mode, {link}.',
+                'url': 'https://www.mageplaza.com/kb/how-enable-single-store-mode-magento-2.html',
+                'anchor': 'learn more',
+            }
+        ],
+        'system_config/edit/section/trans_email' : [
+            {
+                'css_selector': '#trans_email_ident_general_email',
+                'type': 'link',
+                'text': 'How to change Store Email Addresses, {link}.',
+                'url': 'https://www.mageplaza.com/kb/how-change-store-email-addresses-magento-2.html',
+                'anchor': 'learn more',
+            }
+        ],
+        'theme/design_config/edit/scope/websites/scope_id' : [
+            {
+                'css_selector': '#LT71103',
+                'type': 'link',
+                'text': 'How to change the welcome message, {link}.',
+                'url': 'https://www.mageplaza.com/kb/how-change-welcome-message-magento-2.html',
+                'anchor': 'learn more',
+            }
+        ],
+
+        
+    }
+
+
+    function buildHtml(data){
+        var html = '';
+        var link = '<a href="'+ data.url +'?utm_source=store&utm_medium=link&utm_campaign=mageplaza-helps" target="_blank">'+ data.anchor +'</a>';
+        var text = data.text.replace('{link}', link);
+        switch(data.type) {
+            default:
+                var html = '<p class="note">'+ text +'</p>';
+        }
+        return html;
+    }
+
+    var url = window.location.href;
+    for (var path in mpHelpDb){
+        if (mpHelpDb.hasOwnProperty(path) && url.search(path)) {
+            var datas = mpHelpDb[path];
+            _.each(datas, function(data){
+                var html = buildHtml(data);
+                html && $(html).insertAfter(data.css_selector); //only insert if html is not empty
+            });
+        }
+        
+    }
+
+});
+</script>
+

@@ -42,7 +42,7 @@ class Activate extends Action
     const ADMIN_RESOURCE = 'Mageplaza_Core::activate';
 
     /**
-     * @var \Mageplaza\Smtp\Model\ActivateFactory
+     * @var \Mageplaza\Core\Model\ActivateFactory
      */
     protected $activateFactory;
 
