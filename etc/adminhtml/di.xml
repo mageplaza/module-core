@@ -7,7 +7,7 @@
  *
  * This source file is subject to the mageplaza.com license that is
  * available through the world-wide-web at this URL:
- * https://mageplaza.com/LICENSE.txt
+ * https://www.mageplaza.com/LICENSE.txt
  *
  * DISCLAIMER
  *
@@ -17,7 +17,7 @@
  * @category    Mageplaza
  * @package     Mageplaza_Core
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
- * @license     http://mageplaza.com/LICENSE.txt
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -30,5 +30,8 @@
     </type>
     <type name="Magento\Config\Model\Config\Structure\Data">
         <plugin name="mageplaza_module_activate" type="Mageplaza\Core\Model\Config\Structure\Data"/>
+    </type>
+    <type name="Magento\Backend\Model\Menu\Builder\AbstractCommand">
+        <plugin name="mageplaza_move_menu" type="Mageplaza\Core\Plugin\MoveMenu"/>
     </type>
 </config>
