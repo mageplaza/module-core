@@ -65,7 +65,7 @@ class Activate extends DataObject
         $result = ['success' => false];
 
         $curl = $this->curlFactory->create();
-        $curl->write(\Zend_Http_Client::POST, self::MAGEPLAZA_ACTIVE_URL, '1.1', [], http_build_query($params));
+        $curl->write(\Zend_Http_Client::POST, self::MAGEPLAZA_ACTIVE_URL, '1.1', [], http_build_query($params, null, '&'));
 
         try {
             $resultCurl = $curl->read();
