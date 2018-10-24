@@ -52,6 +52,8 @@
                 <field id="menu" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable Mageplaza Menu</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Mageplaza\Core\Model\Config\Backend\Menu</backend_model>
+                    <comment>If yes, the Mageplaza menu will be displayed on the admin navigation. All of the Mageplaza module menu will be displayed there.</comment>
                 </field>
             </group>
         </section>

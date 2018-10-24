@@ -41,9 +41,7 @@ class MoveMenu
      * MoveMenu constructor.
      * @param AbstractData $helper
      */
-    public function __construct(
-        AbstractData $helper
-    )
+    public function __construct(AbstractData $helper)
     {
         $this->helper = $helper;
     }
@@ -56,12 +54,12 @@ class MoveMenu
     public function afterExecute(AbstractCommand $subject, $itemParams)
     {
         if ($this->helper->getConfigGeneral('menu')) {
-            if (isset($itemParams['parent'])) {
-                $parent = explode('_', $itemParams['parent']);
-                $module = explode('_', $itemParams['module']);
-                if (isset($parent['0']) && isset($module ['0']) && $parent['0'] == 'Magento' && $module['0'] == 'Mageplaza') {
-                    $itemParams['parent'] = self::MAGEPLAZA_CORE;
-                }
+            if (strpos($itemParams['id'], 'Mageplaza_') !== false && isset($itemParams['parent']) && strpos($itemParams['parent'], 'Mageplaza_') === false) {
+                $itemParams['parent'] = self::MAGEPLAZA_CORE;
+            }
+        } else {
+            if ((isset($itemParams['id']) && $itemParams['id'] == self::MAGEPLAZA_CORE) || (isset($itemParams['parent']) && $itemParams['parent'] == self::MAGEPLAZA_CORE)) {
+                $itemParams['removed'] = true;
             }
         }
 
