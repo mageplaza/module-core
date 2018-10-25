@@ -30,6 +30,16 @@ use Magento\Framework\App\Config\Value;
 class Menu extends Value
 {
     /**
+     * Model construct that should be used for object initialization
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_setResourceModel('Magento\Config\Model\ResourceModel\Config\Data');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function afterSave()
