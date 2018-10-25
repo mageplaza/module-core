@@ -46,3 +46,13 @@
   max-width: 75%;
   margin: 0 auto -35px;
 }
+
+[data-ui-id="menu-mageplaza-core-menu"] strong:before {
+  display: none; /*no icon under Mageplaza tab*/
+}
+ul[role="menu"] [data-ui-id^="menu-mageplaza"] strong:before {
+  content: @icon-mageplaza__content;
+  font-family: @icons-mageplaza__font-name;;
+  font-size: 1.5rem;
+  margin-right: .8rem;
+}
