@@ -21,32 +21,25 @@
 
 namespace Mageplaza\Core\Block\Adminhtml\System\Config;
 
-use Magento\Config\Block\System\Config\Form\Field;
-use Magento\Framework\Data\Form\Element\AbstractElement;
-
 /**
- * Class Message
+ * Class Head
  * @package Mageplaza\Core\Block\Adminhtml\System\Config
  */
-class Message extends Field
+class Compatibility extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
      * Render text
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function render(AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        $html = '<td colspan="3" id="mageplaza-module-message-id">
-                    <div id="mageplaza-module-messages" style="display: none">
-                        <div class="messages">
-                            <div class="message message-error">
-                                <div data-ui-id="messages-message-error"></div>
-                            </div>
-                        </div>
-                    </div>
-                </td>';
+        $html = '';
+        if ($element->getComment()) {
+            $html .= '<div style="margin-left: 2em; width: 100%;padding: 10px; ">' . $element->getComment() . '</div>';
+        }
 
         return $html;
     }
@@ -58,7 +51,7 @@ class Message extends Field
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getElementHtml(AbstractElement $element)
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         return $this->_toHtml();
     }

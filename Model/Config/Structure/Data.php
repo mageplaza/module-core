@@ -125,9 +125,13 @@ class Data
     protected function getFieldList()
     {
         return [
+            'docs'      => [
+                'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Docs'
+            ],
             'notice'      => [
                 'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Message'
             ],
+
             'version'     => [
                 'type'           => 'label',
                 'label'          => __('Version'),
@@ -141,7 +145,7 @@ class Data
                 'label'          => __('Register Email'),
                 'validate'       => 'required-entry validate-email',
                 'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-email',
-                'comment'        => __('This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get premium support).')
+                'comment'        => __('This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get priority support).')
             ],
             'product_key' => [
                 'label'          => __('Product Key'),

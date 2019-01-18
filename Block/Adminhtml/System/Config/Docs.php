@@ -28,7 +28,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * Class Message
  * @package Mageplaza\Core\Block\Adminhtml\System\Config
  */
-class Message extends Field
+class Docs extends Field
 {
     /**
      * Render text
@@ -38,11 +38,17 @@ class Message extends Field
      */
     public function render(AbstractElement $element)
     {
-        $html = '<td colspan="3" id="mageplaza-module-message-id">
-                    <div id="mageplaza-module-messages" style="display: none">
+        $html = '<td colspan="3" id="mageplaza-module-docs-id">
+                    <div id="mageplaza-module-docs">
                         <div class="messages">
-                            <div class="message message-error">
-                                <div data-ui-id="messages-message-error"></div>
+                            <div class="message message-info">
+                                <div data-ui-id="messages-message-info">
+                                <ul style="margin-left: 2em;">
+                                    <li><a href="#">User Guide</a></li>
+                                    <li><a href="#">FAQs</a></li>
+                                    <li><a href="#">Check Latest Version</a></li>
+                                </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
