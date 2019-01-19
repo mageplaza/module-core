@@ -32,6 +32,8 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Validate extends AbstractData
 {
+    const MODULE_TYPE_FREE = 1;
+    const MODULE_TYPE_PAID = 2;
 //    const DEV_ENV = ['localhost', 'dev', '127.0.0.1', '192.168.', 'demo.'];
     const DEV_ENV = [];
 
@@ -52,6 +54,7 @@ class Validate extends AbstractData
 
     /**
      * Validate constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -71,31 +74,42 @@ class Validate extends AbstractData
 
     /**
      * @param $moduleName
+     *
      * @return bool
      */
     public function needActive($moduleName)
     {
         $type = $this->getModuleType($moduleName);
-        if (!$type || !in_array($type, ['1', '2'])) {
-            return false;
-        }
 
-        return true;
+        return $type && $type == self::MODULE_TYPE_FREE;
     }
 
     /**
      * @param $moduleName
+     *
      * @return mixed
      */
     public function getModuleType($moduleName)
     {
-        $configModulePath = $this->getConfigModulePath($moduleName);
-
-        return $this->getConfigValue($configModulePath . '/module/type');
+        return $this->getModuleData($moduleName, 'type') ?: self::MODULE_TYPE_PAID;
     }
 
     /**
      * @param $moduleName
+     * @param string $field
+     *
+     * @return array|mixed
+     */
+    public function getModuleData($moduleName, $field = '')
+    {
+        $configModulePath = $this->getConfigModulePath($moduleName);
+
+        return $this->getConfigValue($configModulePath . '/module/' . $field);
+    }
+
+    /**
+     * @param $moduleName
+     *
      * @return bool
      */
     public function getConfigModulePath($moduleName)
@@ -117,30 +131,27 @@ class Validate extends AbstractData
 
     /**
      * @param $moduleName
+     *
      * @return bool
      */
     public function isModuleActive($moduleName)
     {
-        $configModulePath = $this->getConfigModulePath($moduleName);
-
-        return $this->getConfigValue($configModulePath . '/module/active')
-            && $this->getConfigValue($configModulePath . '/module/product_key');
+        return $this->getModuleData($moduleName, 'active') && $this->getModuleData($moduleName, 'product_key');
     }
 
     /**
      * @param $moduleName
+     *
      * @return array
      */
     public function getModuleCheckbox($moduleName)
     {
-        $configModulePath = $this->getConfigModulePath($moduleName);
-
-        $create = $this->getConfigValue($configModulePath . '/module/create');
+        $create = $this->getModuleData($moduleName, 'create');
         if (is_null($create)) {
             $create = 1;
         }
 
-        $subscribe = $this->getConfigValue($configModulePath . '/module/subscribe');
+        $subscribe = $this->getModuleData($moduleName, 'subscribe');
         if (is_null($subscribe)) {
             $subscribe = 1;
         }
@@ -160,7 +171,7 @@ class Validate extends AbstractData
             $this->_mageplazaModules = [];
 
             $allowList = true;
-            $hostName  = $this->_urlBuilder->getBaseUrl();
+            $hostName = $this->_urlBuilder->getBaseUrl();
             foreach (self::DEV_ENV as $env) {
                 if (strpos($hostName, $env) !== false) {
                     $allowList = false;

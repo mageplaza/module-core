@@ -39,6 +39,7 @@ class Data
 
     /**
      * Data constructor.
+     *
      * @param ConfigHelper $helper
      */
     public function __construct(ConfigHelper $helper)
@@ -49,6 +50,7 @@ class Data
     /**
      * @param \Magento\Config\Model\Config\Structure\Data $object
      * @param array $config
+     *
      * @return array
      */
     public function beforeMerge(StructureData $object, array $config)
@@ -62,19 +64,42 @@ class Data
                             continue;
                         }
 
-                        if (!$this->_helper->needActive($moduleName)) {
-                            continue;
-                        }
+                        $section['children']['compatibility'] = [
+                            'id'            => 'compatibility',
+                            'label'         => __('Compatibility and Solutions'),
+                            'showInDefault' => '1',
+                            'showInWebsite' => '0',
+                            'showInStore'   => '0',
+                            '_elementType'  => 'group',
+                            'path'          => $section['id'],
+                            "children"      => [
+                                'head' => [
+                                    'id'             => 'head',
+                                    'type'           => 'label',
+                                    'label'          => __('Version'),
+                                    'showInDefault'  => '1',
+                                    'showInWebsite'  => '0',
+                                    'showInStore'    => '0',
+                                    'sortOrder'      => 1,
+                                    'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Compatibility',
+                                    'module_name'    => $moduleName,
+                                    'module_type'    => $this->_helper->getModuleType($moduleName),
+                                    'validate'       => 'required-entry',
+                                    '_elementType'   => 'field',
+                                    'path'           => $section['id'] . '/compatibility',
+                                ]
+                            ]
+                        ];
 
-                        $dynamicGroups = $this->getDynamicConfigGroups($moduleName, $section['id']);
-                        if (!empty($dynamicGroups)) {
-                            $config['config']['system']['sections'][$sectionId]['children'] = $dynamicGroups + $section['children'];
-                        }
+                        $config['config']['system']['sections'][$sectionId]['children'] = $this->getDynamicConfigGroups($moduleName, $section['id']) + $section['children'];
                         break;
                     }
                 }
             }
         }
+
+//        \Zend_Debug::dump($config);
+//        die;
 
         return [$config];
     }
@@ -82,6 +107,7 @@ class Data
     /**
      * @param $moduleName
      * @param $sectionName
+     *
      * @return mixed
      */
     protected function getDynamicConfigGroups($moduleName, $sectionName)
@@ -99,24 +125,26 @@ class Data
             'path'          => $sectionName . '/module'
         ];
 
+        $type = $this->_helper->getModuleType($moduleName);
         $fields = [];
         foreach ($this->getFieldList() as $id => $option) {
+            if (isset($option['show']) && $option['show'] != $type) {
+                continue;
+            }
+
             $fields[$id] = array_merge($defaultFieldOptions, ['id' => $id], $option);
         }
 
-        $dynamicConfigGroups['module'] = [
+        return ['module' => [
             'id'            => 'module',
             'label'         => __('Module Information'),
             'showInDefault' => '1',
             'showInWebsite' => '0',
             'showInStore'   => '0',
-            'sortOrder'     => 1000,
             "_elementType"  => "group",
             'path'          => $sectionName,
             'children'      => $fields
-        ];
-
-        return $dynamicConfigGroups;
+        ]];
     }
 
     /**
@@ -125,34 +153,37 @@ class Data
     protected function getFieldList()
     {
         return [
-            'docs'      => [
-                'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Docs'
+            'docs'        => [
+                'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Docs',
             ],
             'notice'      => [
-                'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Message'
+                'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Message',
             ],
-
             'version'     => [
                 'type'           => 'label',
                 'label'          => __('Version'),
-                'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Form\Field\Version'
+                'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Form\Field\Version',
             ],
             'name'        => [
                 'label'          => __('Register Name'),
-                'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-name'
+                'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-name',
+                'show'           => ConfigHelper::MODULE_TYPE_FREE
             ],
             'email'       => [
                 'label'          => __('Register Email'),
                 'validate'       => 'required-entry validate-email',
                 'frontend_class' => 'mageplaza-module-active-field-free mageplaza-module-active-email',
-                'comment'        => __('This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get priority support).')
+                'comment'        => __('This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get priority support).'),
+                'show'           => ConfigHelper::MODULE_TYPE_FREE
             ],
             'product_key' => [
                 'label'          => __('Product Key'),
-                'frontend_class' => 'mageplaza-module-active-field-key'
+                'frontend_class' => 'mageplaza-module-active-field-key',
+                'show'           => ConfigHelper::MODULE_TYPE_FREE
             ],
             'button'      => [
-                'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Button'
+                'frontend_model' => 'Mageplaza\Core\Block\Adminhtml\System\Config\Button',
+                'show'           => ConfigHelper::MODULE_TYPE_FREE
             ]
         ];
     }

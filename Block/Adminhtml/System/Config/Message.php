@@ -39,7 +39,7 @@ class Message extends Field
     public function render(AbstractElement $element)
     {
         $html = '<td colspan="3" id="mageplaza-module-message-id">
-                    <div id="mageplaza-module-messages" style="display: none">
+                    <div id="mageplaza-module-messages" class="mageplaza-module-messages" style="display: none">
                         <div class="messages">
                             <div class="message message-error">
                                 <div data-ui-id="messages-message-error"></div>
@@ -48,7 +48,7 @@ class Message extends Field
                     </div>
                 </td>';
 
-        return $html;
+        return $this->_decorateRowHtml($element, $html);
     }
 
     /**
