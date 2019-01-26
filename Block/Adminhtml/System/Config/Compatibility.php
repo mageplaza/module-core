@@ -38,7 +38,7 @@ class Compatibility extends \Magento\Config\Block\System\Config\Form\Field
     {
         $html = '';
         if ($element->getComment()) {
-            $html .= '<div style="margin-left: 2em; width: 100%;padding: 10px; ">' . $element->getComment() . '</div>';
+            $html .= '<div id="mp_compatibility" style="margin-left: 2em; width: 100%;padding: 10px; ">' . $element->getComment() . '</div>';
         }
 
         return $html;
