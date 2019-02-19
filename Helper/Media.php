@@ -56,12 +56,14 @@ class Media extends AbstractData
 
     /**
      * Media constructor.
+     *
      * @param Context $context
      * @param ObjectManagerInterface $objectManager
      * @param StoreManagerInterface $storeManager
      * @param Filesystem $filesystem
      * @param UploaderFactory $uploaderFactory
      * @param AdapterFactory $imageFactory
+     *
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -71,13 +73,12 @@ class Media extends AbstractData
         Filesystem $filesystem,
         UploaderFactory $uploaderFactory,
         AdapterFactory $imageFactory
-    )
-    {
+    ) {
         parent::__construct($context, $objectManager, $storeManager);
 
-        $this->mediaDirectory  = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
-        $this->imageFactory    = $imageFactory;
+        $this->imageFactory = $imageFactory;
     }
 
     /**
@@ -85,6 +86,7 @@ class Media extends AbstractData
      * @param string $fileName
      * @param string $type
      * @param null $oldImage
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\FileSystemException
      */
@@ -125,6 +127,7 @@ class Media extends AbstractData
     /**
      * @param $file
      * @param $type
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\FileSystemException
      */
@@ -141,6 +144,7 @@ class Media extends AbstractData
     /**
      * @param $file
      * @param string $type
+     *
      * @return string
      */
     public function getMediaPath($file, $type = '')
@@ -150,6 +154,7 @@ class Media extends AbstractData
 
     /**
      * @param string $type
+     *
      * @return string
      */
     public function getBaseMediaPath($type = '')
@@ -159,6 +164,7 @@ class Media extends AbstractData
 
     /**
      * @param string $file
+     *
      * @return string
      */
     protected function _prepareFile($file)
@@ -171,6 +177,7 @@ class Media extends AbstractData
      * @param $size
      * @param string $type
      * @param bool $keepRatio
+     *
      * @return string
      */
     public function resizeImage($file, $size, $type = '', $keepRatio = true)
@@ -209,6 +216,7 @@ class Media extends AbstractData
 
     /**
      * @param $size
+     *
      * @return array|bool
      */
     protected function correctImageSize($size)
@@ -232,6 +240,7 @@ class Media extends AbstractData
 
     /**
      * @param string $file
+     *
      * @return string
      */
     public function getMediaUrl($file)
@@ -257,6 +266,7 @@ class Media extends AbstractData
 
     /**
      * @param $path
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\FileSystemException
      */

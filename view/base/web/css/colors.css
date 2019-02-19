@@ -18,141 +18,186 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-.mp-bg-blue{
+.mp-bg-blue {
     background: #20a8d8;
 }
-.mp-bg-indigo{
+
+.mp-bg-indigo {
     background: #6610f2;
 }
-.mp-bg-purple{
+
+.mp-bg-purple {
     background: #6f42c1;
 }
-.mp-bg-pink{
+
+.mp-bg-pink {
     background: #e83e8c;
 }
-.mp-bg-red{
+
+.mp-bg-red {
     background: #f86c6b;
 }
-.mp-bg-orange{
+
+.mp-bg-orange {
     background: #f8cb00;
 }
-.mp-bg-yellow{
+
+.mp-bg-yellow {
     background: #ffc107;
 }
-.mp-bg-green{
+
+.mp-bg-green {
     background: #4dbd74;
 }
-.mp-bg-teal{
+
+.mp-bg-teal {
     background: #20c997;
 }
-.mp-bg-cyan{
+
+.mp-bg-cyan {
     background: #17a2b8;
 }
-.mp-bg-white{
+
+.mp-bg-white {
     background: #fff;
 }
-.mp-bg-gray{
+
+.mp-bg-gray {
     background: #73818f;
 }
-.mp-bg-gray-dark{
+
+.mp-bg-gray-dark {
     background: #2f353a;
 }
-.mp-bg-primary{
+
+.mp-bg-primary {
     background: #20a8d8;
 }
-.mp-bg-secondary{
+
+.mp-bg-secondary {
     background: #c8ced3;
 }
-.mp-bg-success{
+
+.mp-bg-success {
     background: #4dbd74;
 }
-.mp-bg-info{
+
+.mp-bg-info {
     background: #63c2de;
 }
-.mp-bg-warning{
+
+.mp-bg-warning {
     background: #ffc107;
 }
-.mp-bg-danger{
+
+.mp-bg-danger {
     background: #f86c6b;
 }
-.mp-bg-light{
+
+.mp-bg-light {
     background: #f0f3f5;
 }
-.mp-bg-dark{
+
+.mp-bg-dark {
     background: #2f353a;
 }
-.mp-bg-magento{
+
+.mp-bg-magento {
     background: #eb5202;
 }
-.mp-bg-mageplaza{
+
+.mp-bg-mageplaza {
     background: #0099e5;
 }
-.mp-blue{
+
+.mp-blue {
     color: #20a8d8;
 }
-.mp-indigo{
+
+.mp-indigo {
     color: #6610f2;
 }
-.mp-purple{
+
+.mp-purple {
     color: #6f42c1;
 }
-.mp-pink{
+
+.mp-pink {
     color: #e83e8c;
 }
-.mp-red{
+
+.mp-red {
     color: #f86c6b;
 }
-.mp-orange{
+
+.mp-orange {
     color: #f8cb00;
 }
-.mp-yellow{
+
+.mp-yellow {
     color: #ffc107;
 }
-.mp-green{
+
+.mp-green {
     color: #4dbd74;
 }
-.mp-teal{
+
+.mp-teal {
     color: #20c997;
 }
-.mp-cyan{
+
+.mp-cyan {
     color: #17a2b8;
 }
-.mp-white{
+
+.mp-white {
     color: #fff;
 }
-.mp-gray{
+
+.mp-gray {
     color: #73818f;
 }
-.mp-gray-dark{
+
+.mp-gray-dark {
     color: #2f353a;
 }
-.mp-primary{
+
+.mp-primary {
     color: #20a8d8;
 }
-.mp-secondary{
+
+.mp-secondary {
     color: #c8ced3;
 }
-.mp-success{
+
+.mp-success {
     color: #4dbd74;
 }
-.mp-info{
+
+.mp-info {
     color: #63c2de;
 }
-.mp-warning{
+
+.mp-warning {
     color: #ffc107;
 }
-.mp-danger{
+
+.mp-danger {
     color: #f86c6b;
 }
-.mp-light{
+
+.mp-light {
     color: #f0f3f5;
 }
-.mp-dark{
+
+.mp-dark {
     color: #2f353a;
 }
-.mp-mageplaza{
+
+.mp-mageplaza {
     color: #0099e5;
 }
-.mp-magento{
+
+.mp-magento {
     color: #eb5202;
 }

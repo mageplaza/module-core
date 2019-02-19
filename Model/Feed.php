@@ -69,7 +69,7 @@ class Feed extends \Magento\AdminNotification\Model\Feed
 
         $feedXml = parent::getFeedData();
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
-            $typeArray    = explode(',', $type);
+            $typeArray = explode(',', $type);
             $noteToRemove = [];
 
             foreach ($feedXml->channel->item as $item) {

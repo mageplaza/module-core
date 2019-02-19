@@ -44,14 +44,14 @@ class PredispatchAdminActionControllerObserver implements ObserverInterface
 
     /**
      * PredispatchAdminActionControllerObserver constructor.
+     *
      * @param Session $backendAuthSession
      * @param AbstractData $helper
      */
     public function __construct(
         Session $backendAuthSession,
         AbstractData $helper
-    )
-    {
+    ) {
         $this->_backendAuthSession = $backendAuthSession;
         $this->helper = $helper;
     }
@@ -61,9 +61,7 @@ class PredispatchAdminActionControllerObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->_backendAuthSession->isLoggedIn()
-            && $this->helper->isModuleOutputEnabled('Magento_AdminNotification')
-        ) {
+        if ($this->_backendAuthSession->isLoggedIn() && $this->helper->isModuleOutputEnabled('Magento_AdminNotification')) {
             /* @var $feedModel \Mageplaza\Core\Model\Feed */
             $feedModel = $this->helper->createObject(\Mageplaza\Core\Model\Feed::class);
             $feedModel->checkUpdate();

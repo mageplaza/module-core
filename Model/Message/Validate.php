@@ -48,15 +48,15 @@ class Validate implements MessageInterface
 
     /**
      * Validate constructor.
+     *
      * @param \Mageplaza\Core\Helper\Validate $helper
      * @param \Magento\Framework\UrlInterface $urlBuilder
      */
     public function __construct(
         ValidateHelper $helper,
         UrlInterface $urlBuilder
-    )
-    {
-        $this->_helper    = $helper;
+    ) {
+        $this->_helper = $helper;
         $this->urlBuilder = $urlBuilder;
     }
 
@@ -68,11 +68,8 @@ class Validate implements MessageInterface
     public function isDisplayed()
     {
         $notActiveModules = $this->getModules();
-        if (sizeof($notActiveModules)) {
-            return true;
-        }
 
-        return false;
+        return (bool) sizeof($notActiveModules);
     }
 
     /**
@@ -115,7 +112,7 @@ class Validate implements MessageInterface
         }
 
         $sectionName = $this->_helper->getConfigModulePath($modules[0]);
-        $url         = $this->urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => $sectionName]);
+        $url = $this->urlBuilder->getUrl('adminhtml/system_config/edit', ['section' => $sectionName]);
 
         return __(
             'One or more Mageplaza extensions are not validated. Click <a href="%1">here</a> to validate them.',

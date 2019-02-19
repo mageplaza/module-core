@@ -59,6 +59,7 @@ class Extensions extends \Magento\Framework\View\Element\Template
 
     /**
      * Extensions constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Module\FullModuleList $moduleList
      * @param array $data
@@ -67,15 +68,11 @@ class Extensions extends \Magento\Framework\View\Element\Template
         Context $context,
         FullModuleList $moduleList,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
 
         $this->moduleList = $moduleList;
-
-        $this->addData(
-            ['cache_lifetime' => 86400, 'cache_tags' => [self::CACHE_TAG]]
-        );
+        $this->addData(['cache_lifetime' => 86400, 'cache_tags' => [self::CACHE_TAG]]);
     }
 
     /**

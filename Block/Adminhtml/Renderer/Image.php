@@ -34,7 +34,6 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
      * Get image preview url
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getUrl()
     {

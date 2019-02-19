@@ -44,6 +44,7 @@ class Button extends Field
 
     /**
      * Button constructor.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Mageplaza\Core\Helper\Validate $helper
      * @param array $data
@@ -52,9 +53,9 @@ class Button extends Field
         Context $context,
         Validate $helper,
         array $data = []
-    )
-    {
+    ) {
         $this->_helper = $helper;
+
         parent::__construct($context, $data);
     }
 
@@ -64,25 +65,21 @@ class Button extends Field
      */
     public function getButtonHtml()
     {
-        $activeButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
-        )->setData(
-            [
+        $activeButton = $this->getLayout()
+            ->createBlock('Magento\Backend\Block\Widget\Button')
+            ->setData([
                 'id'      => 'mageplaza_module_active',
                 'label'   => __('Activate Now'),
                 'onclick' => 'javascript:mageplazaModuleActive(); return false;',
-            ]
-        );
+            ]);
 
-        $cancelButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
-        )->setData(
-            [
+        $cancelButton = $this->getLayout()
+            ->createBlock('Magento\Backend\Block\Widget\Button')
+            ->setData([
                 'id'      => 'mageplaza_module_update',
                 'label'   => __('Update this license'),
                 'onclick' => 'javascript:mageplazaModuleUpdate(); return false;',
-            ]
-        );
+            ]);
 
         return $activeButton->toHtml() . $cancelButton->toHtml();
     }
@@ -91,8 +88,8 @@ class Button extends Field
      * Render button
      *
      * @param AbstractElement $element
+     *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function render(AbstractElement $element)
     {
@@ -114,13 +111,13 @@ class Button extends Field
      * Return element html
      *
      * @param AbstractElement $element
+     *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getElementHtml(AbstractElement $element)
     {
         $originalData = $element->getOriginalData();
-        $path         = explode('/', $originalData['path']);
+        $path = explode('/', $originalData['path']);
         $this->addData(
             [
                 'mp_is_active'       => $this->_helper->isModuleActive($originalData['module_name']),

@@ -52,6 +52,7 @@ class Validate extends AbstractData
 
     /**
      * Validate constructor.
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -62,8 +63,7 @@ class Validate extends AbstractData
         ObjectManagerInterface $objectManager,
         StoreManagerInterface $storeManager,
         ModuleListInterface $moduleList
-    )
-    {
+    ) {
         $this->_moduleList = $moduleList;
 
         parent::__construct($context, $objectManager, $storeManager);
@@ -71,6 +71,7 @@ class Validate extends AbstractData
 
     /**
      * @param $moduleName
+     *
      * @return bool
      */
     public function needActive($moduleName)
@@ -85,6 +86,7 @@ class Validate extends AbstractData
 
     /**
      * @param $moduleName
+     *
      * @return mixed
      */
     public function getModuleType($moduleName)
@@ -96,6 +98,7 @@ class Validate extends AbstractData
 
     /**
      * @param $moduleName
+     *
      * @return bool
      */
     public function getConfigModulePath($moduleName)
@@ -117,6 +120,7 @@ class Validate extends AbstractData
 
     /**
      * @param $moduleName
+     *
      * @return bool
      */
     public function isModuleActive($moduleName)
@@ -124,11 +128,12 @@ class Validate extends AbstractData
         $configModulePath = $this->getConfigModulePath($moduleName);
 
         return $this->getConfigValue($configModulePath . '/module/active')
-            && $this->getConfigValue($configModulePath . '/module/product_key');
+               && $this->getConfigValue($configModulePath . '/module/product_key');
     }
 
     /**
      * @param $moduleName
+     *
      * @return array
      */
     public function getModuleCheckbox($moduleName)
@@ -160,7 +165,7 @@ class Validate extends AbstractData
             $this->_mageplazaModules = [];
 
             $allowList = true;
-            $hostName  = $this->_urlBuilder->getBaseUrl();
+            $hostName = $this->_urlBuilder->getBaseUrl();
             foreach (self::DEV_ENV as $env) {
                 if (strpos($hostName, $env) !== false) {
                     $allowList = false;

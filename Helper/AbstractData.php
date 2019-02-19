@@ -67,6 +67,7 @@ class AbstractData extends AbstractHelper
 
     /**
      * AbstractData constructor.
+     *
      * @param Context $context
      * @param ObjectManagerInterface $objectManager
      * @param StoreManagerInterface $storeManager
@@ -75,16 +76,16 @@ class AbstractData extends AbstractHelper
         Context $context,
         ObjectManagerInterface $objectManager,
         StoreManagerInterface $storeManager
-    )
-    {
+    ) {
         $this->objectManager = $objectManager;
-        $this->storeManager  = $storeManager;
+        $this->storeManager = $storeManager;
 
         parent::__construct($context);
     }
 
     /**
      * @param null $storeId
+     *
      * @return bool
      */
     public function isEnabled($storeId = null)
@@ -95,6 +96,7 @@ class AbstractData extends AbstractHelper
     /**
      * @param string $code
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getConfigGeneral($code = '', $storeId = null)
@@ -107,6 +109,7 @@ class AbstractData extends AbstractHelper
     /**
      * @param string $field
      * @param null $storeId
+     *
      * @return mixed
      */
     public function getModuleConfig($field = '', $storeId = null)
@@ -120,6 +123,7 @@ class AbstractData extends AbstractHelper
      * @param $field
      * @param null $scopeValue
      * @param string $scopeType
+     *
      * @return array|mixed
      */
     public function getConfigValue($field, $scopeValue = null, $scopeType = ScopeInterface::SCOPE_STORE)
@@ -138,6 +142,7 @@ class AbstractData extends AbstractHelper
 
     /**
      * @param $name
+     *
      * @return null
      */
     public function getData($name)
@@ -152,6 +157,7 @@ class AbstractData extends AbstractHelper
     /**
      * @param $name
      * @param $value
+     *
      * @return $this
      */
     public function setData($name, $value)
@@ -173,18 +179,20 @@ class AbstractData extends AbstractHelper
 
     /**
      * @param $ver
+     *
      * @return mixed
      */
     public function versionCompare($ver)
     {
         $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
-        $version         = $productMetadata->getVersion(); //will return the magento version
+        $version = $productMetadata->getVersion(); //will return the magento version
 
         return version_compare($version, $ver, '>=');
     }
 
     /**
      * @param $data
+     *
      * @return string
      * @throws \Zend_Serializer_Exception
      */
@@ -199,6 +207,7 @@ class AbstractData extends AbstractHelper
 
     /**
      * @param $string
+     *
      * @return mixed
      * @throws \Zend_Serializer_Exception
      */
@@ -215,6 +224,7 @@ class AbstractData extends AbstractHelper
      * Encode the mixed $valueToEncode into the JSON format
      *
      * @param mixed $valueToEncode
+     *
      * @return string
      */
     public static function jsonEncode($valueToEncode)
@@ -233,6 +243,7 @@ class AbstractData extends AbstractHelper
      * encoded in the JSON format
      *
      * @param string $encodedValue
+     *
      * @return mixed
      */
     public static function jsonDecode($encodedValue)
@@ -258,6 +269,7 @@ class AbstractData extends AbstractHelper
 
     /**
      * @param string $area
+     *
      * @return mixed
      */
     public function isArea($area = Area::AREA_FRONTEND)
@@ -279,6 +291,7 @@ class AbstractData extends AbstractHelper
     /**
      * @param $path
      * @param array $arguments
+     *
      * @return mixed
      */
     public function createObject($path, $arguments = [])
@@ -288,6 +301,7 @@ class AbstractData extends AbstractHelper
 
     /**
      * @param $path
+     *
      * @return mixed
      */
     public function getObject($path)

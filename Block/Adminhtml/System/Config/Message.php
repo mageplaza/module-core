@@ -34,6 +34,7 @@ class Message extends Field
      * Render text
      *
      * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     *
      * @return string
      */
     public function render(AbstractElement $element)
@@ -55,6 +56,7 @@ class Message extends Field
      * Return element html
      *
      * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

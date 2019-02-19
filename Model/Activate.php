@@ -43,14 +43,14 @@ class Activate extends DataObject
 
     /**
      * Activate constructor.
+     *
      * @param CurlFactory $curlFactory
      * @param array $data
      */
     public function __construct(
         CurlFactory $curlFactory,
         array $data = []
-    )
-    {
+    ) {
         $this->curlFactory = $curlFactory;
 
         parent::__construct($data);
@@ -58,6 +58,7 @@ class Activate extends DataObject
 
     /**
      * @param array $params
+     *
      * @return array
      */
     public function activate($params = [])

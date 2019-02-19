@@ -29,6 +29,9 @@ use Magento\Framework\App\Config\Value;
  */
 class Menu extends Value
 {
+    /**
+     * @var string
+     */
     protected $_resourceName = \Magento\Config\Model\ResourceModel\Config\Data::class;
 
     /**

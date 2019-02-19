@@ -31,8 +31,8 @@ class Partners extends \Magento\Config\Block\System\Config\Form\Field
      * Render text
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -48,6 +48,7 @@ class Partners extends \Magento\Config\Block\System\Config\Form\Field
      * Return element html
      *
      * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

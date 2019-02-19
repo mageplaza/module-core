@@ -70,6 +70,7 @@ class Activate extends Action
 
     /**
      * Activate constructor.
+     *
      * @param Context $context
      * @param Config $resourceConfig
      * @param ReinitableConfigInterface $config
@@ -82,12 +83,11 @@ class Activate extends Action
         ReinitableConfigInterface $config,
         Validate $helper,
         ActivateFactory $activateFactory
-    )
-    {
+    ) {
         $this->activateFactory = $activateFactory;
-        $this->resourceConfig  = $resourceConfig;
-        $this->_appConfig      = $config;
-        $this->_coreHelper     = $helper;
+        $this->resourceConfig = $resourceConfig;
+        $this->_appConfig = $config;
+        $this->_coreHelper = $helper;
 
         parent::__construct($context);
     }
@@ -112,7 +112,7 @@ class Activate extends Action
         }
 
         $activateModel = $this->activateFactory->create();
-        $result        = $activateModel->activate($params);
+        $result = $activateModel->activate($params);
         if ($result['success']) {
             $result['active'] = true;
 
@@ -144,6 +144,7 @@ class Activate extends Action
 
     /**
      * @param $result
+     *
      * @return mixed
      */
     protected function jsonResponse($result)
@@ -159,6 +160,7 @@ class Activate extends Action
      * @param bool $isFullPath
      * @param string $scope
      * @param int $scopeId
+     *
      * @return $this
      */
     protected function saveConfig($pathId, $value = null, $isFullPath = false, $scope = 'default', $scopeId = 0)
@@ -183,6 +185,7 @@ class Activate extends Action
 
     /**
      * @param $pathId
+     *
      * @return string
      */
     protected function buildConfigPath($pathId)
@@ -195,6 +198,7 @@ class Activate extends Action
      * @param bool $isFullPath
      * @param string $scope
      * @param int $scopeId
+     *
      * @return $this
      */
     protected function deleteConfig($pathId, $isFullPath = false, $scope = 'default', $scopeId = 0)

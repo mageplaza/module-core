@@ -39,6 +39,7 @@ class Data
 
     /**
      * Data constructor.
+     *
      * @param ConfigHelper $helper
      */
     public function __construct(ConfigHelper $helper)
@@ -49,29 +50,28 @@ class Data
     /**
      * @param \Magento\Config\Model\Config\Structure\Data $object
      * @param array $config
+     *
      * @return array
      */
     public function beforeMerge(StructureData $object, array $config)
     {
-        if (isset($config['config']['system'])) {
-            $sections = $config['config']['system']['sections'];
-            foreach ($sections as $sectionId => $section) {
-                if (isset($section['tab']) && ($section['tab'] == 'mageplaza') && ($section['id'] != 'mageplaza')) {
-                    foreach ($this->_helper->getModuleList() as $moduleName) {
-                        if ($section['id'] != $this->_helper->getConfigModulePath($moduleName)) {
-                            continue;
-                        }
+        if (!isset($config['config']['system'])) {
+            return [$config];
+        }
 
-                        if (!$this->_helper->needActive($moduleName)) {
-                            continue;
-                        }
-
-                        $dynamicGroups = $this->getDynamicConfigGroups($moduleName, $section['id']);
-                        if (!empty($dynamicGroups)) {
-                            $config['config']['system']['sections'][$sectionId]['children'] = $dynamicGroups + $section['children'];
-                        }
-                        break;
+        $sections = $config['config']['system']['sections'];
+        foreach ($sections as $sectionId => $section) {
+            if (isset($section['tab']) && ($section['tab'] == 'mageplaza') && ($section['id'] != 'mageplaza')) {
+                foreach ($this->_helper->getModuleList() as $moduleName) {
+                    if ($section['id'] != $this->_helper->getConfigModulePath($moduleName) || !$this->_helper->needActive($moduleName)) {
+                        continue;
                     }
+
+                    $dynamicGroups = $this->getDynamicConfigGroups($moduleName, $section['id']);
+                    if (!empty($dynamicGroups)) {
+                        $config['config']['system']['sections'][$sectionId]['children'] = $dynamicGroups + $section['children'];
+                    }
+                    break;
                 }
             }
         }
@@ -82,6 +82,7 @@ class Data
     /**
      * @param $moduleName
      * @param $sectionName
+     *
      * @return mixed
      */
     protected function getDynamicConfigGroups($moduleName, $sectionName)

@@ -39,6 +39,7 @@ class Version extends Field
 
     /**
      * Version constructor.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Module\PackageInfoFactory $packageInfoFactory
      * @param array $data
@@ -47,24 +48,23 @@ class Version extends Field
         Context $context,
         PackageInfoFactory $packageInfoFactory,
         array $data = []
-    )
-    {
-        parent::__construct($context, $data);
-
+    ) {
         $this->_packageInfoFactory = $packageInfoFactory;
+
+        parent::__construct($context, $data);
     }
 
     /**
      * @param AbstractElement $element
+     *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getElementHtml(AbstractElement $element)
     {
         $originalData = $element->getOriginalData();
 
         $packageInfo = $this->_packageInfoFactory->create();
-        $version     = $packageInfo->getVersion($originalData['module_name']);
+        $version = $packageInfo->getVersion($originalData['module_name']);
 
         $html = '<div class="control-value special">' . $version . '</div>';
 
@@ -74,6 +74,7 @@ class Version extends Field
     /**
      * @param AbstractElement $element
      * @param string $html
+     *
      * @return string
      */
     protected function _decorateRowHtml(AbstractElement $element, $html)
