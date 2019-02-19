@@ -179,15 +179,16 @@ class AbstractData extends AbstractHelper
 
     /**
      * @param $ver
+     * @param string $operator
      *
      * @return mixed
      */
-    public function versionCompare($ver)
+    public function versionCompare($ver, $operator = '>=')
     {
         $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
         $version = $productMetadata->getVersion(); //will return the magento version
 
-        return version_compare($version, $ver, '>=');
+        return version_compare($version, $ver, $operator);
     }
 
     /**
