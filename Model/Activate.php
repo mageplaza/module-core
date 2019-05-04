@@ -34,7 +34,7 @@ class Activate extends DataObject
     /**
      * @inheritdoc
      */
-    const MAGEPLAZA_ACTIVE_URL = 'http://store.mageplaza.com/license/index/activate';
+    const MAGEPLAZA_ACTIVE_URL = 'http://dashboard.mageplaza.com/license/index/activate';
 
     /**
      * @var CurlFactory
