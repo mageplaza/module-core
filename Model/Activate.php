@@ -32,9 +32,10 @@ use Mageplaza\Core\Helper\AbstractData;
 class Activate extends DataObject
 {
     /**
+     * Localhost maybe not active via https
      * @inheritdoc
      */
-    const MAGEPLAZA_ACTIVE_URL = 'http://store.mageplaza.com/license/index/activate';
+    const MAGEPLAZA_ACTIVE_URL = 'http://dashboard.mageplaza.com/license/index/activate';
 
     /**
      * @var CurlFactory
