@@ -25,7 +25,6 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Module\PackageInfoFactory;
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Backend system config datetime field renderer
@@ -33,15 +32,15 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 class Version extends Field
 {
     /**
-     * @var DateTimeFormatterInterface
+     * @var PackageInfoFactory
      */
     protected $_packageInfoFactory;
 
     /**
      * Version constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Module\PackageInfoFactory $packageInfoFactory
+     * @param Context $context
+     * @param PackageInfoFactory $packageInfoFactory
      * @param array $data
      */
     public function __construct(
@@ -66,9 +65,7 @@ class Version extends Field
         $packageInfo = $this->_packageInfoFactory->create();
         $version = $packageInfo->getVersion($originalData['module_name']);
 
-        $html = '<div class="control-value special">' . $version . '</div>';
-
-        return $html;
+        return '<div class="control-value special">' . $version . '</div>';
     }
 
     /**

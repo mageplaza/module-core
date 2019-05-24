@@ -1,5 +1,9 @@
 "Activate Now","Activate Now"
 "Update this license","Update this license"
+"User Guide","User Guide"
+FAQs,FAQs
+"Change Log","Change Log"
+"Check Latest Version","Check Latest Version"
 "Invalid data.","Invalid data."
 "Cannot connect to server. Please try again later.","Cannot connect to server. Please try again later."
 Announcement,Announcement
@@ -9,16 +13,9 @@ Announcement,Announcement
 Version,Version
 "Register Name","Register Name"
 "Register Email","Register Email"
-"This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get premium support).","This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get premium support)."
+"This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get priority support).","This email will be used to create a new account at Mageplaza.com, Mageplaza help desk (to get priority support)."
 "Product Key","Product Key"
 "One or more Mageplaza extensions are not validated. Click <a href=""%1"">here</a> to validate them.","One or more Mageplaza extensions are not validated. Click <a href=""%1"">here</a> to validate them."
-"Installed Mageplaza Modules","Installed Mageplaza Modules"
-"Extension name","Extension name"
-"Current Version","Current Version"
-"Store Version","Store Version"
-"Extension Link","Extension Link"
-"Download Link","Download Link"
-"Latest version","Latest version"
 "Receive extension updates and promotion offers from Mageplaza","Receive extension updates and promotion offers from Mageplaza"
 "Mageplaza Extensions","Mageplaza Extensions"
 Information,Information
@@ -29,5 +26,3 @@ Category,Category
 "Select categories that you want to receive notifications","Select categories that you want to receive notifications"
 "Enable Mageplaza Menu","Enable Mageplaza Menu"
 "If yes, the Mageplaza menu will be displayed on the admin navigation. All of the Mageplaza module menu will be displayed there.","If yes, the Mageplaza menu will be displayed on the admin navigation. All of the Mageplaza module menu will be displayed there."
-Marketplace,Marketplace
-"Mageplaza Marketplace","Mageplaza Marketplace"

@@ -39,10 +39,7 @@ abstract class AbstractSource implements ArrayInterface
         $options = [];
 
         foreach ($this->toArray() as $value => $label) {
-            $options[] = [
-                'value' => $value,
-                'label' => $label
-            ];
+            $options[] = compact('value', 'label');
         }
 
         return $options;

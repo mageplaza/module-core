@@ -21,11 +21,15 @@
 
 namespace Mageplaza\Core\Controller\Adminhtml\Index;
 
+use Magento\Backend\App\Action;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+
 /**
  * Class Userguide
  * @package Mageplaza\Core\Controller\Adminhtml\Index
  */
-class Userguide extends \Magento\Backend\App\Action
+class Userguide extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -33,10 +37,12 @@ class Userguide extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Mageplaza_Core::userguide';
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+     * @return ResponseInterface|ResultInterface|void
      */
     public function execute()
     {
-        $this->_response->setRedirect('https://docs.mageplaza.com/?utm_source=configuration&utm_medium=link&utm_content=user-guide');
+        $this->_response->setRedirect(
+            'https://docs.mageplaza.com/?utm_source=configuration&utm_medium=link&utm_content=user-guide'
+        );
     }
 }

@@ -26,6 +26,7 @@
             <general>
                 <notice_enable>1</notice_enable>
                 <notice_type>announcement,new_update,marketing</notice_type>
+                <menu>0</menu>
             </general>
         </mageplaza>
     </default>

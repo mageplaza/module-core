@@ -25,6 +25,9 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Mageplaza\Core\Helper\AbstractData;
 use Mageplaza\Core\Helper\Validate;
 use Mageplaza\Core\Model\ActivateFactory;
 
@@ -42,17 +45,17 @@ class Activate extends Action
     const ADMIN_RESOURCE = 'Mageplaza_Core::activate';
 
     /**
-     * @var \Mageplaza\Core\Model\ActivateFactory
+     * @var ActivateFactory
      */
     protected $activateFactory;
 
     /**
-     * @var \Magento\Config\Model\ResourceModel\Config
+     * @var Config
      */
     protected $resourceConfig;
 
     /**
-     * @var \Mageplaza\Core\Helper\AbstractData
+     * @var AbstractData
      */
     protected $_coreHelper;
 
@@ -64,7 +67,7 @@ class Activate extends Action
     /**
      * Application config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_appConfig;
 
@@ -95,7 +98,7 @@ class Activate extends Action
     /**
      * Execute view action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {

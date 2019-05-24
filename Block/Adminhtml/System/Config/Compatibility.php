@@ -21,24 +21,31 @@
 
 namespace Mageplaza\Core\Block\Adminhtml\System\Config;
 
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Exception\LocalizedException;
+
 /**
- * Class Partners
+ * Class Head
  * @package Mageplaza\Core\Block\Adminhtml\System\Config
  */
-class Partners extends \Magento\Config\Block\System\Config\Form\Field
+class Compatibility extends Field
 {
     /**
      * Render text
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      *
      * @return string
+     * @throws LocalizedException
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         $html = '';
         if ($element->getComment()) {
-            $html .= '<div style="margin: auto; padding: 10px; height: 1500px;">' . $element->getComment() . '</div>';
+            $html .= '<div id="mp_compatibility" style="margin-left: 2em; width: 100%;padding: 10px; ">'
+                     . $element->getComment()
+                     . '</div>';
         }
 
         return $html;
@@ -47,12 +54,12 @@ class Partners extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Return element html
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
         return $this->_toHtml();
     }

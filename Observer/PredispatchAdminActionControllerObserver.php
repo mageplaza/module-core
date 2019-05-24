@@ -25,6 +25,7 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Mageplaza\Core\Helper\AbstractData;
+use Mageplaza\Core\Model\Feed;
 
 /**
  * Class PredispatchAdminActionControllerObserver
@@ -61,9 +62,10 @@ class PredispatchAdminActionControllerObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->_backendAuthSession->isLoggedIn() && $this->helper->isModuleOutputEnabled('Magento_AdminNotification')) {
-            /* @var $feedModel \Mageplaza\Core\Model\Feed */
-            $feedModel = $this->helper->createObject(\Mageplaza\Core\Model\Feed::class);
+        if ($this->_backendAuthSession->isLoggedIn()
+            && $this->helper->isModuleOutputEnabled('Magento_AdminNotification')) {
+            /* @var $feedModel Feed */
+            $feedModel = $this->helper->createObject(Feed::class);
             $feedModel->checkUpdate();
         }
     }

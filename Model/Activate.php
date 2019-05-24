@@ -21,9 +21,12 @@
 
 namespace Mageplaza\Core\Model;
 
+use Exception;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Mageplaza\Core\Helper\AbstractData;
+use Zend_Http_Client;
+use Zend_Http_Response;
 
 /**
  * Class Activate
@@ -67,20 +70,26 @@ class Activate extends DataObject
         $result = ['success' => false];
 
         $curl = $this->curlFactory->create();
-        $curl->write(\Zend_Http_Client::POST, self::MAGEPLAZA_ACTIVE_URL, '1.1', [], http_build_query($params, null, '&'));
+        $curl->write(
+            Zend_Http_Client::POST,
+            self::MAGEPLAZA_ACTIVE_URL,
+            '1.1',
+            [],
+            http_build_query($params, null, '&')
+        );
 
         try {
             $resultCurl = $curl->read();
-            if (!empty($resultCurl)) {
-                $responseBody = \Zend_Http_Response::extractBody($resultCurl);
+            if (empty($resultCurl)) {
+                $result['message'] = __('Cannot connect to server. Please try again later.');
+            } else {
+                $responseBody = Zend_Http_Response::extractBody($resultCurl);
                 $result += AbstractData::jsonDecode($responseBody);
                 if (isset($result['status']) && in_array($result['status'], [200, 201])) {
                     $result['success'] = true;
                 }
-            } else {
-                $result['message'] = __('Cannot connect to server. Please try again later.');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result['message'] = $e->getMessage();
         }
 

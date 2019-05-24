@@ -56,13 +56,14 @@ class MoveMenu
     public function afterExecute(AbstractCommand $subject, $itemParams)
     {
         if ($this->helper->getConfigGeneral('menu')) {
-            if (strpos($itemParams['id'], 'Mageplaza_') !== false && isset($itemParams['parent']) && strpos($itemParams['parent'], 'Mageplaza_') === false) {
+            if (strpos($itemParams['id'], 'Mageplaza_') !== false
+                && isset($itemParams['parent'])
+                && strpos($itemParams['parent'], 'Mageplaza_') === false) {
                 $itemParams['parent'] = self::MAGEPLAZA_CORE;
             }
-        } else {
-            if ((isset($itemParams['id']) && $itemParams['id'] == self::MAGEPLAZA_CORE) || (isset($itemParams['parent']) && $itemParams['parent'] == self::MAGEPLAZA_CORE)) {
-                $itemParams['removed'] = true;
-            }
+        } elseif ((isset($itemParams['id']) && $itemParams['id'] === self::MAGEPLAZA_CORE)
+                || (isset($itemParams['parent']) && $itemParams['parent'] === self::MAGEPLAZA_CORE)) {
+            $itemParams['removed'] = true;
         }
 
         return $itemParams;

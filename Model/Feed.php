@@ -50,7 +50,7 @@ class Feed extends \Magento\AdminNotification\Model\Feed
      */
     public function checkUpdate()
     {
-        if (!(boolean)$this->_backendConfig->getValue('mageplaza/general/notice_enable')) {
+        if (!(boolean) $this->_backendConfig->getValue('mageplaza/general/notice_enable')) {
             return $this;
         }
 
@@ -73,7 +73,7 @@ class Feed extends \Magento\AdminNotification\Model\Feed
             $noteToRemove = [];
 
             foreach ($feedXml->channel->item as $item) {
-                if (!in_array((string)$item->type, $typeArray)) {
+                if (!in_array((string) $item->type, $typeArray)) {
                     $noteToRemove[] = $item;
                 }
             }

@@ -21,15 +21,19 @@
 
 namespace Mageplaza\Core\Helper;
 
+use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class Media
@@ -40,17 +44,17 @@ class Media extends AbstractData
     const TEMPLATE_MEDIA_PATH = 'mageplaza';
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $mediaDirectory;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     * @var UploaderFactory
      */
     protected $uploaderFactory;
 
     /**
-     * @var \Magento\Framework\Image\AdapterFactory
+     * @var AdapterFactory
      */
     protected $imageFactory;
 
@@ -64,7 +68,7 @@ class Media extends AbstractData
      * @param UploaderFactory $uploaderFactory
      * @param AdapterFactory $imageFactory
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function __construct(
         Context $context,
@@ -74,11 +78,11 @@ class Media extends AbstractData
         UploaderFactory $uploaderFactory,
         AdapterFactory $imageFactory
     ) {
-        parent::__construct($context, $objectManager, $storeManager);
-
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
         $this->imageFactory = $imageFactory;
+
+        parent::__construct($context, $objectManager, $storeManager);
     }
 
     /**
@@ -88,25 +92,28 @@ class Media extends AbstractData
      * @param null $oldImage
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function uploadImage(&$data, $fileName = 'image', $type = '', $oldImage = null)
     {
-        if (isset($data[$fileName]) && isset($data[$fileName]['delete']) && $data[$fileName]['delete']) {
+        if (isset($data[$fileName]['delete']) && $data[$fileName]['delete']) {
             if ($oldImage) {
-                $this->removeImage($oldImage, $type);
+                try {
+                    $this->removeImage($oldImage, $type);
+                } catch (Exception $e) {
+                    $this->_logger->critical($e->getMessage());
+                }
             }
             $data['image'] = '';
         } else {
+            $uploader = $this->uploaderFactory->create(['fileId' => $fileName]);
+            $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
+            $uploader->setAllowRenameFiles(true);
+            $uploader->setFilesDispersion(true);
+            $uploader->setAllowCreateFolders(true);
+
+            $path = $this->getBaseMediaPath($type);
+
             try {
-                $uploader = $this->uploaderFactory->create(['fileId' => $fileName]);
-                $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
-                $uploader->setAllowRenameFiles(true);
-                $uploader->setFilesDispersion(true);
-                $uploader->setAllowCreateFolders(true);
-
-                $path = $this->getBaseMediaPath($type);
-
                 $image = $uploader->save(
                     $this->mediaDirectory->getAbsolutePath($path)
                 );
@@ -116,7 +123,7 @@ class Media extends AbstractData
                 }
 
                 $data['image'] = $this->_prepareFile($image['file']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
             }
         }
@@ -129,7 +136,7 @@ class Media extends AbstractData
      * @param $type
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function removeImage($file, $type)
     {
@@ -179,6 +186,7 @@ class Media extends AbstractData
      * @param bool $keepRatio
      *
      * @return string
+     * @throws NoSuchEntityException
      */
     public function resizeImage($file, $size, $type = '', $keepRatio = true)
     {
@@ -190,25 +198,26 @@ class Media extends AbstractData
 
         $resizeImage = $this->getMediaPath($file, ($type ? $type . '/' : '') . 'resize/' . $width . 'x' . $height);
 
-        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
+        /** @var WriteInterface $mediaDirectory */
         $mediaDirectory = $this->getMediaDirectory();
-        if (!$mediaDirectory->isFile($resizeImage)) {
+        if ($mediaDirectory->isFile($resizeImage)) {
+            $image = $resizeImage;
+        } else {
+            $imageResize = $this->imageFactory->create();
+            $imageResize->open($mediaDirectory->getAbsolutePath($image));
+            $imageResize->constrainOnly(true);
+            $imageResize->keepTransparency(true);
+            $imageResize->keepFrame(false);
+            $imageResize->keepAspectRatio($keepRatio);
+            $imageResize->resize($width, $height);
+
             try {
-                $imageResize = $this->imageFactory->create();
-                $imageResize->open($mediaDirectory->getAbsolutePath($image));
-                $imageResize->constrainOnly(true);
-                $imageResize->keepTransparency(true);
-                $imageResize->keepFrame(false);
-                $imageResize->keepAspectRatio($keepRatio);
-                $imageResize->resize($width, $height);
                 $imageResize->save($mediaDirectory->getAbsolutePath($resizeImage));
 
                 $image = $resizeImage;
-            } catch (\Exception $e) {
-                $this->objectManager->get(LoggerInterface::class)->critical($e->getMessage());
+            } catch (Exception $e) {
+                $this->_logger->critical($e->getMessage());
             }
-        } else {
-            $image = $resizeImage;
         }
 
         return $this->getMediaUrl($image);
@@ -226,7 +235,7 @@ class Media extends AbstractData
         }
 
         if (strpos($size, 'x') === false) {
-            $width = $height = (int)$size;
+            $width = $height = (int) $size;
         } else {
             list($width, $height) = explode('x', $size);
         }
@@ -235,13 +244,14 @@ class Media extends AbstractData
             return false;
         }
 
-        return [(int)$width ?: null, (int)$height ?: null];
+        return [(int) $width ?: null, (int) $height ?: null];
     }
 
     /**
-     * @param string $file
+     * @param $file
      *
      * @return string
+     * @throws NoSuchEntityException
      */
     public function getMediaUrl($file)
     {
@@ -250,6 +260,7 @@ class Media extends AbstractData
 
     /**
      * @return string
+     * @throws NoSuchEntityException
      */
     public function getBaseMediaUrl()
     {
@@ -257,7 +268,7 @@ class Media extends AbstractData
     }
 
     /**
-     * @return \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @return WriteInterface
      */
     public function getMediaDirectory()
     {
@@ -268,7 +279,7 @@ class Media extends AbstractData
      * @param $path
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function removePath($path)
     {

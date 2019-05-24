@@ -22,6 +22,7 @@
 namespace Mageplaza\Core\Model\Message;
 
 use Magento\Framework\Notification\MessageInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 use Mageplaza\Core\Helper\Validate as ValidateHelper;
 
@@ -32,12 +33,12 @@ use Mageplaza\Core\Helper\Validate as ValidateHelper;
 class Validate implements MessageInterface
 {
     /**
-     * @var \Mageplaza\Core\Helper\Validate
+     * @var ValidateHelper
      */
     protected $_helper;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $urlBuilder;
 
@@ -49,8 +50,8 @@ class Validate implements MessageInterface
     /**
      * Validate constructor.
      *
-     * @param \Mageplaza\Core\Helper\Validate $helper
-     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param ValidateHelper $helper
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
         ValidateHelper $helper,
@@ -69,7 +70,7 @@ class Validate implements MessageInterface
     {
         $notActiveModules = $this->getModules();
 
-        return (bool) sizeof($notActiveModules);
+        return (bool) count($notActiveModules);
     }
 
     /**
@@ -102,7 +103,7 @@ class Validate implements MessageInterface
     /**
      * Retrieve message text
      *
-     * @return \Magento\Framework\Phrase|string
+     * @return Phrase|string
      */
     public function getText()
     {

@@ -44,29 +44,12 @@
                         <field id="notice_enable">1</field>
                     </depends>
                 </field>
-                <!--<field id="store_helper" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">-->
-                <!--<label>Enable Store Helper</label>-->
-                <!--<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>-->
-                <!--<comment>Provide helper links, tooltips to assist store owners in mataining the store</comment>-->
-                <!--</field>-->
                 <field id="menu" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enable Mageplaza Menu</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Mageplaza\Core\Model\Config\Backend\Menu</backend_model>
                     <comment>If yes, the Mageplaza menu will be displayed on the admin navigation. All of the Mageplaza module menu will be displayed there.</comment>
                 </field>
-            </group>
-        </section>
-        <section id="mpmarketplace" translate="label" type="text" sortOrder="9999" showInDefault="1" showInWebsite="0" showInStore="0">
-            <label>Marketplace</label>
-            <tab>mageplaza</tab>
-            <resource>Mageplaza_Core::marketplace</resource>
-            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Mageplaza Marketplace</label>
-                <frontend_model>Mageplaza\Core\Block\Adminhtml\System\Config\Partners</frontend_model>
-                <comment><![CDATA[
-                <iframe id="mp-core-partners" src="https://www.mageplaza.com/core/partners.html" frameborder="0" scrolling="yes" width="100%" height="100%" style="min-height: 800px;"></iframe>
-                ]]></comment>
             </group>
         </section>
     </system>

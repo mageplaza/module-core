@@ -21,6 +21,9 @@
 
 namespace Mageplaza\Core\Model\Config\Backend;
 
+use Magento\Config\Model\ResourceModel\Config\Data;
+use Magento\Framework\App\Cache\Type\Block;
+use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Config\Value;
 
 /**
@@ -32,7 +35,7 @@ class Menu extends Value
     /**
      * @var string
      */
-    protected $_resourceName = \Magento\Config\Model\ResourceModel\Config\Data::class;
+    protected $_resourceName = Data::class;
 
     /**
      * {@inheritdoc}
@@ -40,8 +43,8 @@ class Menu extends Value
     public function afterSave()
     {
         if ($this->isValueChanged()) {
-            $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER);
-            $this->cacheTypeList->cleanType(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+            $this->cacheTypeList->cleanType(Block::TYPE_IDENTIFIER);
+            $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
         }
 
         return parent::afterSave();

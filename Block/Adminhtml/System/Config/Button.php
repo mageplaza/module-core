@@ -24,6 +24,8 @@ namespace Mageplaza\Core\Block\Adminhtml\System\Config;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Exception\LocalizedException;
+use Mageplaza\Core\Helper\AbstractData;
 use Mageplaza\Core\Helper\Validate;
 
 /**
@@ -38,15 +40,15 @@ class Button extends Field
     protected $_template = 'system/config/button.phtml';
 
     /**
-     * @var \Mageplaza\Core\Helper\AbstractData
+     * @var AbstractData
      */
     protected $_helper;
 
     /**
      * Button constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Mageplaza\Core\Helper\Validate $helper
+     * @param Context $context
+     * @param Validate $helper
      * @param array $data
      */
     public function __construct(
@@ -61,12 +63,12 @@ class Button extends Field
 
     /**
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getButtonHtml()
     {
         $activeButton = $this->getLayout()
-            ->createBlock('Magento\Backend\Block\Widget\Button')
+            ->createBlock(\Magento\Backend\Block\Widget\Button::class)
             ->setData([
                 'id'      => 'mageplaza_module_active',
                 'label'   => __('Activate Now'),
@@ -74,7 +76,7 @@ class Button extends Field
             ]);
 
         $cancelButton = $this->getLayout()
-            ->createBlock('Magento\Backend\Block\Widget\Button')
+            ->createBlock(\Magento\Backend\Block\Widget\Button::class)
             ->setData([
                 'id'      => 'mageplaza_module_update',
                 'label'   => __('Update this license'),
@@ -126,7 +128,7 @@ class Button extends Field
                 'mp_active_url'      => $this->getUrl('mpcore/index/activate'),
                 'mp_free_config'     => Validate::jsonEncode($this->_helper->getConfigValue('free/module') ?: []),
                 'mp_module_html_id'  => implode('_', $path),
-                'mp_module_checkbox' => Validate::jsonEncode($this->_helper->getModuleCheckbox($originalData['module_name']))
+                'mp_module_checkbox' => $this->_helper->getModuleCheckbox($originalData['module_name'])
             ]
         );
 

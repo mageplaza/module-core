@@ -19,42 +19,43 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-/** @var \Mageplaza\Core\Block\Adminhtml\System\Config\Button $block */
+use Mageplaza\Core\Block\Adminhtml\System\Config\Button;
+
+/** @var Button $block */
 ?>
 
 <div class="nested" style="font-size: 12px; margin-bottom: 20px">
     <div class="field choice admin__field admin__field-option">
         <input type="checkbox" id="mageplaza_module_subscribe" class="admin__control-checkbox"/>
         <label for="mageplaza_module_subscribe" class="admin__field-label">
-            <span><?php echo __('Receive extension updates and promotion offers from Mageplaza') ?></span>
+            <span><?= /** @noEscape */ __('Receive extension updates and promotion offers from Mageplaza') ?></span>
         </label>
     </div>
 </div>
 
-<?php echo $block->getButtonHtml() ?>
+<?= /** @noEscape */ $block->getButtonHtml() ?>
 
 <script>
     require([
         'jquery',
         'prototype'
     ], function ($j) {
-        var ajaxUrl = '<?php echo $block->getData('mp_active_url') ?>',
-            moduleType = '<?php echo $block->getData('mp_module_type') ?>',
-            defaultConfig = <?php echo $block->getData('mp_free_config') ?>,
-            checkboxConfig = <?php echo $block->getData('mp_module_checkbox') ?>,
+        var ajaxUrl = '<?= /** @noEscape */ $block->getData('mp_active_url') ?>',
+            moduleType = '<?= /** @noEscape */ $block->getData('mp_module_type') ?>',
+            defaultConfig = <?= /** @noEscape */ $block->getData('mp_free_config') ?>,
+            checkboxConfig = <?= /** @noEscape */ $block->getData('mp_module_checkbox') ?>,
             activeButton = $j('#mageplaza_module_active'),
             updateButton = $j('#mageplaza_module_update'),
             fieldKey = $j('.mageplaza-module-active-field-key'),
             freeFields = $j('.mageplaza-module-active-field-free'),
             emailField = $j('.mageplaza-module-active-email'),
             nameField = $j('.mageplaza-module-active-name'),
-//            createAccField = $j('#mageplaza_module_create_account'),
             subscribeField = $j('#mageplaza_module_subscribe'),
             messageContainer = $j('#mageplaza-module-messages'),
             saveButton = $j('#save');
 
         var submitData = {
-            extension: '<?php echo $block->getData('mp_module_name') ?>',
+            extension: '<?= /** @noEscape */ $block->getData('mp_module_name') ?>',
             domain: window.location.hostname
         };
 
@@ -142,11 +143,11 @@
             }
         }
 
-        var isActive = <?php echo $block->getData('mp_is_active') ? 'true' : 'false' ?>;
+        var isActive = <?= /** @noEscape */ $block->getData('mp_is_active') ? 'true' : 'false' ?>;
         activateProduct(isActive);
 
         if (!isActive) {
-            var containerId = '<?php echo $block->getData('mp_module_html_id') ?>';
+            var containerId = '<?= /** @noEscape */ $block->getData('mp_module_html_id') ?>';
             $(containerId + '-state').value = 0;
             Fieldset.toggleCollapse(containerId);
 
@@ -170,14 +171,10 @@
             }
 
             if (checkboxConfig) {
-//                if (checkboxConfig.create) {
-//                    createAccField.prop("checked", true);
-//                }
                 if (checkboxConfig.subscribe) {
                     subscribeField.prop("checked", true);
                 }
             }
         }
-    })
-    ;
+    });
 </script>

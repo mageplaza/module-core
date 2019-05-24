@@ -21,24 +21,29 @@
 
 namespace Mageplaza\Core\Block\Adminhtml\System\Config;
 
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+
 /**
  * Class Head
  * @package Mageplaza\Core\Block\Adminhtml\System\Config
  */
-class Head extends \Magento\Config\Block\System\Config\Form\Field
+class Head extends Field
 {
     /**
      * Render text
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      *
      * @return string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         $html = '';
         if ($element->getComment()) {
-            $html .= '<div style="margin: auto; width: 40%;padding: 10px;">' . $element->getComment() . '</div>';
+            $html .= '<div style="margin: auto; width: 40%;padding: 10px;">'
+                     . $element->getComment()
+                     . '</div>';
         }
 
         return $html;
@@ -47,12 +52,12 @@ class Head extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Return element html
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
         return $this->_toHtml();
     }

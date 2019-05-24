@@ -21,16 +21,21 @@
 
 namespace Mageplaza\Core\Helper;
 
+use Exception;
+use Magento\Backend\App\Config;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Zend_Serializer_Adapter_PhpSerialize;
+use Zend_Serializer_Exception;
 
 /**
  * Class AbstractData
@@ -46,17 +51,17 @@ class AbstractData extends AbstractHelper
     protected $_data = [];
 
     /**
-     * @type \Magento\Store\Model\StoreManagerInterface
+     * @type StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @type \Magento\Framework\ObjectManagerInterface
+     * @type ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Backend\App\Config
+     * @var Config
      */
     protected $backendConfig;
 
@@ -129,7 +134,7 @@ class AbstractData extends AbstractHelper
     public function getConfigValue($field, $scopeValue = null, $scopeType = ScopeInterface::SCOPE_STORE)
     {
         if (!$this->isArea() && is_null($scopeValue)) {
-            /** @var \Magento\Backend\App\Config $backendConfig */
+            /** @var Config $backendConfig */
             if (!$this->backendConfig) {
                 $this->backendConfig = $this->objectManager->get('Magento\Backend\App\ConfigInterface');
             }
@@ -195,7 +200,7 @@ class AbstractData extends AbstractHelper
      * @param $data
      *
      * @return string
-     * @throws \Zend_Serializer_Exception
+     * @throws Zend_Serializer_Exception
      */
     public function serialize($data)
     {
@@ -210,7 +215,7 @@ class AbstractData extends AbstractHelper
      * @param $string
      *
      * @return mixed
-     * @throws \Zend_Serializer_Exception
+     * @throws Zend_Serializer_Exception
      */
     public function unserialize($string)
     {
@@ -232,7 +237,7 @@ class AbstractData extends AbstractHelper
     {
         try {
             $encodeValue = self::getJsonHelper()->jsonEncode($valueToEncode);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $encodeValue = '{}';
         }
 
@@ -251,7 +256,7 @@ class AbstractData extends AbstractHelper
     {
         try {
             $decodeValue = self::getJsonHelper()->jsonDecode($encodedValue);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $decodeValue = [];
         }
 
@@ -276,12 +281,12 @@ class AbstractData extends AbstractHelper
     public function isArea($area = Area::AREA_FRONTEND)
     {
         if (!isset($this->isArea[$area])) {
-            /** @var \Magento\Framework\App\State $state */
+            /** @var State $state */
             $state = $this->objectManager->get('Magento\Framework\App\State');
 
             try {
                 $this->isArea[$area] = ($state->getAreaCode() == $area);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->isArea[$area] = false;
             }
         }
@@ -311,7 +316,7 @@ class AbstractData extends AbstractHelper
     }
 
     /**
-     * @return \Magento\Framework\Json\Helper\Data|mixed
+     * @return JsonHelper|mixed
      */
     public static function getJsonHelper()
     {
@@ -319,10 +324,10 @@ class AbstractData extends AbstractHelper
     }
 
     /**
-     * @return \Zend_Serializer_Adapter_PhpSerialize|mixed
+     * @return Zend_Serializer_Adapter_PhpSerialize|mixed
      */
     protected function getSerializeClass()
     {
-        return $this->objectManager->get(\Zend_Serializer_Adapter_PhpSerialize::class);
+        return $this->objectManager->get(Zend_Serializer_Adapter_PhpSerialize::class);
     }
 }
