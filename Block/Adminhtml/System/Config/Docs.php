@@ -81,7 +81,7 @@ class Docs extends Field
                                     <li><a href="http://docs.mageplaza.com/' . $this->getPackageName($element) . '/" target="_blank">' . __('User Guide') . '</a></li>
                                     <li><a href="https://www.mageplaza.com/faqs/" target="_blank">' . __('FAQs') . '</a></li>
                                     <li><a href="https://www.mageplaza.com/releases/' . $this->getPackageName($element, 'change_log') . '/" target="_blank">' . __('Change Log') . '</a></li>
-                                    <li><a href="http://store.mageplaza.com/my-downloadable-products.html" target="_blank">' . __('Check Latest Version') . '</a></li>
+                                    <li><a href="https://dashboard.mageplaza.com/license/" target="_blank">' . __('Check Latest Version') . '</a></li>
                                 </ul>
                                 </div>
                             </div>
