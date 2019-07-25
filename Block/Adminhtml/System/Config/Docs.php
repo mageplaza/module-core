@@ -78,9 +78,9 @@ class Docs extends Field
                             <div class="message message-info">
                                 <div data-ui-id="messages-message-info">
                                 <ul style="margin: 0 0 0 2em;">
-                                    <li><a href="http://docs.mageplaza.com/' . $this->getPackageName($element) . '/" target="_blank">' . __('User Guide') . '</a></li>
+                                    <li><a href="' . $this->getUrlByType($element) . '" target="_blank">' . __('User Guide') . '</a></li>
                                     <li><a href="https://www.mageplaza.com/faqs/" target="_blank">' . __('FAQs') . '</a></li>
-                                    <li><a href="https://www.mageplaza.com/releases/' . $this->getPackageName($element, 'change_log') . '/" target="_blank">' . __('Change Log') . '</a></li>
+                                    <li><a href="' . $this->getUrlByType($element, 'change_log') . '" target="_blank">' . __('Change Log') . '</a></li>
                                     <li><a href="https://dashboard.mageplaza.com/license/" target="_blank">' . __('Check Latest Version') . '</a></li>
                                 </ul>
                                 </div>
@@ -111,17 +111,29 @@ class Docs extends Field
      *
      * @return mixed
      */
-    private function getPackageName($element, $type = 'user_guide')
+    private function getUrlByType($element, $type = 'user_guide')
     {
         $moduleName = $element->getOriginalData()['module_name'];
 
         $packageName = $this->_packageInfoFactory->create()->getPackageName($moduleName);
         $lowerCaseName = str_replace(['mageplaza/magento-2-', '-extension', 'mageplaza/module-'], '', $packageName);
+        $path = $this->helper->getModuleData($moduleName, $type) ?: str_replace('-m2', '', $lowerCaseName);
 
-        if ($type === 'user_guide') {
-            return $this->helper->getModuleData($moduleName, 'user_guide') ?: $lowerCaseName;
+        if(strpos($path, 'http') === false){
+            switch ($type) {
+                case 'user_guide':
+                    $domain = 'http://docs.mageplaza.com/';
+                    break;
+                case 'change_log':
+                    $domain = 'https://www.mageplaza.com/releases/';
+                    break;
+                default:
+                    $domain = 'https://www.mageplaza.com/';
+            }
+
+            $path = $domain . $path . '/';
         }
 
-        return $this->helper->getModuleData($moduleName, $type) ?: str_replace('-m2', '', $lowerCaseName);
+        return $path;
     }
 }
