@@ -80,7 +80,7 @@ class Docs extends Field
                                 <ul style="margin: 0 0 0 2em;">
                                     <li><a href="' . $this->getUrlByType($element) . '" target="_blank">' . __('User Guide') . '</a></li>
                                     <li><a href="https://www.mageplaza.com/faqs/" target="_blank">' . __('FAQs') . '</a></li>
-                                    <li><a href="' . $this->getUrlByType($element, 'change_log') . '" target="_blank">' . __('Change Log') . '</a></li>
+                                    <li><a href="' . $this->getUrlByType($element, 'change_log') . '" target="_blank">' . __('Changelog') . '</a></li>
                                     <li><a href="https://dashboard.mageplaza.com/license/" target="_blank">' . __('Check Latest Version') . '</a></li>
                                 </ul>
                                 </div>
