@@ -105,15 +105,15 @@ class Media extends AbstractData
             }
             $data['image'] = '';
         } else {
-            $uploader = $this->uploaderFactory->create(['fileId' => $fileName]);
-            $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
-            $uploader->setAllowRenameFiles(true);
-            $uploader->setFilesDispersion(true);
-            $uploader->setAllowCreateFolders(true);
-
-            $path = $this->getBaseMediaPath($type);
-
             try {
+                $uploader = $this->uploaderFactory->create(['fileId' => $fileName]);
+                $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
+                $uploader->setAllowRenameFiles(true);
+                $uploader->setFilesDispersion(true);
+                $uploader->setAllowCreateFolders(true);
+
+                $path = $this->getBaseMediaPath($type);
+            
                 $image = $uploader->save(
                     $this->mediaDirectory->getAbsolutePath($path)
                 );
