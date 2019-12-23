@@ -198,7 +198,6 @@ class AbstractData extends AbstractHelper
      * @param $data
      *
      * @return string
-     * @throws Zend_Serializer_Exception
      */
     public function serialize($data)
     {
@@ -213,7 +212,6 @@ class AbstractData extends AbstractHelper
      * @param $string
      *
      * @return mixed
-     * @throws Zend_Serializer_Exception
      */
     public function unserialize($string)
     {
