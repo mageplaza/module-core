@@ -24,7 +24,7 @@
     <menu>
         <add id="Mageplaza_Core::menu" title="Mageplaza" module="Mageplaza_Core" sortOrder="50" resource="Mageplaza_Core::menu"/>
         <add id="Mageplaza_Core::documentation" title="Documentations" module="Mageplaza_Core" sortOrder="5" resource="Mageplaza_Core::documentation" parent="Mageplaza_Core::menu"/>
-        <add id="Mageplaza_Core::marketplace" title="Mageplaza Marketplace" module="Mageplaza_Core" sortOrder="10" action="adminhtml/system_config/edit/section/mpmarketplace" resource="Mageplaza_Core::marketplace" parent="Mageplaza_Core::documentation"/>
+<!--        <add id="Mageplaza_Core::marketplace" title="Mageplaza Marketplace" module="Mageplaza_Core" sortOrder="10" action="adminhtml/system_config/edit/section/mpmarketplace" resource="Mageplaza_Core::marketplace" parent="Mageplaza_Core::documentation"/>-->
         <add id="Mageplaza_Core::userguide" title="User Guides" module="Mageplaza_Core" sortOrder="20" action="mpcore/index/userguide" resource="Mageplaza_Core::userguide" parent="Mageplaza_Core::documentation"/>
     </menu>
 </config>

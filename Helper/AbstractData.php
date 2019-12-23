@@ -34,8 +34,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Zend_Serializer_Adapter_PhpSerialize;
-use Zend_Serializer_Exception;
 
 /**
  * Class AbstractData
@@ -133,10 +131,10 @@ class AbstractData extends AbstractHelper
      */
     public function getConfigValue($field, $scopeValue = null, $scopeType = ScopeInterface::SCOPE_STORE)
     {
-        if (!$this->isArea() && is_null($scopeValue)) {
+        if ($scopeValue === null && !$this->isArea()) {
             /** @var Config $backendConfig */
             if (!$this->backendConfig) {
-                $this->backendConfig = $this->objectManager->get('Magento\Backend\App\ConfigInterface');
+                $this->backendConfig = $this->objectManager->get(\Magento\Backend\App\ConfigInterface::class);
             }
 
             return $this->backendConfig->getValue($field);
@@ -282,7 +280,7 @@ class AbstractData extends AbstractHelper
     {
         if (!isset($this->isArea[$area])) {
             /** @var State $state */
-            $state = $this->objectManager->get('Magento\Framework\App\State');
+            $state = $this->objectManager->get(\Magento\Framework\App\State::class);
 
             try {
                 $this->isArea[$area] = ($state->getAreaCode() == $area);
@@ -324,10 +322,10 @@ class AbstractData extends AbstractHelper
     }
 
     /**
-     * @return Zend_Serializer_Adapter_PhpSerialize|mixed
+     * @return mixed
      */
     protected function getSerializeClass()
     {
-        return $this->objectManager->get(Zend_Serializer_Adapter_PhpSerialize::class);
+        return $this->objectManager->get('Zend_Serializer_Adapter_PhpSerialize');
     }
 }
