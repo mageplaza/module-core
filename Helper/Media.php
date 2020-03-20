@@ -191,6 +191,15 @@ class Media extends AbstractData
     public function resizeImage($file, $size, $type = '', $keepRatio = true)
     {
         $image = $this->getMediaPath($file, $type);
+
+        /** @var WriteInterface $mediaDirectory */
+        $mediaDirectory = $this->getMediaDirectory();
+
+        // return empty string if the image we are trying to resize doesn't exists.
+        if (!$mediaDirectory->isExist($mediaDirectory->getAbsolutePath($image))) {
+            return '';
+        }
+
         if (!($imageSize = $this->correctImageSize($size))) {
             return $this->getMediaUrl($image);
         }
@@ -198,8 +207,6 @@ class Media extends AbstractData
 
         $resizeImage = $this->getMediaPath($file, ($type ? $type . '/' : '') . 'resize/' . $width . 'x' . $height);
 
-        /** @var WriteInterface $mediaDirectory */
-        $mediaDirectory = $this->getMediaDirectory();
         if ($mediaDirectory->isFile($resizeImage)) {
             $image = $resizeImage;
         } else {
