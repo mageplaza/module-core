@@ -34,15 +34,6 @@ require([
                 'anchor': 'learn more'
             }
         ],
-        'system_config/edit/section/trans_email': [
-            {
-                'css_selector': '#trans_email_ident_general_email',
-                'type': 'link',
-                'text': 'How to change Store Email Addresses, {link}.',
-                'url': 'https://www.mageplaza.com/kb/how-change-store-email-addresses-magento-2.html',
-                'anchor': 'learn more'
-            }
-        ],
         'theme/design_config/edit/scope/websites/scope_id': [
             {
                 'css_selector': 'input[name*="header_welcome"]',
@@ -119,8 +110,6 @@ require([
                 'url': 'https://pages.mageplaza.com/abandoned-cart-email-templates-for-magento/',
                 'anchor': 'learn more'
             },
-
-
         ],
         'system_config/edit/section/newsletter': [
             {
@@ -141,10 +130,6 @@ require([
                 'url': 'https://pages.mageplaza.com/bundle-of-email-follow-up-templates/',
                 'anchor': 'bundle of follow up emails'
             }
-
-
-        ]
-
 
 
         ]
