@@ -109,6 +109,44 @@ require([
                 'url': 'https://www.mageplaza.com/kb/how-setup-store-information-magento-2.html',
                 'anchor': 'learn more'
             }
+
+        ],
+        'system_config/edit/section/trans_email': [
+            {
+                'css_selector': '#trans_email_ident_sales_email',
+                'type': 'link',
+                'text': 'About 79% of visitors drop their shopping cart at the checkout page. This proven abandoned cart email templates that can improve that number, {link}.',
+                'url': 'https://pages.mageplaza.com/abandoned-cart-email-templates-for-magento/',
+                'anchor': 'learn more'
+            },
+
+
+        ],
+        'system_config/edit/section/newsletter': [
+            {
+                'css_selector': '#newsletter_subscription_success_email_template',
+                'type': 'link',
+                'text': 'Welcome emails generate 4 times the total open rates and 5 times the click rates compared to other bulk promotions. Get proven welcome email templates, {link}.',
+                'url': 'https://pages.mageplaza.com/welcome-email-templates-for-magento-2/',
+                'anchor': 'get a copy'
+            }
+
+
+        ],
+        'admin/email_template/new': [
+            {
+                'css_selector': '#template_select',
+                'type': 'link',
+                'text': 'Get {link} templates that convert',
+                'url': 'https://pages.mageplaza.com/bundle-of-email-follow-up-templates/',
+                'anchor': 'bundle of follow up emails'
+            }
+
+
+        ]
+
+
+
         ]
     };
 
