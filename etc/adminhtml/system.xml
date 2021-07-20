@@ -22,7 +22,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="mageplaza" translate="label" sortOrder="401" class="mageplaza-extensions">
+        <tab id="mageplaza" translate="label" sortOrder="402" class="mageplaza-extensions">
             <label>Mageplaza Extensions</label>
         </tab>
         <section id="mageplaza" translate="label" type="text" sortOrder="8888" showInDefault="1" showInWebsite="0" showInStore="0">
