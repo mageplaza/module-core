@@ -111,7 +111,7 @@ class Docs extends Field
      *
      * @return mixed
      */
-    private function getUrlByType($element, $type = 'user_guide')
+    public function getUrlByType($element, $type = 'user_guide')
     {
         $moduleName = $element->getOriginalData()['module_name'];
 
