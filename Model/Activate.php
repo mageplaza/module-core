@@ -75,7 +75,7 @@ class Activate extends DataObject
             self::MAGEPLAZA_ACTIVE_URL,
             '1.1',
             [],
-            http_build_query($params, null, '&')
+            http_build_query($params, '', '&')
         );
 
         try {
