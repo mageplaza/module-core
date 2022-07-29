@@ -34,6 +34,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\Core\Model\Config\Source\NoticeType;
 
 /**
  * Class AbstractData
@@ -94,6 +95,23 @@ class AbstractData extends AbstractHelper
     public function isEnabled($storeId = null)
     {
         return $this->getConfigGeneral('enabled', $storeId);
+    }
+
+    /**
+     * @param null $storeId
+     *
+     * @return bool
+     */
+    public function isEnabledNotificationUpdate($storeId = null)
+    {
+        $isEnable   = $this->getConfigGeneral('notice_enable', $storeId);
+        $noticeType = $this->getConfigGeneral('notice_type', $storeId);
+        if ($noticeType) {
+            $noticeType = explode(',', $noticeType);
+            $noticeType = in_array(NoticeType::TYPE_NEWUPDATE, $noticeType);
+        }
+
+        return  $isEnable && $noticeType;
     }
 
     /**
@@ -325,5 +343,13 @@ class AbstractData extends AbstractHelper
     protected function getSerializeClass()
     {
         return $this->objectManager->get('Zend_Serializer_Adapter_PhpSerialize');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEdition()
+    {
+        return $this->objectManager->get(ProductMetadataInterface::class)->getEdition();
     }
 }
