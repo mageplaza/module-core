@@ -36,6 +36,7 @@ use Psr\Log\LoggerInterface;
 class GetUpdate
 {
     const CHECK_VERSION_URL = 'https://dashboard.mageplaza.com/mageplaza/product/checkversion/?isAjax=true';
+    const DASHBOARD_URL = 'https://dashboard.mageplaza.com/license/';
 
     /**
      * @var CurlFactory
@@ -128,7 +129,7 @@ class GetUpdate
             if ($response) {
                 $response = Validate::jsonDecode($response);
                 if (isset($response['is_update']) && $response['is_update']) {
-                    $this->notifierPool->addNotice('Mageplaza Notice', $response['message']);
+                    $this->notifierPool->addNotice('Mageplaza Notice', $response['message'],self::DASHBOARD_URL);
                 }
             }
 
