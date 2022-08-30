@@ -103,7 +103,7 @@ class Media extends AbstractData
                     $this->_logger->critical($e->getMessage());
                 }
             }
-            $data['image'] = '';
+            $data[$fileName] = '';
         } else {
             try {
                 $uploader = $this->uploaderFactory->create(['fileId' => $fileName]);
@@ -122,9 +122,9 @@ class Media extends AbstractData
                     $this->removeImage($oldImage, $type);
                 }
 
-                $data['image'] = $this->_prepareFile($image['file']);
+                $data[$fileName] = $this->_prepareFile($image['file']);
             } catch (Exception $e) {
-                $data['image'] = isset($data['image']['value']) ? $data['image']['value'] : '';
+                $data[$fileName] = isset($data[$fileName]['value']) ? $data[$fileName]['value'] : '';
             }
         }
 
