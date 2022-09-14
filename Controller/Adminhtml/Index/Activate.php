@@ -25,7 +25,6 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Mageplaza\Core\Helper\AbstractData;
 use Mageplaza\Core\Helper\Validate;
@@ -67,7 +66,7 @@ class Activate extends Action
     /**
      * Application config
      *
-     * @var ScopeConfigInterface
+     * @var ReinitableConfigInterface
      */
     protected $_appConfig;
 
