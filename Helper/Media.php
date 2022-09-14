@@ -27,7 +27,6 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
@@ -44,7 +43,7 @@ class Media extends AbstractData
     const TEMPLATE_MEDIA_PATH = 'mageplaza';
 
     /**
-     * @var ReadInterface
+     * @var WriteInterface
      */
     protected $mediaDirectory;
 
