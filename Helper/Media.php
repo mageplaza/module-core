@@ -106,13 +106,13 @@ class Media extends AbstractData
         } else {
             try {
                 $uploader = $this->uploaderFactory->create(['fileId' => $fileName]);
-                $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
+                $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png', 'svg']);
                 $uploader->setAllowRenameFiles(true);
                 $uploader->setFilesDispersion(true);
                 $uploader->setAllowCreateFolders(true);
 
                 $path = $this->getBaseMediaPath($type);
-            
+
                 $image = $uploader->save(
                     $this->mediaDirectory->getAbsolutePath($path)
                 );
@@ -201,7 +201,7 @@ class Media extends AbstractData
         $mediaDirectory = $this->getMediaDirectory();
         if ($mediaDirectory->isFile($resizeImage)) {
             $image = $resizeImage;
-        } else {
+        } elseif (!$mediaDirectory->isExist($mediaDirectory->getAbsolutePath($image))) {
             $imageResize = $this->imageFactory->create();
             $imageResize->open($mediaDirectory->getAbsolutePath($image));
             $imageResize->constrainOnly(true);
