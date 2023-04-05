@@ -104,7 +104,7 @@ class Activate extends DataObject
      *
      * @return string
      */
-    public static function extractBody(string $response_str): string
+    public function extractBody(string $response_str): string
     {
         $parts = preg_split('|(?:\r\n){2}|m', $response_str, 2);
         if (isset($parts[1])) {
