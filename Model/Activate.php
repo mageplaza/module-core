@@ -22,11 +22,10 @@
 namespace Mageplaza\Core\Model;
 
 use Exception;
+use Laminas\Http\Request;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Mageplaza\Core\Helper\AbstractData;
-use Zend_Http_Client;
-use Zend_Http_Response;
 
 /**
  * Class Activate
@@ -36,7 +35,7 @@ class Activate extends DataObject
 {
     /**
      * Localhost maybe not active via https
-     * @inheritdoc
+     *
      */
     const MAGEPLAZA_ACTIVE_URL = 'https://dashboard.mageplaza.com/license/index/activate/?isAjax=true';
 
@@ -71,7 +70,7 @@ class Activate extends DataObject
 
         $curl = $this->curlFactory->create();
         $curl->write(
-            Zend_Http_Client::POST,
+            Request::METHOD_POST,
             self::MAGEPLAZA_ACTIVE_URL,
             '1.1',
             [],
@@ -83,8 +82,8 @@ class Activate extends DataObject
             if (empty($resultCurl)) {
                 $result['message'] = __('Cannot connect to server. Please try again later.');
             } else {
-                $responseBody = Zend_Http_Response::extractBody($resultCurl);
-                $result += AbstractData::jsonDecode($responseBody);
+                $responseBody = $this->extractBody($resultCurl);
+                $result       += AbstractData::jsonDecode($responseBody);
                 if (isset($result['status']) && in_array($result['status'], [200, 201])) {
                     $result['success'] = true;
                 }
@@ -96,5 +95,22 @@ class Activate extends DataObject
         $curl->close();
 
         return $result;
+    }
+
+    /**
+     * Extract the body from a response string
+     *
+     * @param string $response_str
+     *
+     * @return string
+     */
+    public static function extractBody(string $response_str): string
+    {
+        $parts = preg_split('|(?:\r\n){2}|m', $response_str, 2);
+        if (isset($parts[1])) {
+            return $parts[1];
+        }
+
+        return '';
     }
 }
