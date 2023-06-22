@@ -352,4 +352,19 @@ class AbstractData extends AbstractHelper
     {
         return $this->objectManager->get(ProductMetadataInterface::class)->getEdition();
     }
+
+    /**
+     * Extract the body from a response string
+     *
+     * @param string $response_str
+     * @return string
+     */
+    public static function extractBody($response_str)
+    {
+        $parts = preg_split('|(?:\r\n){2}|m', $response_str, 2);
+        if (isset($parts[1])) {
+            return $parts[1];
+        }
+        return '';
+    }
 }
