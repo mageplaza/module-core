@@ -378,7 +378,7 @@ class AbstractData extends AbstractHelper
      *
      * @return string
      */
-    public static function getHtmlJqColorPicker(string $htmlId, string $value)
+    public static function getHtmlJqColorPicker(string $htmlId, $value = '')
     {
         return <<<HTML
 <script type="text/javascript">
