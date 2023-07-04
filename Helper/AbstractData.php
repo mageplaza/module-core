@@ -82,7 +82,7 @@ class AbstractData extends AbstractHelper
         StoreManagerInterface $storeManager
     ) {
         $this->objectManager = $objectManager;
-        $this->storeManager = $storeManager;
+        $this->storeManager  = $storeManager;
 
         parent::__construct($context);
     }
@@ -111,7 +111,7 @@ class AbstractData extends AbstractHelper
             $noticeType = in_array(NoticeType::TYPE_NEWUPDATE, $noticeType);
         }
 
-        return  $isEnable && $noticeType;
+        return $isEnable && $noticeType;
     }
 
     /**
@@ -207,7 +207,7 @@ class AbstractData extends AbstractHelper
     public function versionCompare($ver, $operator = '>=')
     {
         $productMetadata = $this->objectManager->get(ProductMetadataInterface::class);
-        $version = $productMetadata->getVersion(); //will return the magento version
+        $version         = $productMetadata->getVersion(); //will return the magento version
 
         return version_compare($version, $ver, $operator);
     }
@@ -357,6 +357,7 @@ class AbstractData extends AbstractHelper
      * Extract the body from a response string
      *
      * @param string $response_str
+     *
      * @return string
      */
     public static function extractBody($response_str)
@@ -365,6 +366,36 @@ class AbstractData extends AbstractHelper
         if (isset($parts[1])) {
             return $parts[1];
         }
+
         return '';
+    }
+
+    /**
+     * getHtmlJqColorPicker
+     *
+     * @param string $htmlId
+     * @param string $value
+     *
+     * @return string
+     */
+    public static function getHtmlJqColorPicker(string $htmlId, string $value)
+    {
+        return <<<HTML
+<script type="text/javascript">
+        require(["jquery","jquery/colorpicker/js/colorpicker"], function ($) {
+            $(document).ready(function () {
+                
+                var el = $("#{$htmlId}");
+                el.css("backgroundColor", "{$value}");
+                el.ColorPicker({
+                    color: "{$value}",
+                    onChange: function (hsb, hex, rgb) {
+                        el.css("backgroundColor", "#" + hex).val("#" + hex);
+                    }
+                });
+            });
+        });
+        </script>
+HTML;
     }
 }
