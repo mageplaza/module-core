@@ -373,8 +373,8 @@ class AbstractData extends AbstractHelper
     /**
      * getHtmlJqColorPicker
      *
-     * @param string $htmlId
-     * @param string $value
+     * @param string $htmlId  // id of the input html
+     * @param string|null $value
      *
      * @return string
      */
@@ -395,7 +395,7 @@ class AbstractData extends AbstractHelper
                 });
             });
         });
-        </script>
+</script>
 HTML;
     }
 }
