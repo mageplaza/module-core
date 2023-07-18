@@ -34,7 +34,7 @@ class Validate extends AbstractData
 {
     const MODULE_TYPE_FREE = 1;
     const MODULE_TYPE_PAID = 2;
-//    const DEV_ENV = ['localhost', 'dev', '127.0.0.1', '192.168.', 'demo.'];
+    //    const DEV_ENV = ['localhost', 'dev', '127.0.0.1', '192.168.', 'demo.'];
     const DEV_ENV = [];
 
     /**
@@ -170,11 +170,13 @@ class Validate extends AbstractData
             $this->_mageplazaModules = [];
 
             $allowList = true;
-            $hostName = $this->_urlBuilder->getBaseUrl();
-            foreach (self::DEV_ENV as $env) {
-                if (strpos($hostName, $env) !== false) {
-                    $allowList = false;
-                    break;
+            if (count(self::DEV_ENV)) {
+                $hostName = $this->_urlBuilder->getBaseUrl();
+                foreach (self::DEV_ENV as $env) {
+                    if (strpos($hostName, $env) !== false) {
+                        $allowList = false;
+                        break;
+                    }
                 }
             }
 
