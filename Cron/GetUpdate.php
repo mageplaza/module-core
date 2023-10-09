@@ -59,6 +59,11 @@ class GetUpdate
     protected $readFactory;
 
     /**
+     * @var NotifierPool
+     */
+    protected $notifierPool;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
