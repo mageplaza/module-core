@@ -59,6 +59,11 @@ class GetUpdate
     protected $readFactory;
 
     /**
+     * @var NotifierPool
+     */
+    protected $notifierPool;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -102,12 +107,12 @@ class GetUpdate
         $edition = $this->helperValidate->getEdition();
 
         $modules = [];
-        foreach ($moduleList as $moduleName){
+        foreach ($moduleList as $moduleName) {
             if ($moduleName === 'Mageplaza_Core') {
                 continue;
             }
 
-            try{
+            try {
                 $path                   = $this->componentRegistrar->getPath(
                     ComponentRegistrar::MODULE,
                     $moduleName
@@ -116,7 +121,7 @@ class GetUpdate
                 $composerJsonData       = $directoryRead->readFile('composer.json');
                 $data                   = json_decode($composerJsonData, true);
                 $modules[$data['name']] = $data['version'];
-            }catch (\Exception $exception){
+            } catch (\Exception $exception) {
                 continue;
             }
         }
@@ -129,7 +134,7 @@ class GetUpdate
             if ($response) {
                 $response = Validate::jsonDecode($response);
                 if (isset($response['is_update']) && $response['is_update']) {
-                    $this->notifierPool->addNotice('Mageplaza Notice', $response['message'],self::DASHBOARD_URL);
+                    $this->notifierPool->addNotice('Mageplaza Notice', $response['message'], self::DASHBOARD_URL);
                 }
             }
 
