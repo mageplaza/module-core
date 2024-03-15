@@ -1,0 +1,117 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+/** @var \Mageplaza\Core\Block\Adminhtml\ProcessBar $block */
+$dataProcess = $block->getDataProcessBar();
+?>
+<div class="mp-css" id="mp-process-modal" style="display: none;">
+    <div class="progress">
+        <div class="progress-bar progress-bar-info" id="mp-progress-bar" role="progressbar">
+            <span id="mp-process-modal-percent"></span>
+        </div>
+    </div>
+    <div class="mp-process-modal-content-processing"></div>
+    <div id="mp-process-modal-content"></div>
+</div>
+<div id="mp-popup-process-bar-container">
+</div>
+<div id="ln_overlay" class="ln_overlay" hidden>
+    <div class="loader">
+        <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>" alt="Loading...">
+    </div>
+</div>
+<script type="text/x-magento-init">
+{
+   "#mp-popup-process-bar-container": {
+           "Mageplaza_Core/js/process/popup":{
+               "isEnabled": "<?= /* @noEscape */ $dataProcess->getIsEnabled() ?>",
+               "url": "<?= /** @noEscape */ $dataProcess->getUrl() ?>",
+               "collection": <?= /* @noEscape */ \Mageplaza\Core\Helper\AbstractData::jsonEncode($dataProcess->getCollection()) ?>
+           }
+   }
+}
+
+</script>
+<style>
+    .mp-css .progress {
+        background-image: -webkit-linear-gradient(top,#ebebeb 0%,#f5f5f5 100%);
+        background-image: -o-linear-gradient(top,#ebebeb 0%,#f5f5f5 100%);
+        background-image: -webkit-gradient(linear,left top,left bottom,from(#ebebeb),to(#f5f5f5));
+        background-image: linear-gradient(to bottom,#ebebeb 0%,#f5f5f5 100%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffebebeb',endColorstr='#fff5f5f5',GradientType=0);
+        overflow: hidden;
+        height: 20px;
+        margin-bottom: 20px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .mp-css .progress-bar {
+        background-image: -webkit-linear-gradient(top,#337ab7 0%,#286090 100%);
+        background-image: -o-linear-gradient(top,#337ab7 0%,#286090 100%);
+        background-image: -webkit-gradient(linear,left top,left bottom,from(#337ab7),to(#286090));
+        background-image: linear-gradient(to bottom,#337ab7 0%,#286090 100%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff337ab7',endColorstr='#ff286090',GradientType=0);
+        float: left;
+        width: 0;
+        height: 100%;
+        font-size: 12px;
+        line-height: 20px;
+        color: #fff;
+        text-align: center;
+        background-color: #337ab7;
+        -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
+        box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
+        -webkit-transition: width .6s ease;
+        -o-transition: width .6s ease;
+        transition: width .6s ease;
+    }
+
+    .mp-css .progress-bar-success {
+        background-image: -webkit-linear-gradient(top,#5cb85c 0%,#449d44 100%);
+        background-image: -o-linear-gradient(top,#5cb85c 0%,#449d44 100%);
+        background-image: -webkit-gradient(linear,left top,left bottom,from(#5cb85c),to(#449d44));
+        background-image: linear-gradient(to bottom,#5cb85c 0%,#449d44 100%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c',endColorstr='#ff449d44',GradientType=0)
+    }
+
+    .mp-css .progress-bar-info {
+        background-image: -webkit-linear-gradient(top,#5bc0de 0%,#31b0d5 100%);
+        background-image: -o-linear-gradient(top,#5bc0de 0%,#31b0d5 100%);
+        background-image: -webkit-gradient(linear,left top,left bottom,from(#5bc0de),to(#31b0d5));
+        background-image: linear-gradient(to bottom,#5bc0de 0%,#31b0d5 100%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5bc0de',endColorstr='#ff31b0d5',GradientType=0)
+    }
+
+    .mp-css .progress-bar-danger {
+        background-image: -webkit-linear-gradient(top,#d9534f 0%,#c9302c 100%);
+        background-image: -o-linear-gradient(top,#d9534f 0%,#c9302c 100%);
+        background-image: -webkit-gradient(linear,left top,left bottom,from(#d9534f),to(#c9302c));
+        background-image: linear-gradient(to bottom,#d9534f 0%,#c9302c 100%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9534f',endColorstr='#ffc9302c',GradientType=0)
+    }
+</style>
