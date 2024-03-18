@@ -87,11 +87,10 @@ define([
                             'modalClass': 'mp-process-modal-popup',
                             'buttons': [
                                 {
-                                    text: $.mage.__('Close'),
-                                    class: 'mp-action-close',
+                                    text: $.mage.__('Stop'),
+                                    class: 'mp-action-stop',
                                     click: function () {
                                         isStopBtnClicked = true;
-                                        var isDone       = false;
                                         confirmation({
                                             content: $.mage.__('Are you sure you want to stop processing?'),
                                             actions: {
@@ -105,6 +104,13 @@ define([
                                             }
                                         });
 
+                                    }
+                                },
+                                {
+                                    text: $.mage.__('Close'),
+                                    class: 'mp-action-close',
+                                    click: function () {
+                                        location.reload();
                                     }
                                 },
                                 {
@@ -148,6 +154,7 @@ define([
                 collectionLength  = collection.length,
                 percent           = 100 * (this.options.index + 1) / collectionLength,
                 btnClose          = $('button.mp-action-close'),
+                btnStop           = $('button.mp-action-stop'),
                 btnReprocess      = $('button.mp-action-reprocess'),
                 popupTitle        = $('.mp-process-modal-popup .modal-title');
 
@@ -157,6 +164,8 @@ define([
                 contentProcessing.text($.mage.__(''));
                 progressBar.removeClass('progress-bar-info');
                 progressBar.addClass('progress-bar-success');
+                btnStop.hide();
+                btnClose.show();
 
                 return;
             }
@@ -164,7 +173,7 @@ define([
             if (this.options.itemError === collectionLength) {
                 popupTitle.text($.mage.__('Process failed'));
                 contentProcessing.text($.mage.__(''));
-                btnClose.hide();
+                btnStop.hide();
                 btnReprocess.show();
 
                 return;
