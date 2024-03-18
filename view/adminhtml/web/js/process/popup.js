@@ -128,9 +128,9 @@ define([
             this.options.index     = 0;
             this.options.itemError = 0;
             var parentElement      = document.getElementById("mp-process-modal-content");
-            // while (parentElement.firstChild){
-            //     parentElement.removeChild(parentElement.firstChild);
-            // }
+            while (parentElement.firstChild){
+                parentElement.removeChild(parentElement.firstChild);
+            }
 
             this.loadAjax();
         },
@@ -175,8 +175,6 @@ define([
                 .replace('%1', this.options.itemSuccess + 1)
                 .replace('%2', collectionLength));
 
-            debugger;
-
             return $.ajax({
                 url: this.options.url,
                 data: {
@@ -196,7 +194,7 @@ define([
                         progressBar.addClass('progress-bar-danger');
 
                     }
-                    self.getContent(percent, data.item_id, data.status);
+                    self.getContent(percent, data.item_error, data.status);
                 } else {
                     self.options.itemSuccess++;
                 }
@@ -206,15 +204,15 @@ define([
 
                 self.loadAjax();
             }).fail(function (data) {
-                self.getContent(percent, data.path, data.status);
+                self.getContent(percent, data.item_error, data.status);
                 self.loadAjax();
             });
         },
 
-        getContent: function (percent, path, status) {
+        getContent: function (percent, itemError, status) {
             var modalContent = $('#mp-process-modal-content');
 
-            modalContent.append('<p>' + path + ': ' + '<strong>' + status + '</strong>' + '</p>');
+            modalContent.append('<p>' + '<strong>' + status + '</strong>' + ': ' + itemError + '</p>');
         }
     });
 
