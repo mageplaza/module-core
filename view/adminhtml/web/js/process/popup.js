@@ -132,11 +132,15 @@ define([
         processLoading: function () {
             this.options.index     = 0;
             this.options.itemError = 0;
-            var parentElement      = document.getElementById("mp-process-modal-content");
+            var parentElement      = document.getElementById("mp-process-modal-content"),
+                progressBar       = $('#mp-progress-bar');
             while (parentElement.firstChild){
                 parentElement.removeChild(parentElement.firstChild);
             }
-
+            progressBar.removeClass('progress-bar-success');
+            progressBar.removeClass('progress-bar-danger');
+            progressBar.removeClass('progress-bar-info');
+            progressBar.addClass('progress-bar-info');
             this.loadAjax();
         },
 
@@ -157,6 +161,7 @@ define([
                 btnReprocess      = $('button.mp-action-reprocess'),
                 popupTitle        = $('.mp-process-modal-popup .modal-title');
 
+            btnStop.show();
             btnReprocess.hide();
             btnClose.hide();
             if (this.options.index >= collectionLength && this.options.itemError !== collectionLength) {
