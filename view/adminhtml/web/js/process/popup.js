@@ -88,7 +88,7 @@ define([
                             'buttons': [
                                 {
                                     text: $.mage.__('Stop'),
-                                    class: 'mp-action-stop',
+                                    class: 'mp-action-stop action-primary',
                                     click: function () {
                                         isStopBtnClicked = true;
                                         confirmation({
@@ -103,19 +103,18 @@ define([
                                                 }
                                             }
                                         });
-
                                     }
                                 },
                                 {
                                     text: $.mage.__('Close'),
-                                    class: 'mp-action-close',
+                                    class: 'mp-action-close action-secondary',
                                     click: function () {
                                         location.reload();
                                     }
                                 },
                                 {
                                     text: $.mage.__('Reprocess'),
-                                    class: 'mp-action-reprocess',
+                                    class: 'mp-action-reprocess action-primary',
                                     click: function () {
                                         self.processLoading();
                                     }
@@ -159,6 +158,7 @@ define([
                 popupTitle        = $('.mp-process-modal-popup .modal-title');
 
             btnReprocess.hide();
+            btnClose.hide();
             if (this.options.index >= collectionLength && this.options.itemError !== collectionLength) {
                 popupTitle.text($.mage.__('Complete'));
                 contentProcessing.text($.mage.__(''));
@@ -174,6 +174,11 @@ define([
                 popupTitle.text($.mage.__('Process failed'));
                 contentProcessing.text($.mage.__(''));
                 btnStop.hide();
+                btnClose.css({
+                    'position': 'relative',
+                    'left': '-5px'
+                });
+                btnClose.show();
                 btnReprocess.show();
 
                 return;
@@ -181,13 +186,14 @@ define([
 
             contentProcessing.text(
                 $.mage.__('Processing: %1 / %2')
-                .replace('%1', this.options.itemSuccess + 1)
+                .replace('%1', this.options.index + 1)
                 .replace('%2', collectionLength));
 
             return $.ajax({
                 url: this.options.url,
                 data: {
                     item_id: item.id,
+                    item_name: item.name,
                     form_key: window.FORM_KEY
                 }
             }).done(function (data) {
