@@ -32,7 +32,6 @@ define([
         options: {
             index: 0,
             itemError: 0,
-            itemSuccess: 0,
             confirmMessage: $.mage.__('Do you want to proceed with the process?')
         },
 
@@ -95,7 +94,8 @@ define([
                                             content: $.mage.__('Are you sure you want to stop processing?'),
                                             actions: {
                                                 confirm: function () {
-                                                    location.reload();
+                                                    processModal.modal('closeModal');
+                                                    isStopBtnClicked = false;
                                                 },
                                                 cancel: function () {
                                                     isStopBtnClicked = false;
@@ -109,7 +109,7 @@ define([
                                     text: $.mage.__('Close'),
                                     class: 'mp-action-close action-secondary',
                                     click: function () {
-                                        location.reload();
+                                        processModal.modal('closeModal');
                                     }
                                 },
                                 {
@@ -132,11 +132,14 @@ define([
         processLoading: function () {
             this.options.index     = 0;
             this.options.itemError = 0;
-            var parentElement      = document.getElementById("mp-process-modal-content"),
+            var parentElement      = document.querySelectorAll("#mp-error-item"),
                 progressBar       = $('#mp-progress-bar');
-            while (parentElement.firstChild){
-                parentElement.removeChild(parentElement.firstChild);
-            }
+            parentElement.forEach(function(element) {
+                element.parentNode.removeChild(element);
+            });
+            $('.mp-process-modal-popup .modal-title').text($.mage.__('Processing...'));
+            progressBar.width('0%');
+            $('#mp-process-modal-percent').text('0/0 (0.00%)');
             progressBar.removeClass('progress-bar-success');
             progressBar.removeClass('progress-bar-danger');
             progressBar.removeClass('progress-bar-info');
@@ -151,8 +154,8 @@ define([
 
             var self              = this,
                 collection        = this.options.collection,
-                contentProcessing = $('.mp-process-modal-content-processing'),
                 progressBar       = $('#mp-progress-bar'),
+                modalPercent      = $('#mp-process-modal-percent'),
                 item              = collection[this.options.index],
                 collectionLength  = collection.length,
                 percent           = 100 * (this.options.index + 1) / collectionLength,
@@ -164,20 +167,8 @@ define([
             btnStop.show();
             btnReprocess.hide();
             btnClose.hide();
-            if (this.options.index >= collectionLength && this.options.itemError !== collectionLength) {
-                popupTitle.text($.mage.__('Complete'));
-                contentProcessing.text($.mage.__(''));
-                progressBar.removeClass('progress-bar-info');
-                progressBar.addClass('progress-bar-success');
-                btnStop.hide();
-                btnClose.show();
-
-                return;
-            }
-
             if (this.options.itemError === collectionLength) {
                 popupTitle.text($.mage.__('Process failed'));
-                contentProcessing.text($.mage.__(''));
                 btnStop.hide();
                 btnClose.css({
                     'position': 'relative',
@@ -189,10 +180,17 @@ define([
                 return;
             }
 
-            contentProcessing.text(
-                $.mage.__('Processing: %1 / %2')
-                .replace('%1', this.options.index + 1)
-                .replace('%2', collectionLength));
+            if (this.options.index >= collectionLength && this.options.itemError !== collectionLength) {
+                popupTitle.text($.mage.__('Complete'));
+                progressBar.removeClass('progress-bar-info');
+                progressBar.addClass('progress-bar-success');
+                btnStop.hide();
+                btnClose.show();
+
+                return;
+            }
+
+            self.options.index++;
 
             return $.ajax({
                 url: this.options.url,
@@ -202,25 +200,18 @@ define([
                     form_key: window.FORM_KEY
                 }
             }).done(function (data) {
-                var progressBar  = $('#mp-progress-bar'),
-                    modalPercent = $('#mp-process-modal-percent');
-
                 if (data.status === 'Error') {
                     self.options.itemError++;
                     if (percent === 100 && self.options.itemError === collectionLength) {
-                        progressBar.width('100%');
-                        modalPercent.text('0/' + collectionLength + ' (0.00%)');
                         progressBar.removeClass('progress-bar-info');
                         progressBar.addClass('progress-bar-danger');
 
                     }
                     self.getContent(percent, data.item_error, data.status);
-                } else {
-                    self.options.itemSuccess++;
                 }
-                self.options.index++;
+
                 progressBar.width(percent.toFixed(2) + '%');
-                modalPercent.text(self.options.itemSuccess + '/' + collectionLength + ' (' + percent.toFixed(2) + '%)');
+                modalPercent.text(self.options.index + '/' + collectionLength + ' (' + percent.toFixed(2) + '%)');
 
                 self.loadAjax();
             }).fail(function (data) {
@@ -230,9 +221,9 @@ define([
         },
 
         getContent: function (percent, itemError, status) {
-            var modalContent = $('#mp-process-modal-content');
+            var modalContent = $('.modal-footer');
 
-            modalContent.append('<p>' + '<strong>' + status + '</strong>' + ': ' + itemError + '</p>');
+            modalContent.append('<p id="mp-error-item" style="text-align: left">' + '<strong>' + status + '</strong>' + ': ' + itemError + '</p>');
         }
     });
 
