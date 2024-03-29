@@ -71,14 +71,14 @@ define([
 
         getConfirmModal: function () {
             var self = this;
-
+            self.options.index = 0;
             confirmation({
                 title: $.mage.__('Action'),
                 content: this.options.confirmMessage,
                 actions: {
                     confirm: function () {
                         var processModal = $('#mp-process-modal');
-
+                        isStopBtnClicked = false;
                         processModal.modal({
                             'type': 'popup',
                             'title': $.mage.__('Processing...'),
@@ -95,7 +95,6 @@ define([
                                             actions: {
                                                 confirm: function () {
                                                     processModal.modal('closeModal');
-                                                    isStopBtnClicked = false;
                                                 },
                                                 cancel: function () {
                                                     isStopBtnClicked = false;
@@ -121,7 +120,14 @@ define([
                                 }
                             ]
                         });
+
                         $('.action-close').hide();
+                        $('#mp-process-modal-content').remove();
+                        $('#mp-process-modal-content-line').remove();
+                        $('.modal-footer').after('<div id="mp-process-modal-content" style="padding: 2rem 3rem;"></div>')
+                        .after('<div style="padding:0 3rem"><div id="mp-process-modal-content-line" style="height: 1px; background:#DCDCDC;"></div></div>');
+                        $('.modal-slide .modal-content').css('padding-bottom', 'unset');
+                        $('.modal-popup .modal-footer').css('padding-top', 'unset');
                         processModal.modal('openModal');
                         self.processLoading();
                     }
@@ -133,8 +139,8 @@ define([
             this.options.index     = 0;
             this.options.itemError = 0;
             var parentElement      = document.querySelectorAll("#mp-error-item"),
-                progressBar       = $('#mp-progress-bar');
-            parentElement.forEach(function(element) {
+                progressBar        = $('#mp-progress-bar');
+            parentElement.forEach(function (element) {
                 element.parentNode.removeChild(element);
             });
             $('.mp-process-modal-popup .modal-title').text($.mage.__('Processing...'));
@@ -152,17 +158,17 @@ define([
                 return;
             }
 
-            var self              = this,
-                collection        = this.options.collection,
-                progressBar       = $('#mp-progress-bar'),
-                modalPercent      = $('#mp-process-modal-percent'),
-                item              = collection[this.options.index],
-                collectionLength  = collection.length,
-                percent           = 100 * (this.options.index + 1) / collectionLength,
-                btnClose          = $('button.mp-action-close'),
-                btnStop           = $('button.mp-action-stop'),
-                btnReprocess      = $('button.mp-action-reprocess'),
-                popupTitle        = $('.mp-process-modal-popup .modal-title');
+            var self             = this,
+                collection       = this.options.collection,
+                progressBar      = $('#mp-progress-bar'),
+                modalPercent     = $('#mp-process-modal-percent'),
+                item             = collection[this.options.index],
+                collectionLength = collection.length,
+                percent          = 100 * (this.options.index + 1) / collectionLength,
+                btnClose         = $('button.mp-action-close'),
+                btnStop          = $('button.mp-action-stop'),
+                btnReprocess     = $('button.mp-action-reprocess'),
+                popupTitle       = $('.mp-process-modal-popup .modal-title');
 
             btnStop.show();
             btnReprocess.hide();
@@ -232,9 +238,9 @@ define([
         },
 
         getContent: function (percent, itemError, status) {
-            var modalContent = $('.modal-footer');
+            var modalContent = $('#mp-process-modal-content');
 
-            modalContent.append('<p id="mp-error-item" style="text-align: left">' + '<strong>' + status + '</strong>' + ': ' + itemError + '</p>');
+            modalContent.append('<p id="mp-error-item" style="text-align: left">' + '<strong style="color: red">' + status + '</strong>' + ': ' + itemError + '</p>');
         }
     });
 
