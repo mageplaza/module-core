@@ -16,10 +16,10 @@
   'use strict';
   if (typeof define === 'function' && define.amd) {
     // Register as an anonymous AMD module:
-    define(['jquery', 'Mageplaza_Core/js/fileUploader/vendor/jquery.ui.widget'], factory);
+    define(['jquery', 'Mageplaza_Core/lib/fileUploader/vendor/jquery.ui.widget'], factory);
   } else if (typeof exports === 'object') {
     // Node/CommonJS:
-    factory(require('jquery'), require('Mageplaza_Core/js/fileUploader/vendor/jquery.ui.widget'));
+    factory(require('jquery'), require('Mageplaza_Core/lib/fileUploader/vendor/jquery.ui.widget'));
   } else {
     // Browser globals:
     factory(window.jQuery);

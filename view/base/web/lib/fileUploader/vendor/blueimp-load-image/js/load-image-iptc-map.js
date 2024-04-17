@@ -19,9 +19,9 @@
   'use strict'
   if (typeof define === 'function' && define.amd) {
     // Register as an anonymous AMD module:
-    define(['Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image', 'Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-iptc'], factory)
+    define(['Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image', 'Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-iptc'], factory)
   } else if (typeof module === 'object' && module.exports) {
-    factory(require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image'), require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-iptc'))
+    factory(require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image'), require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-iptc'))
   } else {
     // Browser globals:
     factory(window.loadImage)

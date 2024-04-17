@@ -44,12 +44,12 @@ Exif orientation values to correctly display the letter F:
   'use strict'
   if (typeof define === 'function' && define.amd) {
     // Register as an anonymous AMD module:
-    define(['Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image', 'Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-scale', 'Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-meta'], factory)
+    define(['Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image', 'Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-scale', 'Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-meta'], factory)
   } else if (typeof module === 'object' && module.exports) {
     factory(
-      require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image'),
-      require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-scale'),
-      require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-meta')
+      require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image'),
+      require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-scale'),
+      require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-meta')
     )
   } else {
     // Browser globals:

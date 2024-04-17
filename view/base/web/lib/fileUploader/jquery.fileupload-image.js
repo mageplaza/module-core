@@ -17,25 +17,25 @@
     // Register as an anonymous AMD module:
     define([
       'jquery',
-      'Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image',
-      'Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-meta',
-      'Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-scale',
-      'Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-exif',
-      'Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-orientation',
-      'Mageplaza_Core/js/fileUploader/vendor/blueimp-canvas-to-blob/js/canvas-to-blob',
-      'Mageplaza_Core/js/fileUploader/jquery.fileupload-process'
+      'Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image',
+      'Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-meta',
+      'Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-scale',
+      'Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-exif',
+      'Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-orientation',
+      'Mageplaza_Core/lib/fileUploader/vendor/blueimp-canvas-to-blob/js/canvas-to-blob',
+      'Mageplaza_Core/lib/fileUploader/jquery.fileupload-process'
     ], factory);
   } else if (typeof exports === 'object') {
     // Node/CommonJS:
     factory(
       require('jquery'),
-      require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image'),
-      require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-meta'),
-      require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-scale'),
-      require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-exif'),
-      require('Mageplaza_Core/js/fileUploader/vendor/blueimp-load-image/js/load-image-orientation'),
-      require('Mageplaza_Core/js/fileUploader/vendor/blueimp-canvas-to-blob/js/canvas-to-blob'),
-      require('Mageplaza_Core/js/fileUploader/jquery.fileupload-process')
+      require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image'),
+      require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-meta'),
+      require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-scale'),
+      require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-exif'),
+      require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-load-image/js/load-image-orientation'),
+      require('Mageplaza_Core/lib/fileUploader/vendor/blueimp-canvas-to-blob/js/canvas-to-blob'),
+      require('Mageplaza_Core/lib/fileUploader/jquery.fileupload-process')
     );
   } else {
     // Browser globals:

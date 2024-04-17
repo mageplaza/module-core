@@ -12,19 +12,19 @@
     // Register as an anonymous AMD module:
     define([
       'jquery',
-      'Mageplaza_Core/js/fileUploader/jquery.fileupload-image',
-      'Mageplaza_Core/js/fileUploader/jquery.fileupload-audio',
-      'Mageplaza_Core/js/fileUploader/jquery.fileupload-video',
-      'Mageplaza_Core/js/fileUploader/jquery.iframe-transport',
+      'Mageplaza_Core/lib/fileUploader/jquery.fileupload-image',
+      'Mageplaza_Core/lib/fileUploader/jquery.fileupload-audio',
+      'Mageplaza_Core/lib/fileUploader/jquery.fileupload-video',
+      'Mageplaza_Core/lib/fileUploader/jquery.iframe-transport',
     ], factory);
   } else if (typeof exports === 'object') {
     // Node/CommonJS:
     factory(
       require('jquery'),
-      require('Mageplaza_Core/js/fileUploader/jquery.fileupload-image'),
-      require('Mageplaza_Core/js/fileUploader/jquery.fileupload-audio'),
-      require('Mageplaza_Core/js/fileUploader/jquery.fileupload-video'),
-      require('Mageplaza_Core/js/fileUploader/jquery.iframe-transport')
+      require('Mageplaza_Core/lib/fileUploader/jquery.fileupload-image'),
+      require('Mageplaza_Core/lib/fileUploader/jquery.fileupload-audio'),
+      require('Mageplaza_Core/lib/fileUploader/jquery.fileupload-video'),
+      require('Mageplaza_Core/lib/fileUploader/jquery.iframe-transport')
     );
   } else {
     // Browser globals:

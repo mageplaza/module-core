@@ -15,10 +15,10 @@
   'use strict';
   if (typeof define === 'function' && define.amd) {
     // Register as an anonymous AMD module:
-    define(['jquery', 'Mageplaza_Core/js/fileUploader/jquery.fileupload-process'], factory);
+    define(['jquery', 'Mageplaza_Core/lib/fileUploader/jquery.fileupload-process'], factory);
   } else if (typeof exports === 'object') {
     // Node/CommonJS:
-    factory(require('jquery'), require('Mageplaza_Core/js/fileUploader/jquery.fileupload-process'));
+    factory(require('jquery'), require('Mageplaza_Core/lib/fileUploader/jquery.fileupload-process'));
   } else {
     // Browser globals:
     factory(window.jQuery);
