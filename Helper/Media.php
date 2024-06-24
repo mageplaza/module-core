@@ -201,7 +201,7 @@ class Media extends AbstractData
         $mediaDirectory = $this->getMediaDirectory();
         if ($mediaDirectory->isFile($resizeImage)) {
             $image = $resizeImage;
-        } elseif (!$mediaDirectory->isExist($mediaDirectory->getAbsolutePath($image))) {
+        } elseif ($mediaDirectory->isExist($mediaDirectory->getAbsolutePath($image))) {
             $imageResize = $this->imageFactory->create();
             $imageResize->open($mediaDirectory->getAbsolutePath($image));
             $imageResize->constrainOnly(true);
