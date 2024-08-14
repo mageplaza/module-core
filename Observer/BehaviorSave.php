@@ -65,8 +65,11 @@ class BehaviorSave implements ObserverInterface
     public function execute(Observer $observer)
     {
         $moduleName = $this->request->getControllerModule();
-        $section    = $this->request->getParam('section') ?: '';
-        $sections   = ['smtp'];
+        if (!$moduleName) {
+            return;
+        }
+        $section     = $this->request->getParam('section') ?: '';
+        $sections    = ['smtp'];
         $activity_id = 1;
         if (!str_contains($moduleName, 'Mageplaza')
             ||
