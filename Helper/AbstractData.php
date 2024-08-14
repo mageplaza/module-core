@@ -29,9 +29,12 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Model\Config\Source\NoticeType;
@@ -373,7 +376,7 @@ class AbstractData extends AbstractHelper
     /**
      * getHtmlJqColorPicker
      *
-     * @param string $htmlId  // id of the input html
+     * @param string $htmlId // id of the input html
      * @param string|null $value
      *
      * @return string
@@ -397,5 +400,47 @@ class AbstractData extends AbstractHelper
         });
 </script>
 HTML;
+    }
+
+    /**
+     * Return is Hyva Theme
+     *
+     * @return bool
+     */
+    public function checkHyvaTheme()
+    {
+        try {
+            $themeCode = $this->getThemeCodeByCache();
+        } catch (\Exception $e) {
+            try {
+                /** @var ThemeProviderInterface $themeProviderInterface */
+                $themeProviderInterface = $this->objectManager->create(ThemeProviderInterface::Class);
+                $themeId                = $this->storeManager->getStore()->getConfig('design/theme/theme_id');
+                $theme                  = $themeProviderInterface->getThemeById($themeId);
+                $themeCode              = $theme->getCode();
+            } catch (NoSuchEntityException $noSuchEntityException) {
+                return false;
+            }
+        }
+
+        if (str_contains($themeCode, 'Hyva')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * GetThemeCode By Cache in DesignInterface
+     *
+     * @return string
+     */
+    private function getThemeCodeByCache()
+    {
+        /** @var DesignInterface $themeProviderInterface */
+        $themeProviderInterface = $this->objectManager->create(DesignInterface::Class);
+        $theme                  = $themeProviderInterface->getDesignTheme();
+
+        return $theme->getCode();
     }
 }
