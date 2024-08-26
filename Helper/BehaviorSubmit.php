@@ -1,18 +1,35 @@
 <?php
-
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
 
 namespace Mageplaza\Core\Helper;
 
-
 use GuzzleHttp\Client;
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Mageplaza\Core\Model\Behavior;
 use Mageplaza\Core\Model\ResourceModel\Behavior as ResourceModel;
 use Throwable;
-use Zend_Log;
-use Zend_Log_Writer_Stream;
 
 /**
  * Class BehaviorSubmit
@@ -20,6 +37,8 @@ use Zend_Log_Writer_Stream;
  */
 class BehaviorSubmit
 {
+    const  CACHE_KEY = 'mp_core_behavior';
+
     /**
      * @var Behavior
      */
@@ -46,6 +65,16 @@ class BehaviorSubmit
     protected $cacheTypeList;
 
     /**
+     * @var CacheInterface
+     */
+    protected $cache;
+
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
+    /**
      * BehaviorSubmit constructor.
      *
      * @param Behavior $behavior
@@ -53,19 +82,25 @@ class BehaviorSubmit
      * @param ScopeConfigInterface $scopeConfig
      * @param WriterInterface $configWriter
      * @param TypeListInterface $cacheTypeList
+     * @param CacheInterface $cache
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         Behavior $behavior,
         ResourceModel $resourceModel,
         ScopeConfigInterface $scopeConfig,
         WriterInterface $configWriter,
-        TypeListInterface $cacheTypeList
+        TypeListInterface $cacheTypeList,
+        CacheInterface $cache,
+        SerializerInterface $serializer
     ) {
         $this->scopeConfig   = $scopeConfig;
         $this->configWriter  = $configWriter;
         $this->behavior      = $behavior;
         $this->resourceModel = $resourceModel;
         $this->cacheTypeList = $cacheTypeList;
+        $this->cache         = $cache;
+        $this->serializer    = $serializer;
     }
 
     /**
@@ -126,7 +161,9 @@ class BehaviorSubmit
     }
 
     /**
-     * @param $value
+     * SetValue of Config Systems
+     *
+     * @param string $value
      */
     public function setValue($value)
     {
@@ -159,15 +196,8 @@ class BehaviorSubmit
             $postData                  = http_build_query($behaviorData);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-            $response = curl_exec($ch);
+            curl_exec($ch);
             curl_close($ch);
-
-            $writer = new Zend_Log_Writer_Stream(BP . '/var/log/submit_data.log');
-            $logger = new Zend_Log();
-            $logger->addWriter($writer);
-            $logger->info($response);
-
         } catch (Throwable $e) {
             //Do no thing
         }
@@ -191,5 +221,44 @@ class BehaviorSubmit
         }
 
         return $randomString;
+    }
+
+    /**
+     * SaveToCache
+     *
+     * @param array $behaviorData
+     */
+    public function saveToCache(array $behaviorData)
+    {
+        // Use SerializerInterface to serialize the data
+        $serializedData = $this->serializer->serialize($behaviorData);
+        $this->cache->save($serializedData, self::CACHE_KEY, [], 86400); // Lifetime in seconds
+    }
+
+    /**
+     * GetDataFormCache
+     *
+     * @return array|null
+     */
+    public function getDataFormCache()
+    {
+        // Retrieve data from cache using the cache key
+        $cachedData = $this->cache->load(self::CACHE_KEY);
+
+        if ($cachedData) {
+            $data = $this->serializer->unserialize($cachedData);
+
+            return $data;
+        }
+
+        return null;
+    }
+
+    /**
+     * ClearCacheBehavior
+     */
+    public function clearCacheBehavior()
+    {
+        $this->cache->remove(self::CACHE_KEY);
     }
 }

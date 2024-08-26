@@ -14,13 +14,23 @@ class BehaviorSubmit
     private $collection;
 
     /**
+     * @var \Mageplaza\Core\Helper\BehaviorSubmit
+     */
+    protected $behaviorSubmit;
+
+    /**
      * BehaviorSubmit constructor.
      *
      * @param Collection $collection
+     * @param \Mageplaza\Core\Helper\BehaviorSubmit $behaviorSubmit
      */
-    public function __construct(Collection $collection)
-    {
-        $this->collection = $collection;
+    public function __construct(
+        Collection $collection,
+        \Mageplaza\Core\Helper\BehaviorSubmit $behaviorSubmit
+    ) {
+        $this->collection     = $collection;
+        $this->behaviorSubmit = $behaviorSubmit;
+
     }
 
     /**
@@ -35,8 +45,11 @@ class BehaviorSubmit
         foreach ($this->collection->getItems() as $behavior) {
             $data[] = $behavior->getData();
         }
+        $data = array_merge($data, $this->behaviorSubmit->getDataFormCache());
         \Mageplaza\Core\Helper\BehaviorSubmit::submitData($data);
 
+        //clean cache and DB
+        $this->behaviorSubmit->clearCacheBehavior();
         $this->collection->getConnection()->truncateTable($this->collection->getMainTable());
     }
 }

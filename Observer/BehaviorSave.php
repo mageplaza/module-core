@@ -90,6 +90,6 @@ class BehaviorSave implements ObserverInterface
             'new_data'        => AbstractData::jsonEncode($this->request->getParams()),
             'old_data'        => AbstractData::jsonEncode([]),
         ];
-        $this->behaviorSave->saveData($data);
+        $this->behaviorSave->saveToCache($data);
     }
 }

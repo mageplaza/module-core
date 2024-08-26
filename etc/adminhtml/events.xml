@@ -25,4 +25,7 @@
     <event name="controller_action_predispatch">
         <observer name="your_module_controller_action_predispatch" instance="Mageplaza\Core\Observer\BehaviorSave" />
     </event>
+    <event name="adminhtml_cache_flush_system">
+        <observer name="mp_core_behavior_cache_clean_observer" instance="Mageplaza\Core\Observer\CacheCleanObserver"/>
+    </event>
 </config>
