@@ -28,8 +28,9 @@
         <job name="core_process_feed" instance="Mageplaza\Core\Cron\ProcessFeed" method="execute">
             <schedule>0 * * * *</schedule>
         </job>
-        <job name="mageplaza_core_clean_table_cronjob" instance="Mageplaza\Core\Cron\BehaviorSubmit" method="execute">
-            <schedule>0 2 * * *</schedule>
+<!--        Add cron submit Behavior Data Server on every monday -->
+        <job name="mageplaza_core_behavior_submit" instance="Mageplaza\Core\Cron\BehaviorSubmit" method="execute">
+            <schedule>0 2 * * 1</schedule>
         </job>
     </group>
 </config>
