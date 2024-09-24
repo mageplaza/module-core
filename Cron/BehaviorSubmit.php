@@ -30,7 +30,6 @@ class BehaviorSubmit
     ) {
         $this->collection     = $collection;
         $this->behaviorSubmit = $behaviorSubmit;
-
     }
 
     /**
@@ -45,7 +44,7 @@ class BehaviorSubmit
         foreach ($this->collection->getItems() as $behavior) {
             $data[] = $behavior->getData();
         }
-        $data = array_merge($data, $this->behaviorSubmit->getDataFormCache());
+        $data = array_merge($data, $this->behaviorSubmit->getDataFormCache() ?? []);
         \Mageplaza\Core\Helper\BehaviorSubmit::submitData($data);
 
         //clean cache and DB

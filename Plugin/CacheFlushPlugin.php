@@ -18,18 +18,16 @@
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+namespace Mageplaza\Core\Plugin;
 
-namespace Mageplaza\Core\Observer;
-
-use Magento\Framework\Event\Observer;
-use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\App\Cache\Manager;
 use Mageplaza\Core\Helper\BehaviorSubmit;
 
 /**
- * Class CacheCleanObserver
- * Mageplaza\Core\Observer
+ * Class CacheFlushPlugin
+ * Mageplaza\Core\Plugin
  */
-class CacheCleanObserver implements ObserverInterface
+class CacheFlushPlugin
 {
     /**
      * @var BehaviorSubmit
@@ -48,11 +46,23 @@ class CacheCleanObserver implements ObserverInterface
     }
 
     /**
-     * Execute
+     * BeforeFlush
      *
-     * @param Observer $observer
+     * @param Manager $subject
+     * @param array $types
      */
-    public function execute(Observer $observer)
+    public function beforeFlush(Manager $subject, array $types)
+    {
+        $this->behaviorSubmit->saveBehaviors();
+    }
+
+    /**
+     * BeforeFlush
+     *
+     * @param Manager $subject
+     * @param array $types
+     */
+    public function beforeClean(Manager $subject, array $types)
     {
         $this->behaviorSubmit->saveBehaviors();
     }

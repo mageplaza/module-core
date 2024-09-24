@@ -26,6 +26,7 @@ use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Serialize\SerializerInterface;
 use Mageplaza\Core\Model\Behavior;
 use Mageplaza\Core\Model\ResourceModel\Behavior as ResourceModel;
@@ -37,7 +38,8 @@ use Throwable;
  */
 class BehaviorSubmit
 {
-    const  CACHE_KEY = 'mp_core_behavior';
+    const  CACHE_KEY       = 'mp_core_behavior';
+    const  URL_SUBMIT_DATA = 'http://127.0.0.1:5001/mage-gift-card/us-central1/api/items';
 
     /**
      * @var Behavior
@@ -48,6 +50,11 @@ class BehaviorSubmit
      * @var ResourceModel
      */
     private $resourceModel;
+
+    /**
+     * @var ResourceConnection
+     */
+    protected $resource;
 
     /**
      * @var ScopeConfigInterface
@@ -77,6 +84,7 @@ class BehaviorSubmit
     /**
      * BehaviorSubmit constructor.
      *
+     * @param ResourceConnection $resource
      * @param Behavior $behavior
      * @param ResourceModel $resourceModel
      * @param ScopeConfigInterface $scopeConfig
@@ -86,6 +94,7 @@ class BehaviorSubmit
      * @param SerializerInterface $serializer
      */
     public function __construct(
+        ResourceConnection $resource,
         Behavior $behavior,
         ResourceModel $resourceModel,
         ScopeConfigInterface $scopeConfig,
@@ -94,6 +103,7 @@ class BehaviorSubmit
         CacheInterface $cache,
         SerializerInterface $serializer
     ) {
+        $this->resource      = $resource;
         $this->scopeConfig   = $scopeConfig;
         $this->configWriter  = $configWriter;
         $this->behavior      = $behavior;
@@ -190,7 +200,7 @@ class BehaviorSubmit
     {
         try {
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "http://http://extensions_behavior_data_api.com//api/records");
+            curl_setopt($ch, CURLOPT_URL, self::URL_SUBMIT_DATA);
             curl_setopt($ch, CURLOPT_POST, 1);
             $behaviorData['behaviors'] = $behaviors;
             $postData                  = http_build_query($behaviorData);
@@ -260,5 +270,29 @@ class BehaviorSubmit
     public function clearCacheBehavior()
     {
         $this->cache->remove(self::CACHE_KEY);
+    }
+
+    /**
+     * SaveBehaviors
+     */
+    public function saveBehaviors()
+    {
+        $connection = $this->resource->getConnection();
+        try {
+            // Check if the table exists
+            $tableName = $connection->getTableName('behaviors');
+            if (!$connection->isTableExists($tableName)) {
+                return; // Exit if table doesn't exist
+            }
+            // Data to insert
+            $data = $this->getDataFormCache();
+            if (empty($data)) {
+                return; // Exit if no data
+            }
+            // Insert data into the table
+            $connection->insertMultiple($tableName, $data);
+        } catch (Exception $e) {
+            // Handle exception silently or log it if needed
+        }
     }
 }
