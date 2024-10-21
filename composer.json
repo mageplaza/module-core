@@ -2,7 +2,7 @@
   "name": "mageplaza/module-core",
   "description": "Mageplaza Core for Magento 2",
   "type": "magento2-module",
-  "version": "1.5.8",
+  "version": "1.5.9",
   "license": "proprietary",
   "authors": [
     {
