@@ -387,7 +387,7 @@ class AbstractData extends AbstractHelper
 <script type="text/javascript">
         require(["jquery","jquery/colorpicker/js/colorpicker"], function ($) {
             $(document).ready(function () {
-                
+
                 var el = $("#{$htmlId}");
                 el.css("backgroundColor", "{$value}");
                 el.ColorPicker({
@@ -423,7 +423,7 @@ HTML;
             }
         }
 
-        if (str_contains($themeCode, 'Hyva')) {
+        if (str_contains(strtolower($themeCode), 'hyva')) {
             return true;
         }
 
