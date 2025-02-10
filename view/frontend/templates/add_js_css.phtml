@@ -1,0 +1,35 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+/** @var Mageplaza\Core\Block\Hyva\AddJsCss $block */
+/** @var Magento\Framework\Escaper $escaper */
+
+
+$files = $block->getData('files');
+foreach ($files as $file):
+    $fileInfo  = $block->getFilePathInfo($file);
+    $extension = $fileInfo['extension'];
+    if ($extension === 'js'): ?>
+        <script src="<?= $escaper->escapeUrl($block->getViewFileUrl($file)) ?>"></script>
+    <?php elseif ($extension === 'css'): ?>
+        <link rel="stylesheet" type="text/css" href="<?= $escaper->escapeUrl($block->getViewFileUrl($file)) ?>"/>
+    <?php endif; ?>
+<?php endforeach; ?>
