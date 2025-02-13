@@ -22,8 +22,8 @@
  -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="content">
+        <referenceBlock name="head.additional">
             <block class="Mageplaza\Core\Block\Hyva\AddJsCss" name="mp_add_js_css" template="Mageplaza_Core::add_js_css.phtml"/>
-        </referenceContainer>
+        </referenceBlock>
     </body>
 </page>
