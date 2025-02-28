@@ -23,6 +23,7 @@ namespace Mageplaza\Core\Helper;
 
 use Exception;
 use Magento\Backend\App\Config;
+use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -155,7 +156,7 @@ class AbstractData extends AbstractHelper
         if ($scopeValue === null && !$this->isArea()) {
             /** @var Config $backendConfig */
             if (!$this->backendConfig) {
-                $this->backendConfig = $this->objectManager->get(\Magento\Backend\App\ConfigInterface::class);
+                $this->backendConfig = $this->objectManager->get(ConfigInterface::class);
             }
 
             return $this->backendConfig->getValue($field);
@@ -299,7 +300,7 @@ class AbstractData extends AbstractHelper
     {
         if (!isset($this->isArea[$area])) {
             /** @var State $state */
-            $state = $this->objectManager->get(\Magento\Framework\App\State::class);
+            $state = $this->objectManager->get(State::class);
 
             try {
                 $this->isArea[$area] = ($state->getAreaCode() == $area);
@@ -411,7 +412,7 @@ HTML;
     {
         try {
             $themeCode = $this->getThemeCodeByCache();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             try {
                 /** @var ThemeProviderInterface $themeProviderInterface */
                 $themeProviderInterface = $this->objectManager->create(ThemeProviderInterface::Class);
@@ -438,9 +439,21 @@ HTML;
     private function getThemeCodeByCache()
     {
         /** @var DesignInterface $themeProviderInterface */
-        $themeProviderInterface = $this->objectManager->create(DesignInterface::Class);
+        $themeProviderInterface = $this->objectManager->create(DesignInterface::class);
         $theme                  = $themeProviderInterface->getDesignTheme();
 
-        return $theme->getCode();
+        $parentTheme = $theme->getParentTheme();
+
+        return $parentTheme ? $parentTheme->getCode() : $theme->getCode();
+    }
+
+    /**
+     * IsHyvaTheme
+     *
+     * @return bool
+     */
+    public function isHyvaTheme()
+    {
+        return $this->checkHyvaTheme();
     }
 }
