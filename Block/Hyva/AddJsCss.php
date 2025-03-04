@@ -56,7 +56,7 @@ class AddJsCss extends Template
      */
     public function setFiles($files)
     {
-        $this->setData('files', $files);
+        $this->setData('files', array_merge($this->getData('files')?? [], $files));
     }
 
     /**
