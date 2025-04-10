@@ -217,6 +217,17 @@ class AbstractData extends AbstractHelper
     }
 
     /**
+     * @return bool
+     */
+    public function is247Below()
+    {
+        if (!$this->versionCompare('2.4.7','<=')) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @param $data
      *
      * @return string
