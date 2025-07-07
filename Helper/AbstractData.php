@@ -217,13 +217,16 @@ class AbstractData extends AbstractHelper
     }
 
     /**
+     * Is <= 247
+     *
      * @return bool
      */
     public function is247Below()
     {
-        if (!$this->versionCompare('2.4.7','<=')) {
+        if ($this->versionCompare('2.4.7', '<=')) {
             return true;
         }
+
         return false;
     }
 
@@ -426,7 +429,7 @@ HTML;
         } catch (Exception $e) {
             try {
                 /** @var ThemeProviderInterface $themeProviderInterface */
-                $themeProviderInterface = $this->objectManager->create(ThemeProviderInterface::Class);
+                $themeProviderInterface = $this->objectManager->create(ThemeProviderInterface::class);
                 $themeId                = $this->storeManager->getStore()->getConfig('design/theme/theme_id');
                 $theme                  = $themeProviderInterface->getThemeById($themeId);
                 $themeCode              = $theme->getCode();
