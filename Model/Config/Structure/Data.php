@@ -74,6 +74,9 @@ class Data
 
                     $dynamicGroups = $this->getDynamicConfigGroups($moduleName, $section['id']);
                     if (!empty($dynamicGroups)) {
+                        if (isset($section['children']['module']['children']['license'])) {
+                            $dynamicGroups['module']['children']['license'] = $section['children']['module']['children']['license'];
+                        }
                         $config['config']['system']['sections'][$sectionId]['children'] = $dynamicGroups + $section['children'];
                     }
                     break;
