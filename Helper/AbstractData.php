@@ -217,13 +217,13 @@ class AbstractData extends AbstractHelper
     }
 
     /**
-     * Is <= 247
+     * Is < 248
      *
      * @return bool
      */
     public function is247Below()
     {
-        if ($this->versionCompare('2.4.7', '<=')) {
+        if ($this->versionCompare('2.4.8', '<')) {
             return true;
         }
 
