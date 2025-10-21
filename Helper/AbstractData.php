@@ -206,7 +206,7 @@ class AbstractData extends AbstractHelper
      * @param $ver
      * @param string $operator
      *
-     * @return mixed
+     * @return bool|int
      */
     public function versionCompare($ver, $operator = '>=')
     {
@@ -217,17 +217,13 @@ class AbstractData extends AbstractHelper
     }
 
     /**
-     * Is < 248
+     * Is <= 247
      *
      * @return bool
      */
     public function is247Below()
     {
-        if ($this->versionCompare('2.4.8', '<')) {
-            return true;
-        }
-
-        return false;
+        return $this->versionCompare('2.4.8', '<');
     }
 
     /**

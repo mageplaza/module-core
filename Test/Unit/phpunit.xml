@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:magento2:dev/tests/unit/phpunit.xsd"
+         bootstrap="../../../../../../dev/tests/unit/framework/bootstrap.php">
+    <testsuite name="Mageplaza_Core_Unit_Test">
+        <directory>.</directory>
+    </testsuite>
+</phpunit>
