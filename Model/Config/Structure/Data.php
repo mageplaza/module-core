@@ -77,6 +77,9 @@ class Data
                         if (isset($section['children']['module']['children']['license'])) {
                             $dynamicGroups['module']['children']['license'] = $section['children']['module']['children']['license'];
                         }
+                        if (isset($section['children']['module']['children']['trial_status'])) {
+                            $dynamicGroups['module']['children']['trial_status'] = $section['children']['module']['children']['trial_status'];
+                        }
                         $config['config']['system']['sections'][$sectionId]['children'] = $dynamicGroups + $section['children'];
                     }
                     break;
