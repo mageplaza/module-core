@@ -19,6 +19,11 @@
  */
 
 var config = {
+    map: {
+        '*': {
+            'jquery-ui-modules/core': 'jquery-ui-modules/widget'
+        }
+    },
     paths: {
         'jquery/file-uploader': 'Mageplaza_Core/lib/fileUploader/jquery.fileuploader',
         'mageplaza/core/jquery/popup': 'Mageplaza_Core/js/jquery.magnific-popup.min',
