@@ -50,7 +50,7 @@ class Feed extends \Magento\AdminNotification\Model\Feed
      */
     public function checkUpdate()
     {
-        if (!(boolean) $this->_backendConfig->getValue('mageplaza/general/notice_enable')) {
+        if (!(bool) $this->_backendConfig->getValue('mageplaza/general/notice_enable')) {
             return $this;
         }
 
