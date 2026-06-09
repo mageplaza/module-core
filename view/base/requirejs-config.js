@@ -20,7 +20,10 @@
 
 var config = {
     map: {
-        '*': {
+        'touchPunch': {
+            'jquery-ui-modules/core': 'jquery-ui-modules/widget'
+        },
+        'Mageplaza_Core/js/jquery.ui.touch-punch.min': {
             'jquery-ui-modules/core': 'jquery-ui-modules/widget'
         }
     },
