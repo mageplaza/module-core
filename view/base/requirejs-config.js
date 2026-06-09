@@ -19,11 +19,6 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            'jquery-ui-modules/core': 'jquery-ui-modules/widget'
-        }
-    },
     paths: {
         'jquery/file-uploader': 'Mageplaza_Core/lib/fileUploader/jquery.fileuploader',
         'mageplaza/core/jquery/popup': 'Mageplaza_Core/js/jquery.magnific-popup.min',
@@ -39,6 +34,6 @@ var config = {
         "mageplaza/core/bootstrap": ["jquery"],
         mpIonRangeSlider: ["jquery"],
         mpDevbridgeAutocomplete: ["jquery"],
-        touchPunch: ['jquery', 'jquery-ui-modules/core', 'jquery-ui-modules/mouse', 'jquery-ui-modules/widget']
+        touchPunch: ['jquery', 'jquery-ui-modules/widget', 'jquery-ui-modules/mouse']
     }
 };
