@@ -394,15 +394,26 @@ class AbstractData extends AbstractHelper
      */
     public static function getHtmlJqColorPicker(string $htmlId, $value = '')
     {
+        // Hex flags keep the value inert inside an inline <script> without relying on
+        // json_encode's default slash escaping. false means invalid UTF-8, so fall back
+        // to an empty string literal rather than emitting nothing and breaking the script.
+        $safeValue = json_encode(
+            (string) $value,
+            JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+        );
+        if ($safeValue === false) {
+            $safeValue = '""';
+        }
+
         return <<<HTML
 <script type="text/javascript">
         require(["jquery","jquery/colorpicker/js/colorpicker"], function ($) {
             $(document).ready(function () {
 
                 var el = $("#{$htmlId}");
-                el.css("backgroundColor", "{$value}");
+                el.css("backgroundColor", {$safeValue});
                 el.ColorPicker({
-                    color: "{$value}",
+                    color: {$safeValue},
                     onChange: function (hsb, hex, rgb) {
                         el.css("backgroundColor", "#" + hex).val("#" + hex);
                     }
