@@ -15,6 +15,7 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -73,6 +74,7 @@ class AbstractDataTest extends TestCase
      * @param string $version
      * @param bool $expectedResult
      */
+    #[DataProvider('versionDataProvider')]
     public function testIs247Below(string $version, bool $expectedResult): void
     {
         // Create a partial mock to override versionCompare method
@@ -101,7 +103,7 @@ class AbstractDataTest extends TestCase
      *
      * @return array
      */
-    public function versionDataProvider(): array
+    public static function versionDataProvider(): array
     {
         return [
             'Version below 2.4.8 should return true' => ['2.4.5', true],
@@ -161,5 +163,71 @@ class AbstractDataTest extends TestCase
 
         $result = $abstractDataMock->is247Below();
         $this->assertFalse($result);
+    }
+
+    /**
+     * The colour value is interpolated into an inline <script>, so it must never be able
+     * to close the tag or break out of the string literal.
+     *
+     * @dataProvider colorPickerXssDataProvider
+     * @param string $value
+     */
+    #[DataProvider('colorPickerXssDataProvider')]
+    public function testGetHtmlJqColorPickerEscapesValue(string $value): void
+    {
+        $html = AbstractData::getHtmlJqColorPicker('field_id', $value);
+
+        // Only the wrapper opens and closes the script element.
+        $this->assertSame(1, substr_count($html, '<script'));
+        $this->assertSame(1, substr_count(strtolower($html), '</script>'));
+        $this->assertStringNotContainsString($value, $html);
+    }
+
+    /**
+     * @return array
+     */
+    public static function colorPickerXssDataProvider(): array
+    {
+        return [
+            'closing script tag' => ['#fff</script><script>alert(1)</script>'],
+            'breaking out of the string' => ['#fff";alert(1);var a="'],
+            'single quote break out' => ["#fff';alert(1);var a='"],
+            'newline injection' => ["#fff\";alert(1)\n//"],
+            'html entities' => ['&lt;script&gt;alert(1)&lt;/script&gt;'],
+            'backslash' => ['#fff\\"'],
+        ];
+    }
+
+    /**
+     * A plain colour must still reach the JavaScript unchanged.
+     */
+    public function testGetHtmlJqColorPickerKeepsValidColor(): void
+    {
+        $html = AbstractData::getHtmlJqColorPicker('field_id', '#ff0000');
+
+        $this->assertStringContainsString('"#ff0000"', $html);
+        $this->assertStringContainsString('$("#field_id")', $html);
+    }
+
+    /**
+     * Invalid UTF-8 makes json_encode() return false; emitting nothing would produce a
+     * JavaScript syntax error and kill the whole colour picker.
+     */
+    public function testGetHtmlJqColorPickerHandlesInvalidUtf8(): void
+    {
+        $html = AbstractData::getHtmlJqColorPicker('field_id', "\xB1\x31");
+
+        $this->assertStringContainsString('el.css("backgroundColor", "")', $html);
+        $this->assertStringContainsString('color: ""', $html);
+    }
+
+    /**
+     * Null must behave like an empty colour rather than emitting a bare null.
+     */
+    public function testGetHtmlJqColorPickerHandlesNull(): void
+    {
+        $html = AbstractData::getHtmlJqColorPicker('field_id', null);
+
+        $this->assertStringContainsString('color: ""', $html);
     }
 }
