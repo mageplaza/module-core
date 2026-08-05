@@ -26,3 +26,6 @@ Category,Category
 "Select categories that you want to receive notifications","Select categories that you want to receive notifications"
 "Enable Mageplaza Menu","Enable Mageplaza Menu"
 "If yes, the Mageplaza menu will be displayed on the admin navigation. All of the Mageplaza module menu will be displayed there.","If yes, the Mageplaza menu will be displayed on the admin navigation. All of the Mageplaza module menu will be displayed there."
+Changelog,Changelog
+Invalid method %1::%2,Invalid method %1::%2
+No %1 error found,No %1 error found
