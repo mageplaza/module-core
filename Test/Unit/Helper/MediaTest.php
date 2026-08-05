@@ -20,6 +20,7 @@ use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\Media;
+use Mageplaza\Core\Model\SvgUploadContext;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -60,6 +61,18 @@ class MediaTest extends TestCase
     private $loggerMock;
 
     /**
+     * @var SvgUploadContext
+     */
+    private $svgUploadContext;
+
+    /**
+     * Makes the in-memory writeFile() fail, standing in for a filesystem error.
+     *
+     * @var bool
+     */
+    private $writeShouldFail = false;
+
+    /**
      * Set up test environment
      */
     protected function setUp(): void
@@ -75,6 +88,9 @@ class MediaTest extends TestCase
             });
         $directoryMock->method('writeFile')
             ->willReturnCallback(function ($path, $content) {
+                if ($this->writeShouldFail) {
+                    throw new Exception('Filesystem is read only');
+                }
                 $this->files[$path] = $content;
 
                 return strlen($content);
@@ -94,6 +110,7 @@ class MediaTest extends TestCase
         $contextMock->method('getLogger')->willReturn($this->loggerMock);
 
         $this->uploaderFactoryMock = $this->createMock(UploaderFactory::class);
+        $this->svgUploadContext = new SvgUploadContext();
 
         $this->media = new Media(
             $contextMock,
@@ -101,7 +118,8 @@ class MediaTest extends TestCase
             $this->createMock(StoreManagerInterface::class),
             $filesystemMock,
             $this->uploaderFactoryMock,
-            $this->createMock(AdapterFactory::class)
+            $this->createMock(AdapterFactory::class),
+            $this->svgUploadContext
         );
 
         $this->sanitizeSvg = new ReflectionMethod($this->media, 'sanitizeSvg');
@@ -476,6 +494,76 @@ class MediaTest extends TestCase
 
         $this->assertArrayNotHasKey('mageplaza/blog/post/old.png', $this->files);
         $this->assertSame('', $data['image']);
+    }
+
+    /**
+     * svg must be offered to the uploader; Magento's own protected extension list is
+     * lifted for this call by the plugin.
+     */
+    public function testSvgIsOfferedToTheUploader(): void
+    {
+        $offered = null;
+        $uploaderMock = $this->createMock(Uploader::class);
+        $uploaderMock->method('setAllowedExtensions')
+            ->willReturnCallback(function ($extensions) use (&$offered, $uploaderMock) {
+                $offered = $extensions;
+
+                return $uploaderMock;
+            });
+        $uploaderMock->method('save')->willReturn(['file' => '/p/i/pic.png']);
+        $this->uploaderFactoryMock->method('create')->willReturn($uploaderMock);
+
+        $data = [];
+        $this->media->uploadImage($data, 'image', 'blog/post');
+
+        $this->assertContains('svg', $offered);
+        $this->assertContains('png', $offered);
+    }
+
+    /**
+     * An unexpected failure while rewriting must still leave nothing behind: the upload
+     * directory is public and the dispersion path is derived from the file name.
+     */
+    public function testUnexpectedSanitiseFailureStillDeletesTheFile(): void
+    {
+        $this->writeShouldFail = true;
+        $this->files['test.svg'] = '<svg xmlns="http://www.w3.org/2000/svg"><rect/></svg>';
+
+        $this->expectException(Exception::class);
+
+        try {
+            $this->sanitizeSvg->invoke($this->media, 'test.svg');
+        } finally {
+            $this->assertArrayNotHasKey('test.svg', $this->files, 'Unrewritten SVG survived');
+        }
+    }
+
+    /**
+     * The relaxation of Magento's protected extension rule must not outlive the save call,
+     * otherwise an unrelated uploader later in the same request would inherit it.
+     */
+    public function testSvgUploadContextIsLeftInactiveAfterSave(): void
+    {
+        $this->stubUploader(['file' => '/p/i/pic.png']);
+        $this->assertFalse($this->svgUploadContext->isActive(), 'Context active before upload');
+
+        $data = [];
+        $this->media->uploadImage($data, 'image', 'blog/post');
+
+        $this->assertFalse($this->svgUploadContext->isActive());
+    }
+
+    /**
+     * The same holds when the upload throws.
+     */
+    public function testSvgUploadContextIsLeftInactiveAfterFailure(): void
+    {
+        $this->stubUploaderFailure(new Exception('Disk full'));
+
+        $data = [];
+        $this->media->uploadImage($data, 'image', 'blog/post');
+
+        $this->assertFalse($this->svgUploadContext->isActive());
     }
 
     /**

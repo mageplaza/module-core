@@ -36,6 +36,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\Core\Model\SvgUploadContext;
 
 /**
  * Class Media
@@ -100,6 +101,11 @@ class Media extends AbstractData
     protected $imageFactory;
 
     /**
+     * @var SvgUploadContext
+     */
+    protected $svgUploadContext;
+
+    /**
      * Media constructor.
      *
      * @param Context $context
@@ -108,6 +114,9 @@ class Media extends AbstractData
      * @param Filesystem $filesystem
      * @param UploaderFactory $uploaderFactory
      * @param AdapterFactory $imageFactory
+     * @param SvgUploadContext|null $svgUploadContext Optional to keep subclasses in other
+     *                                                modules constructing this helper with
+     *                                                the original six arguments working.
      *
      * @throws FileSystemException
      */
@@ -117,11 +126,13 @@ class Media extends AbstractData
         StoreManagerInterface $storeManager,
         Filesystem $filesystem,
         UploaderFactory $uploaderFactory,
-        AdapterFactory $imageFactory
+        AdapterFactory $imageFactory,
+        ?SvgUploadContext $svgUploadContext = null
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
         $this->imageFactory = $imageFactory;
+        $this->svgUploadContext = $svgUploadContext ?: $objectManager->get(SvgUploadContext::class);
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -155,9 +166,17 @@ class Media extends AbstractData
 
                 $path = $this->getBaseMediaPath($type);
 
-                $image = $uploader->save(
-                    $this->mediaDirectory->getAbsolutePath($path)
-                );
+                // Magento protects svg globally. The plugin lifts that for this call only,
+                // because it is the one immediately followed by sanitizeSvg() below.
+                $this->svgUploadContext->enter();
+
+                try {
+                    $image = $uploader->save(
+                        $this->mediaDirectory->getAbsolutePath($path)
+                    );
+                } finally {
+                    $this->svgUploadContext->leave();
+                }
 
                 if (preg_match('/\.svg$/i', $image['file'])) {
                     $this->sanitizeSvg($path . '/' . ltrim($image['file'], '/'));
@@ -191,7 +210,10 @@ class Media extends AbstractData
      * the decoded value, which is what the policy below is applied to.
      *
      * The file is deleted and an exception thrown when it cannot be made safe, so the
-     * caller falls back to the previous image.
+     * caller falls back to the previous image. That holds for unexpected failures too:
+     * an upload directory is served publicly under a path derived from the file name, so
+     * leaving an unrewritten SVG behind would publish exactly what this method exists to
+     * neutralise.
      *
      * @param string $relativePath
      *
@@ -199,6 +221,23 @@ class Media extends AbstractData
      * @throws Exception
      */
     protected function sanitizeSvg($relativePath)
+    {
+        try {
+            $this->rewriteSvg($relativePath);
+        } catch (Exception $e) {
+            $this->rejectSvg($relativePath, $e->getMessage());
+        }
+    }
+
+    /**
+     * Parse, filter and write back the SVG. Any failure leaves it to sanitizeSvg().
+     *
+     * @param string $relativePath
+     *
+     * @return void
+     * @throws Exception
+     */
+    private function rewriteSvg($relativePath)
     {
         if (!$this->mediaDirectory->isFile($relativePath)) {
             return;
@@ -264,17 +303,20 @@ class Media extends AbstractData
      * Delete an SVG that cannot be sanitized and abort the upload.
      *
      * @param string $relativePath
+     * @param string $reason
      *
      * @return void
      * @throws Exception
      */
-    private function rejectSvg($relativePath)
+    private function rejectSvg($relativePath, $reason = '')
     {
         if ($this->mediaDirectory->isFile($relativePath)) {
             $this->mediaDirectory->delete($relativePath);
         }
 
-        throw new Exception('The SVG file could not be sanitized and was rejected.');
+        throw new Exception(
+            trim('The SVG file could not be sanitized and was rejected. ' . $reason)
+        );
     }
 
     /**
