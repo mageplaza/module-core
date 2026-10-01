@@ -110,8 +110,7 @@ class Response
         }
         $parts = parse_url($url);
         if (!$parts || !isset($parts['scheme'], $parts['host']) || $parts['scheme'] !== 'https'
-            || (!preg_match('/(^|\.)mageplaza\.com$/i', $parts['host'])
-                && !(getenv('IS_DDEV_PROJECT') === 'true' && $parts['host'] === 'dashboard.ddev.site'))
+            || !preg_match('/(^|\.)mageplaza\.com$/i', $parts['host'])
             || isset($parts['user']) || isset($parts['pass'])
             || (isset($parts['port']) && $parts['port'] !== 443)) {
             return null;
