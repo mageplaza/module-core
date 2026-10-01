@@ -31,7 +31,7 @@ class ClientTest extends TestCase
     public static function endpointProvider()
     {
         return [[null, GetUpdate::CHECK_VERSION_URL],
-            ['https://dashboard.ddev.site/mageplaza/product/checkversion/', 'https://dashboard.ddev.site/mageplaza/product/checkversion/']];
+            ['https://dashboard.example.test/mageplaza/product/checkversion/', 'https://dashboard.example.test/mageplaza/product/checkversion/']];
     }
 
     public function testInvalidOverrideNeverCallsAnEndpoint()
@@ -41,7 +41,7 @@ class ClientTest extends TestCase
         $factory = $this->createMock(CurlFactory::class);
         $factory->method('create')->willReturn($curl);
         $deployment = $this->createMock(DeploymentConfig::class);
-        $deployment->method('get')->willReturn('http://dashboard.ddev.site/');
+        $deployment->method('get')->willReturn('http://dashboard.example.test/');
         $client = new Client($factory, $this->createMock(LoggerInterface::class), $deployment);
         $this->assertNull($client->fetch([]));
     }
