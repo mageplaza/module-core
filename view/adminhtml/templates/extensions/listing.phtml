@@ -1,0 +1,129 @@
+<?php
+/** @var \Mageplaza\Core\Block\Adminhtml\Extensions\Listing $block */
+$rows = $block->getRows();
+$banner = $block->getBanner();
+?>
+<div class="mp-extensions" data-track-url="<?= $block->escapeUrl($block->getTrackUrl()) ?>" data-track-enabled="<?= $block->isEventTrackingEnabled() ? '1' : '0' ?>" data-mage-init='{"Mageplaza_Core/js/extensions-check":{}}'>
+    <div class="mp-extensions-toolbar">
+        <span class="mp-extensions-checked"><?= $block->escapeHtml($block->getLastCheckedLabel()) ?></span>
+        <div class="mp-extensions-toolbar-actions">
+            <?php if ($block->getLicenseUrl()): ?>
+            <a href="<?= $block->escapeUrl($block->getLicenseUrl()) ?>" target="_blank" rel="noopener noreferrer">
+                <?= $block->escapeHtml(__('My License')) ?>
+            </a>
+            <?php endif; ?>
+            <span data-role="check-now-control" style="display: inline-block;">
+            <button type="button" class="action-default" data-role="check-now"
+                    data-retry-after="<?= (int) $block->getRefreshRetryAfter() ?>" data-refresh-url="<?= $block->escapeUrl($block->getRefreshUrl()) ?>" <?= !$rows ? 'disabled' : '' ?>>
+                <span><?= $block->escapeHtml(__('Check now')) ?></span>
+            </button>
+            </span>
+            <?php if ($block->getRequestFeatureUrl()): ?>
+            <a class="action-primary" data-core-event="request_feature_click" href="<?= $block->escapeUrl($block->getRequestFeatureUrl()) ?>"
+               target="_blank" rel="noopener noreferrer"><span><?= $block->escapeHtml(__('Request a feature')) ?> <span aria-hidden="true">↗</span></span></a>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="message message-notice" data-role="refresh-notice" role="status" hidden></div>
+    <div class="message message-error mp-extensions-error" data-role="refresh-error" role="alert" hidden></div>
+    <?php if ($block->hasError()): ?>
+        <div class="message message-warning">
+            <?= $block->escapeHtml(__('The last check failed. Previously checked data is shown below.')) ?>
+        </div>
+    <?php elseif (!$block->hasChecked() && $rows): ?>
+        <div class="message message-notice">
+            <?= $block->escapeHtml(__('Click Check now to get the latest extension information.')) ?>
+        </div>
+    <?php endif; ?>
+    <?php if ($block->getConnectUrl()): ?>
+        <div class="message message-notice">
+            <?= $block->escapeHtml($block->getUnlinkedPaidCount()
+                ? __('%1 paid extension(s) are not linked to a license for this domain.', $block->getUnlinkedPaidCount())
+                : __('Some licenses are not linked to this domain yet.')) ?>
+            <a data-role="connect-licenses" href="<?= $block->escapeUrl($block->getConnectUrl()) ?>" target="_blank" rel="noopener noreferrer"><?= $block->escapeHtml(__('Link licenses')) ?> <span aria-hidden="true">↗</span></a>
+        </div>
+    <?php endif; ?>
+    <?php if ($banner): ?>
+        <div class="mp-extensions-banner" data-role="promotion-banner" data-banner-id="<?= $block->escapeHtmlAttr($banner['id']) ?>" hidden>
+            <a data-core-event="banner_click" data-banner-id="<?= $block->escapeHtmlAttr($banner['id']) ?>" href="<?= $block->escapeUrl($banner['url']) ?>" target="_blank" rel="noopener noreferrer">
+                <img src="<?= $block->escapeUrl($banner['image']) ?>" alt="<?= $block->escapeHtmlAttr($banner['alt']) ?>"/>
+            </a>
+            <button type="button" class="action-close" data-role="dismiss-banner" aria-label="<?= $block->escapeHtmlAttr(__('Dismiss promotion')) ?>">
+                <span><?= $block->escapeHtml(__('Dismiss promotion')) ?></span>
+            </button>
+        </div>
+    <?php endif; ?>
+    <div class="admin__data-grid-wrap mp-extensions-grid-wrap">
+        <table class="data-grid mp-extensions-grid" aria-label="<?= $block->escapeHtmlAttr(__('Installed Mageplaza extensions')) ?>">
+            <thead>
+            <tr>
+                <?php foreach (['Extension', 'Current', 'Latest', 'Support / Subscription', 'Actions'] as $heading): ?>
+                    <th class="data-grid-th" scope="col"><span><?= $block->escapeHtml(__($heading)) ?></span></th>
+                <?php endforeach; ?>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!$rows): ?>
+                <tr><td colspan="5" class="data-grid-empty-cell"><?= $block->escapeHtml(__('No Mageplaza extensions are installed.')) ?></td></tr>
+            <?php endif; ?>
+            <?php foreach ($rows as $index => $row): ?>
+                <tr class="data-row <?= $index % 2 ? '_odd-row' : '' ?>">
+                    <td class="mp-extensions-name">
+                        <strong><?= $block->escapeHtml($row['label']) ?></strong>
+                        <span class="mp-extensions-package"><?= $block->escapeHtml($row['package']) ?></span>
+                    </td>
+                    <td class="mp-extensions-version"><?= $block->escapeHtml($row['version']) ?></td>
+                    <td class="mp-extensions-version">
+                        <span><?= $block->escapeHtml($row['latest_version'] ?: '—') ?></span>
+                        <?php if ($row['has_update']): ?>
+                            <span class="mp-extensions-badge"><?= $block->escapeHtml(__('Update available')) ?></span>
+                        <?php endif; ?>
+                        <?php if ($row['release_url']): ?>
+                            <a class="mp-extensions-changelog" data-core-event="release_notes_click" data-package="<?= $block->escapeHtmlAttr($row['package']) ?>" href="<?= $block->escapeUrl($row['release_url']) ?>"
+                               target="_blank" rel="noopener noreferrer"><?= $block->escapeHtml(__("See what's new")) ?></a>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if (!$row['dates']): ?>
+                            <span class="mp-extensions-muted">—</span>
+                        <?php endif; ?>
+                        <?php foreach ($row['dates'] as $date): ?>
+                            <div class="mp-extensions-expiry mp-extensions-expiry-<?= $block->escapeHtmlAttr($date['state']) ?>">
+                                <span class="mp-extensions-expiry-label"><?= $block->escapeHtml($date['label']) ?><?php if ($date['license_id']): ?> #<?= (int) $date['license_id'] ?><?php endif; ?></span>
+                                <span><?= $block->escapeHtml($date['date']) ?></span>
+                                <span class="mp-extensions-expiry-remaining">
+                                    <?php if ($date['days'] === 0): ?>
+                                        <?= $block->escapeHtml(__('Expired')) ?>
+                                        <?php if ($date['renew_url']): ?>
+                                            · <a href="<?= $block->escapeUrl($date['renew_url']) ?>" target="_blank" rel="noopener noreferrer"><?= $block->escapeHtml(__('Renew')) ?></a>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <?= $block->escapeHtml(__('%1 days left', $date['days'])) ?>
+                                    <?php endif; ?>
+                                </span>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php foreach ($row['license_links'] as $licenseLink): ?>
+                            <a class="mp-extensions-license-link" href="<?= $block->escapeUrl($licenseLink['url']) ?>" target="_blank" rel="noopener noreferrer"><?= $block->escapeHtml($licenseLink['id'] ? __('Manage license #%1', $licenseLink['id']) : __('Manage license')) ?> <span aria-hidden="true">↗</span></a>
+                        <?php endforeach; ?>
+                    </td>
+                    <td>
+                        <div class="mp-extensions-row-actions">
+                            <?php if ($row['upgrade_url']): ?>
+                                <a class="action-default mp-extensions-upgrade" data-core-event="upgrade_click" data-package="<?= $block->escapeHtmlAttr($row['package']) ?>" href="<?= $block->escapeUrl($row['upgrade_url']) ?>"
+                                   target="_blank" rel="noopener noreferrer"><?= $block->escapeHtml($row['upgrade_label']) ?> <span aria-hidden="true">↗</span></a>
+                            <?php endif; ?>
+                            <?php if ($row['config_url']): ?>
+                                <a href="<?= $block->escapeUrl($row['config_url']) ?>"><?= $block->escapeHtml(__('Configure')) ?></a>
+                            <?php endif; ?>
+                            <?php if ($row['request_feature_url']): ?>
+                            <a data-core-event="request_feature_click" data-package="<?= $block->escapeHtmlAttr($row['package']) ?>" href="<?= $block->escapeUrl($row['request_feature_url']) ?>" target="_blank" rel="noopener noreferrer"><?= $block->escapeHtml(__('Request feature')) ?></a>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>

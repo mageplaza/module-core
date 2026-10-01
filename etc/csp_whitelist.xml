@@ -23,6 +23,12 @@
 <csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
     <policies>
+        <policy id="img-src">
+            <values>
+                <value id="mageplaza-extensions-images" type="host">*.mageplaza.com</value>
+                <value id="mageplaza-extensions-root-images" type="host">mageplaza.com</value>
+            </values>
+        </policy>
         <policy id="font-src">
             <values>
                 <value id="fontawesome" type="host">*.fontawesome.com</value>

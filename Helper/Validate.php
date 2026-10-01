@@ -23,6 +23,7 @@ namespace Mageplaza\Core\Helper;
 
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -52,6 +53,9 @@ class Validate extends AbstractData
      */
     protected $_moduleList;
 
+    /** @var PackageInfoFactory */
+    private $packageInfoFactory;
+
     /**
      * Validate constructor.
      *
@@ -59,14 +63,17 @@ class Validate extends AbstractData
      * @param ObjectManagerInterface $objectManager
      * @param StoreManagerInterface $storeManager
      * @param ModuleListInterface $moduleList
+     * @param PackageInfoFactory $packageInfoFactory
      */
     public function __construct(
         Context $context,
         ObjectManagerInterface $objectManager,
         StoreManagerInterface $storeManager,
-        ModuleListInterface $moduleList
+        ModuleListInterface $moduleList,
+        PackageInfoFactory $packageInfoFactory
     ) {
         $this->_moduleList = $moduleList;
+        $this->packageInfoFactory = $packageInfoFactory;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -193,5 +200,23 @@ class Validate extends AbstractData
         }
 
         return $this->_mageplazaModules;
+    }
+
+    /**
+     * Build documentation links using the same convention as the config section.
+     * @param string $moduleName
+     * @param string $type
+     * @return string
+     */
+    public function getDocUrl($moduleName, $type = 'user_guide')
+    {
+        $packageName = $this->packageInfoFactory->create()->getPackageName($moduleName);
+        $slug = str_replace(['mageplaza/magento-2-', '-extension', 'mageplaza/module-'], '', (string) $packageName);
+        $path = $this->getModuleData($moduleName, $type) ?: str_replace('-m2', '', $slug);
+        if (strpos($path, 'http') === false) {
+            $domains = ['user_guide' => 'http://docs.mageplaza.com/', 'change_log' => 'https://www.mageplaza.com/releases/'];
+            $path = (isset($domains[$type]) ? $domains[$type] : 'https://www.mageplaza.com/') . $path . '/';
+        }
+        return $path;
     }
 }

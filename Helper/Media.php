@@ -438,7 +438,8 @@ class Media extends AbstractData
     public function resizeImage($file, $size, $type = '', $keepRatio = true)
     {
         $image = $this->getMediaPath($file, $type);
-        if (!($imageSize = $this->correctImageSize($size))) {
+        if (strtolower(pathinfo($image, PATHINFO_EXTENSION)) === 'svg'
+            || !($imageSize = $this->correctImageSize($size))) {
             return $this->getMediaUrl($image);
         }
         list($width, $height) = $imageSize;

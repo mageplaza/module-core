@@ -73,3 +73,35 @@ ul[role="menu"] [data-ui-id^="menu-mageplaza"] strong:before {
   font-size: 1.5rem;
   margin-right: .8rem;
 }
+
+
+.mp-extensions {
+    [hidden] { display: none !important; }
+    &-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    &-checked, &-muted, &-package { color: #666; }
+    &-toolbar-actions { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    &-toolbar-actions a.action-default { text-decoration: none; }
+    &-grid-wrap { padding: 0; overflow-x: auto; }
+    &-grid { min-width: 850px; }
+    &-grid .data-grid-th { cursor: default; }
+    &-grid td { vertical-align: top; padding: 1.5rem 1rem; }
+    &-name { width: 30%; }
+    &-package { display: block; font-size: 1.1rem; margin-top: .4rem; overflow-wrap: anywhere; }
+    &-version { white-space: nowrap; }
+    &-changelog { display: block; margin-top: .6rem; font-size: 1.2rem; }
+    &-badge { display: inline-block; font-size: 1.1rem; font-weight: 600; color: #795900; background: #fff2c5; padding: .2rem .6rem; margin: .3rem 0 .3rem .5rem; border-radius: 2px; }
+    &-row-actions { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; font-size: 1.2rem; }
+    &-upgrade { padding: .4rem .8rem; font-size: 1.2rem; text-decoration: none; }
+    &-expiry { font-size: 1.2rem; margin-bottom: .8rem; }
+    &-expiry:last-child { margin-bottom: 0; }
+    &-expiry-label { display: block; color: #303030; font-weight: 600; }
+    &-expiry-remaining { display: block; }
+    &-license-link { display: block; margin-top: .4rem; font-size: 1.2rem; }
+    &-expiry-active .mp-extensions-expiry-remaining { color: #457407; }
+    &-expiry-warning .mp-extensions-expiry-remaining { color: #795900; }
+    &-expiry-expired .mp-extensions-expiry-remaining { color: #e22626; font-weight: 600; }
+    &-banner { position: relative; margin-bottom: 2rem; }
+    &-banner img { display: block; width: 100%; height: auto; }
+    &-banner .action-close { position: absolute; top: 1rem; right: 1rem; background: #fff; padding: .8rem; }
+    &-banner .action-close span { &:extend(.abs-visually-hidden all); }
+}

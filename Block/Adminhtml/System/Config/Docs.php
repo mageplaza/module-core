@@ -115,25 +115,6 @@ class Docs extends Field
     {
         $moduleName = $element->getOriginalData()['module_name'];
 
-        $packageName = $this->_packageInfoFactory->create()->getPackageName($moduleName);
-        $lowerCaseName = str_replace(['mageplaza/magento-2-', '-extension', 'mageplaza/module-'], '', $packageName);
-        $path = $this->helper->getModuleData($moduleName, $type) ?: str_replace('-m2', '', $lowerCaseName);
-
-        if(strpos($path, 'http') === false){
-            switch ($type) {
-                case 'user_guide':
-                    $domain = 'http://docs.mageplaza.com/';
-                    break;
-                case 'change_log':
-                    $domain = 'https://www.mageplaza.com/releases/';
-                    break;
-                default:
-                    $domain = 'https://www.mageplaza.com/';
-            }
-
-            $path = $domain . $path . '/';
-        }
-
-        return $path;
+        return $this->helper->getDocUrl($moduleName, $type);
     }
 }

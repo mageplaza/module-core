@@ -55,7 +55,13 @@ class MoveMenu
      */
     public function afterExecute(AbstractCommand $subject, $itemParams)
     {
-        if ($this->helper->getConfigGeneral('menu')) {
+        $enabled = $this->helper->getConfigGeneral('menu');
+        if (($itemParams['id'] ?? '') === 'Mageplaza_Core::extensions_menu') {
+            $itemParams['parent'] = $enabled ? self::MAGEPLAZA_CORE : 'Magento_Backend::system';
+            $itemParams['sortOrder'] = $enabled ? 0 : 70;
+            return $itemParams;
+        }
+        if ($enabled) {
             if (strpos($itemParams['id'], 'Mageplaza_') !== false
                 && isset($itemParams['parent'])
                 && strpos($itemParams['parent'], 'Mageplaza_') === false) {
