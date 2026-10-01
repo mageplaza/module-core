@@ -24,6 +24,7 @@
     <group id="default">
         <job name="core_get_update" instance="Mageplaza\Core\Cron\GetUpdate" method="execute">
             <schedule>0 2 * * *</schedule>
+            <config_path>crontab/default/jobs/core_get_update/schedule/cron_expr</config_path>
         </job>
         <job name="core_process_feed" instance="Mageplaza\Core\Cron\ProcessFeed" method="execute">
             <schedule>0 * * * *</schedule>
