@@ -14,10 +14,12 @@ use Exception;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Image\Adapter\AbstractAdapter;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\Media;
 use Mageplaza\Core\Model\SvgUploadContext;
@@ -75,6 +77,11 @@ class MediaTest extends TestCase
     private $writeShouldFail = false;
 
     /**
+     * @var MockObject|AdapterFactory
+     */
+    private $imageFactoryMock;
+
+    /**
      * Set up test environment
      */
     protected function setUp(): void
@@ -103,6 +110,14 @@ class MediaTest extends TestCase
 
                 return true;
             });
+        $directoryMock->method('getAbsolutePath')
+            ->willReturnCallback(function ($path) {
+                return '/media/' . $path;
+            });
+        $directoryMock->method('isExist')
+            ->willReturnCallback(function ($path) {
+                return isset($this->files[substr($path, strlen('/media/'))]);
+            });
 
         $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock->method('getDirectoryWrite')->willReturn($directoryMock);
@@ -113,14 +128,20 @@ class MediaTest extends TestCase
 
         $this->uploaderFactoryMock = $this->createMock(UploaderFactory::class);
         $this->svgUploadContext = new SvgUploadContext();
+        $this->imageFactoryMock = $this->createMock(AdapterFactory::class);
+
+        $storeMock = $this->createMock(Store::class);
+        $storeMock->method('getBaseUrl')->willReturn('https://example.test/media/');
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $storeManagerMock->method('getStore')->willReturn($storeMock);
 
         $this->media = new Media(
             $contextMock,
             $this->createMock(ObjectManagerInterface::class),
-            $this->createMock(StoreManagerInterface::class),
+            $storeManagerMock,
             $filesystemMock,
             $this->uploaderFactoryMock,
-            $this->createMock(AdapterFactory::class),
+            $this->imageFactoryMock,
             $this->svgUploadContext
         );
 
@@ -581,5 +602,118 @@ class MediaTest extends TestCase
 
         $this->assertArrayNotHasKey('mageplaza/blog/post/old.png', $this->files);
         $this->assertSame('n/e/new.png', $data['image']);
+    }
+
+    /**
+     * @param string $failingStep
+     *
+     * @return MockObject|AbstractAdapter
+     */
+    private function stubImageAdapter(string $failingStep = '')
+    {
+        $adapterMock = $this->createMock(AbstractAdapter::class);
+        foreach (['open', 'resize', 'save'] as $step) {
+            if ($step === $failingStep) {
+                $adapterMock->method($step)->willThrowException(new Exception('Unsupported image format'));
+            } elseif ($step === 'save') {
+                $adapterMock->method('save')->willReturnCallback(function ($destination) {
+                    $this->files[substr($destination, strlen('/media/'))] = 'resized';
+                });
+            }
+        }
+        $this->imageFactoryMock->method('create')->willReturn($adapterMock);
+
+        return $adapterMock;
+    }
+
+    /**
+     * A source the adapter cannot process falls back to the original image.
+     *
+     * @dataProvider failingResizeStepDataProvider
+     *
+     * @param string $failingStep
+     */
+    #[DataProvider('failingResizeStepDataProvider')]
+    public function testResizeFailureReturnsOriginalImage(string $failingStep): void
+    {
+        $this->files['mageplaza/blog/post/broken.jpg'] = 'binary';
+        $this->stubImageAdapter($failingStep);
+        $this->loggerMock->expects($this->once())->method('critical');
+
+        $url = $this->media->resizeImage('broken.jpg', '400x300', 'blog/post');
+
+        $this->assertSame('https://example.test/media/mageplaza/blog/post/broken.jpg', $url);
+        $this->assertArrayNotHasKey('mageplaza/blog/post/resize/400x300/broken.jpg', $this->files);
+    }
+
+    /**
+     * @return array
+     */
+    public static function failingResizeStepDataProvider(): array
+    {
+        return [
+            'open' => ['open'],
+            'resize' => ['resize'],
+            'save' => ['save'],
+        ];
+    }
+
+    /**
+     * A processable source is resized and the resized copy is served.
+     */
+    public function testResizeReturnsResizedImage(): void
+    {
+        $this->files['mageplaza/blog/post/photo.jpg'] = 'binary';
+        $adapterMock = $this->stubImageAdapter();
+        $adapterMock->expects($this->once())->method('open')->with('/media/mageplaza/blog/post/photo.jpg');
+        $adapterMock->expects($this->once())->method('resize')->with(400, 300);
+        $this->loggerMock->expects($this->never())->method('critical');
+
+        $url = $this->media->resizeImage('photo.jpg', '400x300', 'blog/post');
+
+        $this->assertSame('https://example.test/media/mageplaza/blog/post/resize/400x300/photo.jpg', $url);
+    }
+
+    /**
+     * SVG is never handed to the raster adapter.
+     *
+     * @dataProvider svgFileDataProvider
+     *
+     * @param string $file
+     */
+    #[DataProvider('svgFileDataProvider')]
+    public function testSvgIsNotResized(string $file): void
+    {
+        $this->files['mageplaza/blog/post/' . $file] = '<svg/>';
+        $this->imageFactoryMock->expects($this->never())->method('create');
+
+        $url = $this->media->resizeImage($file, '400x300', 'blog/post');
+
+        $this->assertSame('https://example.test/media/mageplaza/blog/post/' . $file, $url);
+    }
+
+    /**
+     * @return array
+     */
+    public static function svgFileDataProvider(): array
+    {
+        return [
+            'lowercase' => ['logo.svg'],
+            'uppercase' => ['logo.SVG'],
+        ];
+    }
+
+    /**
+     * An existing resized copy is served without reprocessing the source.
+     */
+    public function testCachedResizeIsReused(): void
+    {
+        $this->files['mageplaza/blog/post/photo.jpg'] = 'binary';
+        $this->files['mageplaza/blog/post/resize/400x300/photo.jpg'] = 'resized';
+        $this->imageFactoryMock->expects($this->never())->method('create');
+
+        $url = $this->media->resizeImage('photo.jpg', '400x300', 'blog/post');
+
+        $this->assertSame('https://example.test/media/mageplaza/blog/post/resize/400x300/photo.jpg', $url);
     }
 }

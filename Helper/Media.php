@@ -451,15 +451,14 @@ class Media extends AbstractData
         if ($mediaDirectory->isFile($resizeImage)) {
             $image = $resizeImage;
         } elseif ($mediaDirectory->isExist($mediaDirectory->getAbsolutePath($image))) {
-            $imageResize = $this->imageFactory->create();
-            $imageResize->open($mediaDirectory->getAbsolutePath($image));
-            $imageResize->constrainOnly(true);
-            $imageResize->keepTransparency(true);
-            $imageResize->keepFrame(false);
-            $imageResize->keepAspectRatio($keepRatio);
-            $imageResize->resize($width, $height);
-
             try {
+                $imageResize = $this->imageFactory->create();
+                $imageResize->open($mediaDirectory->getAbsolutePath($image));
+                $imageResize->constrainOnly(true);
+                $imageResize->keepTransparency(true);
+                $imageResize->keepFrame(false);
+                $imageResize->keepAspectRatio($keepRatio);
+                $imageResize->resize($width, $height);
                 $imageResize->save($mediaDirectory->getAbsolutePath($resizeImage));
 
                 $image = $resizeImage;
