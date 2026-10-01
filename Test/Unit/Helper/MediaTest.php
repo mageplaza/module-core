@@ -22,6 +22,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\Media;
 use Mageplaza\Core\Model\SvgUploadContext;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +32,7 @@ use ReflectionMethod;
  * Class MediaTest
  * @package Mageplaza\Core\Test\Unit\Helper
  */
+#[AllowMockObjectsWithoutExpectations]
 class MediaTest extends TestCase
 {
     /**

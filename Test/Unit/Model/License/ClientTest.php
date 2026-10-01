@@ -6,12 +6,16 @@ use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Mageplaza\Core\Cron\GetUpdate;
 use Mageplaza\Core\Model\License\Client;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 class ClientTest extends TestCase
 {
     /** @dataProvider endpointProvider */
+    #[DataProvider('endpointProvider')]
     public function testDefaultAndLocalEndpoints($override, $expected)
     {
         $curl = $this->createMock(Curl::class);

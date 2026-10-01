@@ -15,6 +15,7 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * Class AbstractDataTest
  * @package Mageplaza\Core\Test\Unit\Helper
  */
+#[AllowMockObjectsWithoutExpectations]
 class AbstractDataTest extends TestCase
 {
     /**

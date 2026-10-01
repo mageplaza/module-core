@@ -2,11 +2,13 @@
 namespace Mageplaza\Core\Test\Unit\Model\License;
 
 use Mageplaza\Core\Model\License\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ResponseTest extends TestCase
 {
     /** @dataProvider rejectedUrls */
+    #[DataProvider('rejectedUrls')]
     public function testUntrustedUrlsAreRejected($url)
     {
         $this->assertNull(Response::filterUrl($url));

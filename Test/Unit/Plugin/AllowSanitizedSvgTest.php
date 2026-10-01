@@ -13,6 +13,7 @@ namespace Mageplaza\Core\Test\Unit\Plugin;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use Mageplaza\Core\Model\SvgUploadContext;
 use Mageplaza\Core\Plugin\AllowSanitizedSvg;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  * Class AllowSanitizedSvgTest
  * @package Mageplaza\Core\Test\Unit\Plugin
  */
+#[AllowMockObjectsWithoutExpectations]
 class AllowSanitizedSvgTest extends TestCase
 {
     /**

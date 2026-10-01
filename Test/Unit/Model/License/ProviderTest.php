@@ -13,8 +13,11 @@ use Mageplaza\Core\Model\License\InstalledModules;
 use Mageplaza\Core\Model\License\Provider;
 use Mageplaza\Core\Model\License\ResponseFactory;
 use Mageplaza\Core\Model\License\Storage;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class ProviderTest extends TestCase
 {
     private function provider($storage, $client, $locks, $installed = null)
@@ -37,6 +40,7 @@ class ProviderTest extends TestCase
     }
 
     /** @dataProvider cachedRefreshProvider */
+    #[DataProvider('cachedRefreshProvider')]
     public function testCooldownAndConcurrentRefreshUseExistingData($lockAvailable)
     {
         $storage = $this->createMock(Storage::class);
@@ -61,6 +65,7 @@ class ProviderTest extends TestCase
     }
 
     /** @dataProvider fetchProvider */
+    #[DataProvider('fetchProvider')]
     public function testExpiredCooldownFetchesAndKeepsRealFailuresVisible($response)
     {
         $storage = $this->createMock(Storage::class);

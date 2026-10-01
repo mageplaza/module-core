@@ -5,8 +5,10 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Mageplaza\Core\Model\License\Storage;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class StorageTest extends TestCase
 {
     public function testCacheMissKeepsDurableDataAndFailureKeepsSuccessfulTimestamp()

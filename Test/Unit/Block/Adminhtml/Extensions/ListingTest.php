@@ -6,8 +6,10 @@ use Mageplaza\Core\Block\Adminhtml\Extensions\Listing;
 use Mageplaza\Core\Model\License\InstalledModules;
 use Mageplaza\Core\Model\License\Provider;
 use Mageplaza\Core\Model\License\Response;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 
+#[AllowMockObjectsWithoutExpectations]
 class ListingTest extends TestCase
 {
     private function createListing(array $installed, array $remote = [])
