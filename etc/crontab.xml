@@ -23,7 +23,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
         <job name="core_get_update" instance="Mageplaza\Core\Cron\GetUpdate" method="execute">
-            <schedule>0 2 * * 0</schedule>
+            <schedule>0 2 * * *</schedule>
         </job>
         <job name="core_process_feed" instance="Mageplaza\Core\Cron\ProcessFeed" method="execute">
             <schedule>0 * * * *</schedule>

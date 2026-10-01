@@ -1,145 +1,57 @@
 <?php
-/**
- * Mageplaza
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Mageplaza.com license that is
- * available through the world-wide-web at this URL:
- * https://www.mageplaza.com/LICENSE.txt
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this extension to newer
- * version in the future.
- *
- * @category    Mageplaza
- * @package     Mageplaza_Core
- * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
- * @license     https://www.mageplaza.com/LICENSE.txt
- */
-
+/** Daily My Extensions refresh and deduplicated inbox notifications. */
 namespace Mageplaza\Core\Cron;
 
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Component\ComponentRegistrarInterface;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Mageplaza\Core\Helper\Validate;
-use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\Framework\Notification\NotifierInterface as NotifierPool;
+use Magento\Framework\Exception\LocalizedException;
+use Mageplaza\Core\Model\License\InstalledModules;
+use Mageplaza\Core\Model\License\Notifier;
+use Mageplaza\Core\Model\License\Provider;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class GetUpdate
- * @package Mageplaza\Core\Cron
- */
 class GetUpdate
 {
     const CHECK_VERSION_URL = 'https://dashboard.mageplaza.com/mageplaza/product/checkversion/?isAjax=true';
     const DASHBOARD_URL = 'https://dashboard.mageplaza.com/license/';
 
-    /**
-     * @var CurlFactory
-     */
-    protected $curlFactory;
+    private $provider;
+    private $installed;
+    private $notifier;
+    private $logger;
 
-    /**
-     * @var Validate
-     */
-    protected $helperValidate;
-
-    /**
-     * @var ComponentRegistrarInterface
-     */
-    protected $componentRegistrar;
-
-    /**
-     * @var ReadFactory
-     */
-    protected $readFactory;
-
-    /**
-     * @var NotifierPool
-     */
-    protected $notifierPool;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * GetUpdate constructor.
-     *
-     * @param Validate $helperValidate
-     * @param ComponentRegistrarInterface $componentRegistrar
-     * @param ReadFactory $readFactory
-     * @param CurlFactory $curlFactory
-     * @param NotifierPool $notifierPool
-     * @param LoggerInterface $logger
-     */
     public function __construct(
-        Validate $helperValidate,
-        ComponentRegistrarInterface $componentRegistrar,
-        ReadFactory $readFactory,
-        CurlFactory $curlFactory,
-        NotifierPool $notifierPool,
+        Provider $provider,
+        InstalledModules $installed,
+        Notifier $notifier,
         LoggerInterface $logger
     ) {
-        $this->helperValidate     = $helperValidate;
-        $this->componentRegistrar = $componentRegistrar;
-        $this->readFactory        = $readFactory;
-        $this->curlFactory        = $curlFactory;
-        $this->notifierPool       = $notifierPool;
-        $this->logger             = $logger;
+        $this->provider = $provider;
+        $this->installed = $installed;
+        $this->notifier = $notifier;
+        $this->logger = $logger;
     }
 
-    /**
-     * @return $this
-     */
     public function execute()
     {
-        if (!$this->helperValidate->isEnabledNotificationUpdate()) {
+        $modules = $this->installed->getList();
+        if (!$modules) {
             return $this;
         }
-
-        $moduleList = $this->helperValidate->getModuleList();
-        $edition = $this->helperValidate->getEdition();
-
-        $modules = [];
-        foreach ($moduleList as $moduleName) {
-            if ($moduleName === 'Mageplaza_Core') {
-                continue;
-            }
-
-            try {
-                $path                   = $this->componentRegistrar->getPath(
-                    ComponentRegistrar::MODULE,
-                    $moduleName
-                );
-                $directoryRead          = $this->readFactory->create($path);
-                $composerJsonData       = $directoryRead->readFile('composer.json');
-                $data                   = json_decode($composerJsonData, true);
-                $modules[$data['name']] = $data['version'];
-            } catch (\Exception $exception) {
-                continue;
-            }
-        }
-
         try {
-            $curl = $this->curlFactory->create();
-            $curl->post(self::CHECK_VERSION_URL, ['magento_edition' => $edition, 'modules' => $modules]);
-            $response = $curl->getBody();
-
-            if ($response) {
-                $response = Validate::jsonDecode($response);
-                if (isset($response['is_update']) && $response['is_update']) {
-                    $this->notifierPool->addNotice('Mageplaza Notice', $response['message'], self::DASHBOARD_URL);
+            try {
+                if (!$this->provider->refresh()) {
+                    return $this;
                 }
+            } catch (LocalizedException $exception) {
+                // A failed fetch leaves the previous snapshot; its error flag prevents notices.
             }
-
-        } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $record = $this->provider->getRecord();
+            if (!empty($record['error']) || empty($record['checked_at'])) {
+                return $this;
+            }
+            $this->notifier->notify($this->provider->get(), $modules);
+        } catch (\Throwable $exception) {
+            $this->logger->warning('Mageplaza extension daily check failed: ' . get_class($exception));
         }
+        return $this;
     }
 }

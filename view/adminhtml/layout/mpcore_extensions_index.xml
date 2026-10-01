@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Mageplaza_Core::css/extensions-toolbar.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageplaza\Core\Block\Adminhtml\Extensions\Listing" name="mageplaza.extensions" template="Mageplaza_Core::extensions/listing.phtml"/>
+        </referenceContainer>
+    </body>
+</page>
