@@ -36,11 +36,6 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Select Yes to get latest updates from Mageplaza.</comment>
                 </field>
-                <field id="event_tracking_enabled" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Report My Extensions Clicks</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Send anonymous click type, extension package and campaign ID to Mageplaza Dashboard. No product key or admin identity is sent.</comment>
-                </field>
                 <field id="notice_type" translate="label comment" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Category</label>
                     <source_model>Mageplaza\Core\Model\Config\Source\NoticeType</source_model>

@@ -21,7 +21,6 @@
 
 namespace Mageplaza\Core\Model\License;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Lock\LockManagerInterface;
@@ -32,7 +31,6 @@ class EventReporter
     const INSTALLATION_FLAG = 'mageplaza_core_installation_id';
 
     private $client;
-    private $config;
     private $flags;
     private $locks;
     private $packageInfo;
@@ -40,28 +38,21 @@ class EventReporter
 
     public function __construct(
         Client $client,
-        ScopeConfigInterface $config,
         FlagManager $flags,
         LockManagerInterface $locks,
         PackageInfoFactory $packageInfo,
         ProductMetadataInterface $metadata
     ) {
         $this->client = $client;
-        $this->config = $config;
         $this->flags = $flags;
         $this->locks = $locks;
         $this->packageInfo = $packageInfo;
         $this->metadata = $metadata;
     }
 
-    public function isEnabled()
-    {
-        return $this->config->isSetFlag('mageplaza/general/event_tracking_enabled');
-    }
-
     public function send($eventName, $eventId, $package = null, $bannerId = null)
     {
-        if (!$this->isEnabled() || !in_array($eventName,
+        if (!in_array($eventName,
             ['banner_click', 'upgrade_click', 'release_notes_click', 'request_feature_click'], true)
             || !$this->isUuid($eventId)) {
             return false;

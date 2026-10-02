@@ -3,7 +3,7 @@
 $rows = $block->getRows();
 $banner = $block->getBanner();
 ?>
-<div class="mp-extensions" data-track-url="<?= $block->escapeUrl($block->getTrackUrl()) ?>" data-track-enabled="<?= $block->isEventTrackingEnabled() ? '1' : '0' ?>" data-mage-init='{"Mageplaza_Core/js/extensions-check":{}}'>
+<div class="mp-extensions" data-track-url="<?= $block->escapeUrl($block->getTrackUrl()) ?>" data-mage-init='{"Mageplaza_Core/js/extensions-check":{}}'>
     <div class="mp-extensions-toolbar">
         <span class="mp-extensions-checked"><?= $block->escapeHtml($block->getLastCheckedLabel()) ?></span>
         <div class="mp-extensions-toolbar-actions">

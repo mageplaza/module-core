@@ -26,7 +26,6 @@ use Magento\Backend\Block\Template\Context;
 use Mageplaza\Core\Model\License\InstalledModules;
 use Mageplaza\Core\Model\License\Provider;
 use Mageplaza\Core\Model\License\Response;
-use Mageplaza\Core\Model\License\EventReporter;
 
 class Listing extends Template
 {
@@ -36,13 +35,11 @@ class Listing extends Template
     private $provider;
     /** @var array|null */
     private $rows;
-    private $eventReporter;
 
-    public function __construct(Context $context, InstalledModules $installed, Provider $provider, EventReporter $eventReporter, array $data = [])
+    public function __construct(Context $context, InstalledModules $installed, Provider $provider, array $data = [])
     {
         $this->installed = $installed;
         $this->provider = $provider;
-        $this->eventReporter = $eventReporter;
         parent::__construct($context, $data);
     }
 
@@ -151,12 +148,6 @@ class Listing extends Template
     public function getTrackUrl()
     {
         return $this->getUrl('mpcore/extensions/track');
-    }
-
-    /** @return bool */
-    public function isEventTrackingEnabled()
-    {
-        return $this->eventReporter->isEnabled();
     }
 
     /** @return string */

@@ -93,7 +93,7 @@ define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
             }
         });
         root.on('click', 'a[data-core-event]', function () {
-            if (root.attr('data-track-enabled') !== '1' || !window.FORM_KEY || !window.crypto ||
+            if (!window.FORM_KEY || !window.crypto ||
                 !window.crypto.getRandomValues) {
                 return;
             }

@@ -25,7 +25,6 @@
         <mageplaza>
             <general>
                 <notice_enable>1</notice_enable>
-                <event_tracking_enabled>1</event_tracking_enabled>
                 <notice_type>announcement,new_update,marketing</notice_type>
                 <menu>0</menu>
             </general>
