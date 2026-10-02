@@ -81,7 +81,6 @@ define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
         try {
             dismissed = window.localStorage.getItem('mp_core_banner_dismissed');
         } catch (e) {
-            // Storage can be unavailable in private or restricted browser contexts.
         }
         if (bannerId && dismissed !== bannerId) {
             banner.prop('hidden', false);
@@ -91,10 +90,8 @@ define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
             try {
                 window.localStorage.setItem('mp_core_banner_dismissed', bannerId);
             } catch (e) {
-                // Dismiss for this page even when persistence is unavailable.
             }
         });
-        // Click tracking is best effort; links keep their native navigation behavior.
         root.on('click', 'a[data-core-event]', function () {
             if (root.attr('data-track-enabled') !== '1' || !window.FORM_KEY || !window.crypto ||
                 !window.crypto.getRandomValues) {
@@ -143,7 +140,6 @@ define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
                 timeout: 15000,
                 showLoader: false,
                 global: false,
-                // Keep expired-session responses on this page instead of the backend redirect handler.
                 complete: $.noop
             }).done(function (response) {
                 if (response && response.success && typeof response.html === 'string' && response.html.trim()) {
@@ -162,9 +158,12 @@ define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
                         : $t('Please wait a moment before checking again.')).prop('hidden', false);
                     return;
                 }
-                // A failed check keeps the existing data and only disables retry.
+                error.text((response && response.message) || $t('Unable to check for updates. Please try again later.'))
+                    .prop('hidden', false);
                 startCooldown((response && response.retry_after) || 60);
-            }).fail(function () {
+            }).fail(function (xhr) {
+                error.text((xhr.responseJSON && xhr.responseJSON.message)
+                    || $t('Unable to check for updates. Please reload the page and try again.')).prop('hidden', false);
                 startCooldown(60);
             }).always(function () {
                 updateCooldown();

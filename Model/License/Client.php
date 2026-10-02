@@ -1,5 +1,24 @@
 <?php
-/** Mageplaza Core — bounded checkversion request; never log license credentials. */
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
 namespace Mageplaza\Core\Model\License;
 
 use Magento\Framework\HTTP\Client\CurlFactory;
@@ -60,7 +79,6 @@ class Client
             $curl = $this->curlFactory->create();
             $curl->setTimeout(10);
             $curl->setOption(CURLOPT_CONNECTTIMEOUT, 5);
-            // Deployment-only override keeps local QA isolated from the production endpoint.
             $endpoint = $this->deploymentConfig->get('mageplaza_core/check_version_url', GetUpdate::CHECK_VERSION_URL);
             if (!is_string($endpoint) || !filter_var($endpoint, FILTER_VALIDATE_URL)
                 || parse_url($endpoint, PHP_URL_SCHEME) !== 'https') {

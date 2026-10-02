@@ -1,5 +1,24 @@
 <?php
-/** Mageplaza Core — deduplicated daily inbox notices from a validated response. */
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
 namespace Mageplaza\Core\Model\License;
 
 use Magento\Framework\FlagManager;
@@ -81,6 +100,7 @@ class Notifier
             return;
         }
         $updates = [];
+        $names = [];
         $lines = [];
         foreach ($installed as $package => $module) {
             $remote = $response->getModule($package);
@@ -91,12 +111,15 @@ class Notifier
             }
             $updates[$package] = $latest;
             $label = $remote['label'] ?: (isset($module['label']) ? (string) $module['label'] : $package);
+            $names[] = $label;
             $lines[] = $this->escape($label . ' ' . $current . ' → ' . $latest);
         }
         ksort($updates);
         if ($updates && ($snapshot['updates'] ?? []) !== $updates) {
-            $title = count($updates) === 1 ? $lines[0] : count($updates) . ' Mageplaza extensions have updates';
-            $this->notifier->addNotice($title, implode('<br>', $lines), $this->backendUrl->getUrl('mpcore/extensions/index'));
+            $title = count($updates) === 1
+                ? $this->escape($names[0] . ' has a new version')
+                : count($updates) . ' Mageplaza extensions have updates';
+            $this->notifier->addNotice($title, implode('; ', $lines), $this->backendUrl->getUrl('mpcore/extensions/index'));
         }
         $snapshot['updates'] = $updates;
     }
@@ -117,7 +140,7 @@ class Notifier
                 }
                 $expiry = new \DateTimeImmutable($date, $zone);
                 $days = (int) $today->diff($expiry)->format('%r%a');
-                if ($days > 30) {
+                if ($days > 30 || $days < -30) {
                     continue;
                 }
                 $tier = $days <= 0 ? 0 : ($days <= 7 ? 7 : 30);

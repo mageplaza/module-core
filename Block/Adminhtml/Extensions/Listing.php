@@ -1,5 +1,24 @@
 <?php
-/** Mageplaza Core — My Extensions admin view. */
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Core
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
 namespace Mageplaza\Core\Block\Adminhtml\Extensions;
 
 use Magento\Backend\Block\Template;
@@ -173,7 +192,6 @@ class Listing extends Template
     /** @return array */
     private function getExpiry($date, $label)
     {
-        // Compare calendar dates in the configured admin timezone, without a time-of-day offset.
         $timezone = new \DateTimeZone($this->_localeDate->getConfigTimezone());
         $today = new \DateTimeImmutable('today', $timezone);
         $expiry = new \DateTimeImmutable($date, $timezone);

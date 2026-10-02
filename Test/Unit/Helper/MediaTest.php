@@ -638,7 +638,7 @@ class MediaTest extends TestCase
     {
         $this->files['mageplaza/blog/post/broken.jpg'] = 'binary';
         $this->stubImageAdapter($failingStep);
-        $this->loggerMock->expects($this->once())->method('critical');
+        $this->loggerMock->expects($this->once())->method('warning');
 
         $url = $this->media->resizeImage('broken.jpg', '400x300', 'blog/post');
 
@@ -667,7 +667,7 @@ class MediaTest extends TestCase
         $adapterMock = $this->stubImageAdapter();
         $adapterMock->expects($this->once())->method('open')->with('/media/mageplaza/blog/post/photo.jpg');
         $adapterMock->expects($this->once())->method('resize')->with(400, 300);
-        $this->loggerMock->expects($this->never())->method('critical');
+        $this->loggerMock->expects($this->never())->method('warning');
 
         $url = $this->media->resizeImage('photo.jpg', '400x300', 'blog/post');
 

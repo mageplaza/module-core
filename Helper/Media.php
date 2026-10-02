@@ -463,7 +463,7 @@ class Media extends AbstractData
 
                 $image = $resizeImage;
             } catch (Exception $e) {
-                $this->_logger->critical($e->getMessage());
+                $this->_logger->warning($e->getMessage());
             }
         }
 
