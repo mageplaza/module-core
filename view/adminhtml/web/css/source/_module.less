@@ -100,8 +100,8 @@ ul[role="menu"] [data-ui-id^="menu-mageplaza"] strong:before {
     &-expiry-active .mp-extensions-expiry-remaining { color: #457407; }
     &-expiry-warning .mp-extensions-expiry-remaining { color: #795900; }
     &-expiry-expired .mp-extensions-expiry-remaining { color: #e22626; font-weight: 600; }
-    &-banner { position: relative; margin-bottom: 2rem; }
-    &-banner img { display: block; width: 100%; height: auto; max-height: 160px; object-fit: contain; }
-    &-banner .action-close { position: absolute; top: 1rem; right: 1rem; background: #fff; padding: .8rem; }
+    &-banner { position: relative; width: fit-content; max-width: 100%; margin: 2rem 0; }
+    &-banner img { display: block; max-width: 100%; height: auto; max-height: 160px; }
+    &-banner .action-close { position: absolute; top: .5rem; right: .5rem; background: rgba(255, 255, 255, .85); border-radius: 50%; padding: .4rem; }
     &-banner .action-close span { &:extend(.abs-visually-hidden all); }
 }

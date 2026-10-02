@@ -119,7 +119,16 @@ class Notifier
             $title = count($updates) === 1
                 ? $this->escape($names[0] . ' has a new version')
                 : count($updates) . ' Mageplaza extensions have updates';
-            $this->notifier->addNotice($title, implode('; ', $lines), $this->backendUrl->getUrl('mpcore/extensions/index'));
+            if (count($updates) === 1) {
+                $description = $lines[0];
+            } else {
+                $more = count($names) - 3;
+                $list = $more > 0
+                    ? implode(', ', array_slice($names, 0, 3)) . ' and ' . $more . ' more'
+                    : implode(', ', array_slice($names, 0, -1)) . ' and ' . end($names);
+                $description = $this->escape($list . '. Open My Extensions to see the new versions.');
+            }
+            $this->notifier->addNotice($title, $description, $this->backendUrl->getUrl('mpcore/extensions/index'));
         }
         $snapshot['updates'] = $updates;
     }
