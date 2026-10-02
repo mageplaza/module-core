@@ -29,7 +29,9 @@ class ListingTest extends TestCase
         $block->method('formatDate')->willReturnCallback(function ($date) { return $date->format('Y-m-d'); });
         foreach (['installed' => $modules, 'provider' => $provider, '_localeDate' => $timezone] as $key => $value) {
             $property = new \ReflectionProperty(Listing::class, $key);
-            $property->setAccessible(true);
+            if (PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
             $property->setValue($block, $value);
         }
         return $block;
