@@ -87,7 +87,7 @@ class Notifier
         if (!$this->validate->isEnabledNotificationUpdate() || empty($data['is_update']) || $message === '') {
             return;
         }
-        $hash = md5($message);
+        $hash = hash('sha256', $message);
         if (($snapshot['legacy'] ?? '') !== $hash) {
             $this->notifier->addNotice('Mageplaza Notice', $this->escape($message), self::LICENSE_URL);
             $snapshot['legacy'] = $hash;
