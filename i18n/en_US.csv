@@ -62,3 +62,8 @@ No %1 error found,No %1 error found
 "Upgrade edition","Upgrade edition"
 "Installed Extensions","Installed Extensions"
 "Unable to check for updates. Please reload the page and try again.","Unable to check for updates. Please reload the page and try again."
+"%1 paid extension(s) are not linked to a license for this domain.","%1 paid extension(s) are not linked to a license for this domain."
+"Some licenses are not linked to this domain yet.","Some licenses are not linked to this domain yet."
+"Link licenses","Link licenses"
+"Manage license #%1","Manage license #%1"
+"Manage license","Manage license"
