@@ -84,22 +84,26 @@ ul[role="menu"] [data-ui-id^="menu-mageplaza"] strong:before {
     &-grid-wrap { padding: 0; overflow-x: auto; }
     &-grid { min-width: 850px; }
     &-grid .data-grid-th { cursor: default; }
-    &-grid td { vertical-align: top; padding: 1.5rem 1rem; }
+    &-grid td { vertical-align: middle; padding: 1.4rem 1.2rem; }
     &-name { width: 30%; }
     &-package { display: block; font-size: 1.1rem; margin-top: .4rem; overflow-wrap: anywhere; }
+    &-edition, &-arrow { color: #6b6b6b; }
+    &-group th { background: #ece9e6; color: #514943; padding: .6rem 1.2rem; text-transform: uppercase; font-size: 1.2rem; letter-spacing: .05em; }
+    &-download { font-weight: 700; }
+    &-renew { color: #ba4000; font-weight: 700; }
+    &-renew:hover { color: #ba4000; }
+    &-expiry-critical .mp-extensions-expiry-remaining { color: #d32f2f; font-weight: 600; }
     &-version { white-space: nowrap; }
     &-changelog { display: block; margin-top: .6rem; font-size: 1.2rem; }
-    &-badge { display: inline-block; font-size: 1.1rem; font-weight: 600; color: #795900; background: #fff2c5; padding: .2rem .6rem; margin: .3rem 0 .3rem .5rem; border-radius: 2px; }
     &-row-actions { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; font-size: 1.2rem; }
-    &-upgrade { padding: .4rem .8rem; font-size: 1.2rem; text-decoration: none; }
+    &-upgrade { font-size: 1.2rem; }
     &-expiry { font-size: 1.2rem; margin-bottom: .8rem; }
     &-expiry:last-child { margin-bottom: 0; }
-    &-expiry-label { display: block; color: #303030; font-weight: 600; }
+    &-expiry-label { display: block; color: #6b6b6b; }
     &-expiry-remaining { display: block; }
-    &-license-link { display: block; margin-top: .4rem; font-size: 1.2rem; }
-    &-expiry-active .mp-extensions-expiry-remaining { color: #457407; }
-    &-expiry-warning .mp-extensions-expiry-remaining { color: #795900; }
-    &-expiry-expired .mp-extensions-expiry-remaining { color: #e22626; font-weight: 600; }
+    &-expiry-active .mp-extensions-expiry-remaining { color: #3a7d22; }
+    &-expiry-warning .mp-extensions-expiry-remaining { color: #b26a00; }
+    &-expiry-expired .mp-extensions-expiry-remaining { color: #d32f2f; font-weight: 600; }
     &-banner { position: relative; width: fit-content; max-width: 100%; margin: 2rem 0; }
     &-banner img { display: block; max-width: 100%; height: auto; max-height: 160px; }
     &-banner .action-close { position: absolute; top: .5rem; right: .5rem; background: rgba(255, 255, 255, .85); border-radius: 50%; padding: .4rem; }

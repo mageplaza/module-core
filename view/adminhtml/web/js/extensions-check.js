@@ -1,4 +1,4 @@
-define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
+define(['jquery', 'mage/translate', 'mage/apply/main', 'Magento_Ui/js/modal/modal'], function ($, $t, mage, modal) {
     'use strict';
 
     return function (config, element) {
@@ -13,6 +13,22 @@ define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
             cooldownTimer = null,
             hasModules = !button.prop('disabled');
 
+        var featureDialog = root.find('[data-role="feature-dialog"]');
+        if (featureDialog.length) {
+            root.on('click', '[data-role="request-feature"]', function () {
+                if (!featureDialog.data('mage-modal')) {
+                    modal({title: $t('Request a feature'), buttons: [], modalClass: 'mp-feature-modal'}, featureDialog);
+                    featureDialog.prop('hidden', false);
+                }
+                featureDialog.modal('openModal');
+            });
+            featureDialog.on('change', '[data-role="feature-extension"]', function () {
+                var option = $(this).find(':selected');
+                featureDialog.find('[data-role="feature-submit"]').attr('href', option.val())
+                    .attr('data-package', option.attr('data-package') || '');
+            });
+        }
+
         function updateCooldown() {
             var seconds = Math.max(0, Math.ceil((cooldownUntil - Date.now()) / 1000));
 
@@ -22,7 +38,7 @@ define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
             }
             button.attr('aria-busy', 'false').prop('disabled', !hasModules || seconds > 0)
                 .css('pointer-events', !hasModules || seconds > 0 ? 'none' : '')
-                .find('span').text($t('Check now'));
+                .find('span').text($t('Check for updates'));
             if (!seconds) {
                 window.clearInterval(cooldownTimer);
                 cooldownTimer = null;
@@ -92,7 +108,7 @@ define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
             } catch (e) {
             }
         });
-        root.on('click', 'a[data-core-event]', function () {
+        root.add(featureDialog).on('click', 'a[data-core-event]', function () {
             if (!window.FORM_KEY || !window.crypto ||
                 !window.crypto.getRandomValues) {
                 return;
@@ -144,6 +160,13 @@ define(['jquery', 'mage/translate', 'mage/apply/main'], function ($, $t, mage) {
             }).done(function (response) {
                 if (response && response.success && typeof response.html === 'string' && response.html.trim()) {
                     var updatedRoot = $(response.html);
+                    if (featureDialog.data('mage-modal')) {
+                        var featureModal = featureDialog.closest('.modal-popup');
+                        featureDialog.modal('destroy');
+                        featureModal.remove();
+                        $('body').removeClass('_has-modal');
+                        $('.modals-overlay').remove();
+                    }
                     root.replaceWith(updatedRoot);
                     updatedRoot.find('[data-role="refresh-notice"]')
                         .removeClass('message-notice').addClass('message-success')

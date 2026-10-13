@@ -62,6 +62,8 @@ class Response
             }
             $licenses[] = [
                 'license_id' => (int) $license['license_id'],
+                'download_url' => self::filterUrl($license['download_url'] ?? null),
+                'can_update' => ($license['can_update'] ?? false) === true,
                 'support_expired_at' => self::validDate($license['support_expired_at'] ?? null),
                 'subscription_expired_at' => self::validDate($license['subscription_expired_at'] ?? null),
                 'renew_url' => self::filterUrl($license['renew_url'] ?? null),
@@ -71,6 +73,8 @@ class Response
         return [
             'licenses' => $licenses,
             'manage_url' => self::filterUrl($module['manage_url'] ?? null),
+            'download_url' => self::filterUrl($module['download_url'] ?? null),
+            'edition' => $this->text($module['edition'] ?? null),
             'label' => $this->text(isset($module['label']) ? $module['label'] : null),
             'is_free' => isset($module['is_free']) && $module['is_free'] === true,
             'can_update' => isset($module['can_update']) && $module['can_update'] === true,
