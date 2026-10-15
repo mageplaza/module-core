@@ -54,8 +54,8 @@ $banner = $block->getBanner();
     <?php if ($block->getRequestFeatureUrl()): ?>
     <div data-role="feature-dialog" hidden>
         <label for="mp-feature-extension"><?= $block->escapeHtml(__('Extension')) ?></label>
-        <select id="mp-feature-extension" class="admin__control-select" data-role="feature-extension">
-            <option value="<?= $block->escapeUrl($block->getRequestFeatureUrl()) ?>"><?= $block->escapeHtml(__('General feature')) ?></option>
+        <select id="mp-feature-extension" class="admin__control-select" data-role="feature-extension" size="5">
+            <option value="<?= $block->escapeUrl($block->getRequestFeatureUrl()) ?>" selected><?= $block->escapeHtml(__('General feature')) ?></option>
             <?php foreach ($rows as $row): ?>
                 <option value="<?= $block->escapeUrl($row['request_feature_url']) ?>" data-package="<?= $block->escapeHtmlAttr($row['package']) ?>"><?= $block->escapeHtml($row['label']) ?></option>
             <?php endforeach; ?>
