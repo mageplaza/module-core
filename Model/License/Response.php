@@ -102,7 +102,9 @@ class Response
         $id = $this->text(isset($banner['id']) ? $banner['id'] : null);
         $image = self::filterUrl(isset($banner['image']) ? $banner['image'] : null);
         $url = self::filterUrl(isset($banner['url']) ? $banner['url'] : null);
-        if (!$id || !$image || !$url) {
+        $text = $this->text(isset($banner['text']) ? $banner['text'] : null);
+        $buttonText = $this->text(isset($banner['button_text']) ? $banner['button_text'] : null);
+        if (!$id || !$url || (!$image && (!$text || !$buttonText))) {
             return null;
         }
         $today = gmdate('Y-m-d');
@@ -114,13 +116,58 @@ class Response
                 }
             }
         }
-        $result = ['id' => $id, 'image' => $image, 'url' => $url,
-            'alt' => $this->text(isset($banner['alt']) ? $banner['alt'] : null) ?: ''];
+        $bgColor = self::color(isset($banner['bg_color']) ? $banner['bg_color'] : null, '#fff4ec');
+        $buttonColor = self::color(isset($banner['button_color']) ? $banner['button_color'] : null, '#eb5202');
+        $result = ['id' => $id, 'image' => (string) $image, 'url' => $url,
+            'text' => (string) $text, 'button_text' => (string) $buttonText,
+            'bg_color' => $bgColor, 'button_color' => $buttonColor,
+            'text_color' => self::contrastColor($bgColor), 'button_text_color' => self::contrastColor($buttonColor)];
         $notify = isset($banner['notify']) && is_array($banner['notify']) ? $banner['notify'] : [];
         $title = $this->text(isset($notify['title']) ? $notify['title'] : null);
         $description = $this->text(isset($notify['description']) ? $notify['description'] : null);
         if ($title && $description) {
             $result['notify'] = ['title' => $title, 'description' => $description];
+        }
+        return $result;
+    }
+
+    /** @return string */
+    public static function color($value, $default)
+    {
+        return is_string($value) && preg_match('/^#[0-9a-fA-F]{6}$/', $value) ? strtolower($value) : $default;
+    }
+
+    /** @return string */
+    public static function contrastColor($hex)
+    {
+        $luminance = 0;
+        foreach ([0 => 0.2126, 2 => 0.7152, 4 => 0.0722] as $offset => $weight) {
+            $channel = hexdec(substr($hex, 1 + $offset, 2)) / 255;
+            $luminance += $weight * ($channel <= 0.03928 ? $channel / 12.92 : pow(($channel + 0.055) / 1.055, 2.4));
+        }
+        return $luminance > 0.5 ? '#303030' : '#ffffff';
+    }
+
+    /** @return array */
+    public function getRecommendations()
+    {
+        $items = isset($this->data['recommendations']) && is_array($this->data['recommendations'])
+            ? $this->data['recommendations'] : [];
+        $result = [];
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $package = isset($item['package']) ? $item['package'] : null;
+            $label = $this->text(isset($item['label']) ? $item['label'] : null);
+            $image = self::filterUrl(isset($item['image']) ? $item['image'] : null);
+            $url = self::filterUrl(isset($item['url']) ? $item['url'] : null);
+            if (!is_string($package) || !preg_match('#^mageplaza/[a-z0-9][a-z0-9._-]*$#D', $package)
+                || !$label || !$image || !$url) {
+                continue;
+            }
+            $result[] = ['package' => $package, 'label' => $label, 'image' => $image, 'url' => $url,
+                'price' => $this->text(isset($item['price']) ? $item['price'] : null) ?: ''];
         }
         return $result;
     }

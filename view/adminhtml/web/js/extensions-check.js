@@ -108,6 +108,22 @@ define(['jquery', 'mage/translate', 'mage/apply/main', 'Magento_Ui/js/modal/moda
             } catch (e) {
             }
         });
+        var recommendations = root.find('[data-role="recommendations"]'),
+            recommendationsHidden = null;
+        try {
+            recommendationsHidden = window.localStorage.getItem('mp_core_recommendations_hidden');
+        } catch (e) {
+        }
+        if (recommendationsHidden !== '1') {
+            recommendations.prop('hidden', false);
+        }
+        root.on('click', '[data-role="hide-recommendations"]', function () {
+            recommendations.prop('hidden', true);
+            try {
+                window.localStorage.setItem('mp_core_recommendations_hidden', '1');
+            } catch (e) {
+            }
+        });
         root.add(featureDialog).on('click', 'a[data-core-event]', function () {
             if (!window.FORM_KEY || !window.crypto ||
                 !window.crypto.getRandomValues) {

@@ -146,7 +146,13 @@ class Listing extends Template
     /** @return array|null */
     public function getBanner()
     {
-        return $this->provider->get()->getBanner();
+        return $this->isPromotionEnabled() ? $this->provider->get()->getBanner() : null;
+    }
+
+    /** @return array */
+    public function getRecommendations()
+    {
+        return $this->isPromotionEnabled() ? $this->provider->get()->getRecommendations() : [];
     }
 
     /** @return string */
@@ -204,6 +210,16 @@ class Listing extends Template
     {
         $record = $this->provider->getRecord();
         return !empty($record['checked_at']);
+    }
+
+    /** @return bool */
+    private function isPromotionEnabled()
+    {
+        if (!$this->_scopeConfig->getValue('mageplaza/general/notice_enable')) {
+            return false;
+        }
+        $types = array_map('trim', explode(',', (string) $this->_scopeConfig->getValue('mageplaza/general/notice_type')));
+        return in_array('marketing', $types, true);
     }
 
     /** @return array */

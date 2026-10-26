@@ -108,4 +108,22 @@ ul[role="menu"] [data-ui-id^="menu-mageplaza"] strong:before {
     &-banner img { display: block; max-width: 100%; height: auto; max-height: 160px; }
     &-banner .action-close { position: absolute; top: .5rem; right: .5rem; background: rgba(255, 255, 255, .85); border-radius: 50%; padding: .4rem; }
     &-banner .action-close span { &:extend(.abs-visually-hidden all); }
+    &-banner-text { display: flex; align-items: center; gap: 1.2rem 2rem; width: auto; min-height: 4.8rem; padding: .6rem 1.4rem; border: 1px solid; box-sizing: border-box; }
+    &-banner-text[hidden] { display: none; }
+    &-banner-text p { flex: 1; margin: 0; }
+    &-banner-text &-banner-cta { flex: none; padding: .7rem 1.6rem; border-radius: 3px; font-weight: 600; text-decoration: none; }
+    &-banner-text .action-close { position: static; flex: none; background: transparent; color: inherit; }
+    &-recommendations { margin: 2rem 0; }
+    &-recommendations-head { display: flex; justify-content: space-between; align-items: center; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    &-recommendations-head h3 { margin: 0; }
+    &-recommendations-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.4rem; }
+    &-recommendation { display: grid; gap: .6rem; justify-items: center; align-content: start; text-align: center; min-width: 0; padding: 1.6rem; background: #f4f4f6; border: 1px solid #e3e3e8; border-radius: 6px; box-shadow: 0 1px 2px rgba(0, 0, 0, .06); color: #444; text-decoration: none; }
+    &-recommendation:hover { border-color: #adadad; color: #444; text-decoration: none; }
+    &-recommendation img { display: block; max-width: 100%; height: auto; }
+    &-recommendation-image { position: relative; display: block; width: 100%; max-width: 20rem; }
+    &-recommendation-cart { position: absolute; left: 50%; bottom: 22%; transform: translateX(-50%); background: #5ddc76; color: #0b2a12; font-size: 1.3rem; font-weight: 600; padding: .8rem 1.8rem; border-radius: 2rem; white-space: nowrap; opacity: 0; transition: opacity .15s; }
+    &-recommendation:hover &-recommendation-cart,
+    &-recommendation:focus-visible &-recommendation-cart { opacity: 1; }
+    &-recommendation-name { margin-top: .8rem; font-size: 1.5rem; }
+    &-recommendation-price { color: #9a9a9a; font-size: 2rem; font-weight: 700; }
 }

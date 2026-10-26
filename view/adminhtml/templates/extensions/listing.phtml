@@ -1,6 +1,7 @@
 <?php
 $rows = $block->getRows();
 $banner = $block->getBanner();
+$recommendations = $block->getRecommendations();
 ?>
 <div class="mp-extensions" data-track-url="<?= $block->escapeUrl($block->getTrackUrl()) ?>" data-mage-init='{"Mageplaza_Core/js/extensions-check":{}}'>
     <div class="mp-extensions-toolbar">
@@ -42,14 +43,23 @@ $banner = $block->getBanner();
         </div>
     <?php endif; ?>
     <?php if ($banner): ?>
-        <div class="mp-extensions-banner" data-role="promotion-banner" data-banner-id="<?= $block->escapeHtmlAttr($banner['id']) ?>" hidden>
-            <a data-core-event="banner_click" data-banner-id="<?= $block->escapeHtmlAttr($banner['id']) ?>" href="<?= $block->escapeUrl($banner['url']) ?>" target="_blank" rel="noopener noreferrer">
-                <img src="<?= $block->escapeUrl($banner['image']) ?>" alt="<?= $block->escapeHtmlAttr($banner['alt']) ?>"/>
+        <div class="mp-extensions-banner<?= $banner['image'] ? '' : ' mp-extensions-banner-text' ?>" data-role="promotion-banner" data-banner-id="<?= $block->escapeHtmlAttr($banner['id']) ?>" hidden>
+            <?php if ($banner['image']): ?>
+            <a data-core-event="banner_click" data-banner-id="<?= $block->escapeHtmlAttr($banner['id']) ?>" href="<?= $block->escapeUrl($banner['url']) ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= $block->escapeHtmlAttr(__('Promotion')) ?>">
+                <img src="<?= $block->escapeUrl($banner['image']) ?>" alt=""/>
             </a>
+            <?php else: ?>
+            <p><?= $block->escapeHtml($banner['text']) ?></p>
+            <a class="mp-extensions-banner-cta" data-core-event="banner_click" data-banner-id="<?= $block->escapeHtmlAttr($banner['id']) ?>" href="<?= $block->escapeUrl($banner['url']) ?>" target="_blank" rel="noopener noreferrer"><?= $block->escapeHtml($banner['button_text']) ?> <span aria-hidden="true">↗</span></a>
+            <?php endif; ?>
             <button type="button" class="action-close" data-role="dismiss-banner" aria-label="<?= $block->escapeHtmlAttr(__('Dismiss promotion')) ?>">
                 <span><?= $block->escapeHtml(__('Dismiss promotion')) ?></span>
             </button>
         </div>
+        <?php if (!$banner['image']): ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('background-color: ' . $banner['bg_color'] . '; color: ' . $banner['text_color'] . '; border-color: ' . $banner['bg_color'] . ';', '.mp-extensions-banner-text') ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('background-color: ' . $banner['button_color'] . '; color: ' . $banner['button_text_color'] . ';', '.mp-extensions-banner-text .mp-extensions-banner-cta') ?>
+        <?php endif; ?>
     <?php endif; ?>
     <?php if ($block->getRequestFeatureUrl()): ?>
     <div data-role="feature-dialog" hidden>
@@ -148,4 +158,24 @@ $banner = $block->getBanner();
             </tbody>
         </table>
     </div>
+    <?php if ($recommendations): ?>
+        <div class="mp-extensions-recommendations" data-role="recommendations" hidden>
+            <div class="mp-extensions-recommendations-head">
+                <h3><?= $block->escapeHtml(__('Also Recommended For Your Store')) ?></h3>
+                <button type="button" class="action-default" data-role="hide-recommendations"><span><?= $block->escapeHtml(__('Hide')) ?></span></button>
+            </div>
+            <div class="mp-extensions-recommendations-grid">
+                <?php foreach ($recommendations as $item): ?>
+                    <a class="mp-extensions-recommendation" data-core-event="recommendation_click" data-package="<?= $block->escapeHtmlAttr($item['package']) ?>" href="<?= $block->escapeUrl($item['url']) ?>" target="_blank" rel="noopener noreferrer">
+                        <span class="mp-extensions-recommendation-image">
+                            <img src="<?= $block->escapeUrl($item['image']) ?>" alt="<?= $block->escapeHtmlAttr($item['label']) ?>"/>
+                            <span class="mp-extensions-recommendation-cart"><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                        </span>
+                        <span class="mp-extensions-recommendation-name"><?= $block->escapeHtml($item['label']) ?></span>
+                        <?php if ($item['price']): ?><span class="mp-extensions-recommendation-price"><?= $block->escapeHtml($item['price']) ?></span><?php endif; ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    <?php endif; ?>
 </div>
