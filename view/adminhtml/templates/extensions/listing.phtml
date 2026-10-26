@@ -5,7 +5,7 @@ $recommendations = $block->getRecommendations();
 ?>
 <div class="mp-extensions" data-track-url="<?= $block->escapeUrl($block->getTrackUrl()) ?>" data-mage-init='{"Mageplaza_Core/js/extensions-check":{}}'>
     <div class="mp-extensions-toolbar">
-        <span class="mp-extensions-checked"><?= $block->escapeHtml($block->getLastCheckedLabel()) ?></span>
+        <span class="mp-extensions-checked"><?= $block->escapeHtml($block->getLastCheckedLabel()) ?><?php if ($settingsUrl = $block->getNotificationSettingsUrl()): ?> · <a href="<?= $block->escapeUrl($settingsUrl) ?>"><?= $block->escapeHtml(__('Notification settings')) ?></a><?php endif; ?></span>
         <div class="mp-extensions-toolbar-actions">
             <?php if ($block->getLicenseUrl()): ?>
             <a href="<?= $block->escapeUrl($block->getLicenseUrl()) ?>" target="_blank" rel="noopener noreferrer">

@@ -81,4 +81,66 @@ class NotifierTest extends TestCase
     {
         return new Response(['is_update' => 1, 'message' => $message]);
     }
+
+    private $snapshot = [];
+    private $majors = [];
+
+    private function notify(array $module, $types = 'announcement,renewal_reminder')
+    {
+        $flags = $this->createMock(FlagManager::class);
+        $flags->method('getFlagData')->willReturnCallback(function () { return $this->snapshot; });
+        $flags->method('saveFlag')->willReturnCallback(function ($code, $data) { $this->snapshot = $data; return true; });
+        $locks = $this->createMock(LockManagerInterface::class);
+        $locks->method('lock')->willReturn(true);
+        $notifier = $this->createMock(NotifierInterface::class);
+        $notifier->method('addMajor')->willReturnCallback(function ($title) { $this->majors[] = $title; return $this->createMock(\Magento\Framework\Notification\MessageInterface::class); });
+        $notifier->expects($this->never())->method('addNotice');
+        $timezone = $this->createMock(TimezoneInterface::class);
+        $timezone->method('getConfigTimezone')->willReturn('UTC');
+        $validate = $this->createMock(Validate::class);
+        $validate->method('getConfigGeneral')->willReturnMap([['notice_enable', null, '1'], ['notice_type', null, $types]]);
+        $validate->method('isEnabledNotificationUpdate')->willReturn(false);
+        (new Notifier($flags, $locks, $notifier, $timezone, $validate, $this->createMock(UrlInterface::class)))
+            ->notify(new Response(['modules' => ['osc' => $module]]), ['osc' => ['label' => 'One Step Checkout', 'version' => '4.6.0']]);
+    }
+
+    private function inDays($days)
+    {
+        return gmdate('Y-m-d', strtotime('today UTC') + $days * 86400);
+    }
+
+    public function testPaidGetsOneReminderAtSevenDays()
+    {
+        $this->notify(['subscription_expired_at' => $this->inDays(7)]);
+        $this->notify(['subscription_expired_at' => $this->inDays(7)]);
+        $this->assertSame(['One Step Checkout Subscription expires soon'], $this->majors);
+    }
+
+    public function testNoReminderOutsideWindow()
+    {
+        foreach ([8, 30, 0, -3] as $days) {
+            $this->notify(['subscription_expired_at' => $this->inDays($days)]);
+        }
+        $this->assertSame([], $this->majors);
+    }
+
+    public function testNoReminderWhenCategoryUnchecked()
+    {
+        $this->notify(['subscription_expired_at' => $this->inDays(3)], 'announcement,new_update,marketing');
+        $this->assertSame([], $this->majors);
+    }
+
+    public function testFreeAndSupportDatesAreIgnored()
+    {
+        $this->notify(['is_free' => true, 'support_expired_at' => $this->inDays(3)]);
+        $this->notify(['support_expired_at' => $this->inDays(3)]);
+        $this->assertSame([], $this->majors);
+    }
+
+    public function testRenewedDateRemindsAgain()
+    {
+        $this->notify(['subscription_expired_at' => $this->inDays(5)]);
+        $this->notify(['subscription_expired_at' => $this->inDays(6)]);
+        $this->assertCount(2, $this->majors);
+    }
 }

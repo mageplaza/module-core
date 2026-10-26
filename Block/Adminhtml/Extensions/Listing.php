@@ -198,6 +198,16 @@ class Listing extends Template
         return __('Last checked: %1', $this->formatDate((new \DateTimeImmutable())->setTimestamp((int) $record['checked_at']), \IntlDateFormatter::MEDIUM, true));
     }
 
+    /** @return string|null */
+    public function getNotificationSettingsUrl()
+    {
+        if (!$this->_authorization->isAllowed('Magento_Config::config')
+            || !$this->_authorization->isAllowed('Mageplaza_Core::configuration')) {
+            return null;
+        }
+        return $this->getUrl('adminhtml/system_config/edit', ['section' => 'mageplaza']);
+    }
+
     /** @return bool */
     public function hasError()
     {

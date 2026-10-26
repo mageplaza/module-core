@@ -27,6 +27,7 @@ use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Notification\NotifierInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Mageplaza\Core\Helper\Validate;
+use Mageplaza\Core\Model\Config\Source\NoticeType;
 
 class Notifier
 {
@@ -126,7 +127,7 @@ class Notifier
                 $list = $more > 0
                     ? implode(', ', array_slice($names, 0, 3)) . ' and ' . $more . ' more'
                     : implode(', ', array_slice($names, 0, -1)) . ' and ' . end($names);
-                $description = $this->escape($list . '. Open My Extensions to see the new versions.');
+                $description = $this->escape($list . '. Open Updates & Licenses to see the new versions.');
             }
             $this->notifier->addNotice($title, $description, $this->backendUrl->getUrl('mpcore/extensions/index'));
         }
@@ -135,6 +136,10 @@ class Notifier
 
     private function notifyExpiry(Response $response, array $installed, array &$snapshot)
     {
+        $categories = array_map('trim', explode(',', (string) $this->validate->getConfigGeneral('notice_type')));
+        if (!in_array(NoticeType::TYPE_RENEWAL, $categories, true)) {
+            return;
+        }
         $zone = new \DateTimeZone($this->timezone->getConfigTimezone());
         $today = new \DateTimeImmutable('today', $zone);
         $expirySnapshot = is_array($snapshot['expiry'] ?? null) ? $snapshot['expiry'] : [];
@@ -142,31 +147,25 @@ class Notifier
         $url = $response->getAccountUrl('license_url') ?: self::LICENSE_URL;
         foreach ($installed as $package => $module) {
             $remote = $response->getModule($package);
-            foreach (['support_expired_at' => 'Support', 'subscription_expired_at' => 'Subscription'] as $field => $label) {
-                $date = $remote[$field];
-                if (!$date) {
-                    continue;
-                }
-                $expiry = new \DateTimeImmutable($date, $zone);
-                $days = (int) $today->diff($expiry)->format('%r%a');
-                if ($days > 30 || $days < -30) {
-                    continue;
-                }
-                $tier = $days <= 0 ? 0 : ($days <= 7 ? 7 : 30);
-                $old = $expirySnapshot[$package][$field] ?? null;
-                $next[$package][$field] = ['date' => $date, 'tier' => $tier];
-                if (is_array($old) && ($old['date'] ?? '') === $date && (int) ($old['tier'] ?? 999) <= $tier) {
-                    continue;
-                }
-                $name = $remote['label'] ?: (isset($module['label']) ? (string) $module['label'] : $package);
-                $title = $this->escape($name . ' ' . $label . ($tier === 0 ? ' expired' : ' expires soon'));
-                $description = $this->escape($label . ' expires on ' . $date . ($tier === 0 ? ' (expired)' : ' (' . $days . ' days left)'));
-                if ($tier <= 7) {
-                    $this->notifier->addMajor($title, $description, $url);
-                } else {
-                    $this->notifier->addNotice($title, $description, $url);
-                }
+            $date = $remote['subscription_expired_at'];
+            if ($remote['is_free'] || !$date) {
+                continue;
             }
+            $days = (int) $today->diff(new \DateTimeImmutable($date, $zone))->format('%r%a');
+            if ($days > 7 || $days <= 0) {
+                continue;
+            }
+            $old = $expirySnapshot[$package]['subscription_expired_at'] ?? null;
+            $next[$package]['subscription_expired_at'] = ['date' => $date, 'tier' => 7];
+            if (is_array($old) && ($old['date'] ?? '') === $date) {
+                continue;
+            }
+            $name = $remote['label'] ?: (isset($module['label']) ? (string) $module['label'] : $package);
+            $this->notifier->addMajor(
+                $this->escape($name . ' Subscription expires soon'),
+                $this->escape('Subscription expires on ' . $date . ' (' . $days . ' days left)'),
+                $url
+            );
         }
         $snapshot['expiry'] = $next;
     }

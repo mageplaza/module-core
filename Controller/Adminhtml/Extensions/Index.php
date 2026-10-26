@@ -43,7 +43,7 @@ class Index extends Action implements HttpGetActionInterface
     {
         $page = $this->pageFactory->create();
         $page->setActiveMenu('Mageplaza_Core::extensions');
-        $page->getConfig()->getTitle()->prepend(__('My Extensions'));
+        $page->getConfig()->getTitle()->prepend(__('Updates & Licenses'));
         return $page;
     }
 }

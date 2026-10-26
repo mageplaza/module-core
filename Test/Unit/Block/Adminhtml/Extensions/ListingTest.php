@@ -186,4 +186,22 @@ class ListingTest extends TestCase
         $this->assertSame(1, $row['renew_actions'][0]['license_id']);
     }
 
+    public function testNotificationSettingsUrlNeedsBothConfigPermissions()
+    {
+        $cases = [[true, true, 'https://store.example.com/admin/config'], [true, false, null], [false, true, null]];
+        foreach ($cases as [$config, $information, $expected]) {
+            $block = $this->createListing(['osc' => $this->module()]);
+            $authorization = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
+            $authorization->method('isAllowed')->willReturnMap([
+                ['Magento_Config::config', null, $config],
+                ['Mageplaza_Core::configuration', null, $information],
+            ]);
+            $property = new \ReflectionProperty(\Magento\Backend\Block\Template::class, '_authorization');
+            if (PHP_VERSION_ID < 80100) {
+                $property->setAccessible(true);
+            }
+            $property->setValue($block, $authorization);
+            $this->assertSame($expected, $block->getNotificationSettingsUrl());
+        }
+    }
 }
