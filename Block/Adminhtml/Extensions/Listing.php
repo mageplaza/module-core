@@ -65,9 +65,13 @@ class Listing extends Template
                 'version' => $module['version'],
                 'latest_version' => $remote['latest_version'],
                 'release_url' => $remote['release_url'],
-                'has_update' => $remote['can_update'] && $remote['latest_version'] && Response::validVersion($module['version'])
+                'has_update' => $remote['latest_version'] && Response::validVersion($module['version'])
                     && version_compare($remote['latest_version'], $module['version'], '>'),
-                'renew_url' => $remote['renew_url'],
+                'is_free' => $remote['is_free'],
+                'edition' => $remote['edition'],
+                'download_url' => $remote['download_url'] ?: ($remote['is_free'] ? $this->getLicenseUrl() : null),
+                'renew_actions' => [],
+                'can_download' => $remote['is_free'] || $remote['can_update'],
                 'upgrade_url' => $remote['upgrade_url'],
                 'upgrade_label' => $remote['upgrade_label'] ?: __('Upgrade edition'),
                 'config_url' => $module['section']
@@ -78,16 +82,27 @@ class Listing extends Template
             ];
             $licenses = $remote['licenses'] ?: [$remote];
             foreach ($licenses as $license) {
+                $field = $remote['is_free'] ? 'support_expired_at' : 'subscription_expired_at';
+                $downloadUrl = $license['download_url'] ?? null;
+                if (!$downloadUrl && !empty($license['manage_url'])) {
+                    $downloadUrl = str_replace('open_license=', 'open_download=', $license['manage_url']);
+                }
+                if ($downloadUrl && ($remote['is_free'] || (!empty($license[$field])
+                    && $this->getExpiry($license[$field], '')['days'] > 0))) {
+                    $row['download_url'] = $downloadUrl;
+                }
                 if (!empty($license['manage_url'])) {
                     $row['license_links'][] = ['url' => $license['manage_url'],
                         'id' => count($licenses) > 1 ? ($license['license_id'] ?? null) : null];
                 }
-                $field = $remote['is_free'] ? 'support_expired_at' : 'subscription_expired_at';
                 if (!empty($license[$field])) {
-                    $date = $this->getExpiry($license[$field], $remote['is_free'] ? __('Support') : __('Subscription'));
+                    $date = $this->getExpiry($license[$field], $remote['is_free'] ? __('Support until') : __('Support & Update until'));
                     $date['renew_url'] = $license['renew_url'] ?? null;
                     $date['license_id'] = count($licenses) > 1 ? ($license['license_id'] ?? null) : null;
                     $row['dates'][] = $date;
+                    if ($date['days'] <= ($remote['is_free'] ? 0 : 7) && $date['renew_url']) {
+                        $row['renew_actions'][] = $date;
+                    }
                 }
             }
             foreach ($row['dates'] as $date) {
@@ -97,14 +112,18 @@ class Listing extends Template
             }
             $row['unlinked_paid'] = $remote['label'] !== null && !$remote['is_free'] && !$row['license_links'];
             $row['request_feature_url'] = $this->getRequestFeatureUrl($row);
+            $row['group'] = !$row['is_free'] && $row['expiring'] ? 0 : ($row['has_update'] ? 1 : 2);
+            $row['can_download'] = $row['has_update'] && $row['can_download'] && $row['download_url'];
+            if (!$row['is_free'] && $row['dates'] && !array_filter($row['dates'], function ($date) {
+                return $date['days'] > 0;
+            })) {
+                $row['can_download'] = false;
+            }
             $rows[] = $row;
         }
         usort($rows, function ($first, $second) {
-            if ($first['has_update'] != $second['has_update']) {
-                return $first['has_update'] ? -1 : 1;
-            }
-            if ($first['expiring'] != $second['expiring']) {
-                return $first['expiring'] ? -1 : 1;
+            if ($first['group'] !== $second['group']) {
+                return $first['group'] <=> $second['group'];
             }
             return strcasecmp($first['label'], $second['label']);
         });
@@ -127,21 +146,34 @@ class Listing extends Template
     /** @return array|null */
     public function getBanner()
     {
-        return $this->provider->get()->getBanner();
+        return $this->isPromotionEnabled() ? $this->provider->get()->getBanner() : null;
+    }
+
+    /** @return array */
+    public function getRecommendations()
+    {
+        return $this->isPromotionEnabled() ? $this->provider->get()->getRecommendations() : [];
     }
 
     /** @return string */
     public function getLicenseUrl()
     {
-        return $this->provider->get()->getAccountUrl('license_url');
+        return $this->provider->get()->getAccountUrl('license_url') ?: 'https://dashboard.mageplaza.com/license/';
     }
 
     /** @return string */
     public function getRequestFeatureUrl(array $row = [])
     {
-        return $row
-            ? $this->provider->get()->getModule($row['package'])['request_feature_url']
-            : $this->provider->get()->getAccountUrl('request_feature_url');
+        $params = [
+            'intent' => 'feature_request',
+            'domain' => (string) $this->_scopeConfig->getValue('web/secure/base_url'),
+            'magento_version' => $this->provider->getMagentoVersion(),
+            'extension' => $row ? $row['label'] : 'general',
+        ];
+        if ($row) {
+            $params['version'] = $row['version'];
+        }
+        return 'https://www.mageplaza.com/support/?' . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
     }
 
     /** @return string */
@@ -166,6 +198,16 @@ class Listing extends Template
         return __('Last checked: %1', $this->formatDate((new \DateTimeImmutable())->setTimestamp((int) $record['checked_at']), \IntlDateFormatter::MEDIUM, true));
     }
 
+    /** @return string|null */
+    public function getNotificationSettingsUrl()
+    {
+        if (!$this->_authorization->isAllowed('Magento_Config::config')
+            || !$this->_authorization->isAllowed('Mageplaza_Core::configuration')) {
+            return null;
+        }
+        return $this->getUrl('adminhtml/system_config/edit', ['section' => 'mageplaza']);
+    }
+
     /** @return bool */
     public function hasError()
     {
@@ -180,6 +222,16 @@ class Listing extends Template
         return !empty($record['checked_at']);
     }
 
+    /** @return bool */
+    private function isPromotionEnabled()
+    {
+        if (!$this->_scopeConfig->getValue('mageplaza/general/notice_enable')) {
+            return false;
+        }
+        $types = array_map('trim', explode(',', (string) $this->_scopeConfig->getValue('mageplaza/general/notice_type')));
+        return in_array('marketing', $types, true);
+    }
+
     /** @return array */
     private function getExpiry($date, $label)
     {
@@ -188,6 +240,6 @@ class Listing extends Template
         $expiry = new \DateTimeImmutable($date, $timezone);
         $days = max(0, (int) $today->diff($expiry)->format('%r%a'));
         return ['label' => $label, 'date' => $this->formatDate($expiry, \IntlDateFormatter::MEDIUM, false, $timezone->getName()),
-            'days' => $days, 'state' => $days === 0 ? 'expired' : ($days <= 30 ? 'warning' : 'active')];
+            'days' => $days, 'state' => $days === 0 ? 'expired' : ($days <= 7 ? 'critical' : ($days <= 30 ? 'warning' : 'active'))];
     }
 }

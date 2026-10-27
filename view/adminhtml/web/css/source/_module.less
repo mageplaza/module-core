@@ -84,24 +84,46 @@ ul[role="menu"] [data-ui-id^="menu-mageplaza"] strong:before {
     &-grid-wrap { padding: 0; overflow-x: auto; }
     &-grid { min-width: 850px; }
     &-grid .data-grid-th { cursor: default; }
-    &-grid td { vertical-align: top; padding: 1.5rem 1rem; }
+    &-grid td { vertical-align: middle; padding: 1.4rem 1.2rem; }
     &-name { width: 30%; }
     &-package { display: block; font-size: 1.1rem; margin-top: .4rem; overflow-wrap: anywhere; }
+    &-edition, &-arrow { color: #6b6b6b; }
+    &-group th { background: #ece9e6; color: #514943; padding: .6rem 1.2rem; text-transform: uppercase; font-size: 1.2rem; letter-spacing: .05em; }
+    &-download { font-weight: 700; }
+    &-renew { color: #ba4000; font-weight: 700; }
+    &-renew:hover { color: #ba4000; }
+    &-expiry-critical .mp-extensions-expiry-remaining { color: #d32f2f; font-weight: 600; }
     &-version { white-space: nowrap; }
     &-changelog { display: block; margin-top: .6rem; font-size: 1.2rem; }
-    &-badge { display: inline-block; font-size: 1.1rem; font-weight: 600; color: #795900; background: #fff2c5; padding: .2rem .6rem; margin: .3rem 0 .3rem .5rem; border-radius: 2px; }
     &-row-actions { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; font-size: 1.2rem; }
-    &-upgrade { padding: .4rem .8rem; font-size: 1.2rem; text-decoration: none; }
+    &-upgrade { font-size: 1.2rem; }
     &-expiry { font-size: 1.2rem; margin-bottom: .8rem; }
     &-expiry:last-child { margin-bottom: 0; }
-    &-expiry-label { display: block; color: #303030; font-weight: 600; }
+    &-expiry-label { display: block; color: #6b6b6b; }
     &-expiry-remaining { display: block; }
-    &-license-link { display: block; margin-top: .4rem; font-size: 1.2rem; }
-    &-expiry-active .mp-extensions-expiry-remaining { color: #457407; }
-    &-expiry-warning .mp-extensions-expiry-remaining { color: #795900; }
-    &-expiry-expired .mp-extensions-expiry-remaining { color: #e22626; font-weight: 600; }
+    &-expiry-active .mp-extensions-expiry-remaining { color: #3a7d22; }
+    &-expiry-warning .mp-extensions-expiry-remaining { color: #b26a00; }
+    &-expiry-expired .mp-extensions-expiry-remaining { color: #d32f2f; font-weight: 600; }
     &-banner { position: relative; width: fit-content; max-width: 100%; margin: 2rem 0; }
     &-banner img { display: block; max-width: 100%; height: auto; max-height: 160px; }
     &-banner .action-close { position: absolute; top: .5rem; right: .5rem; background: rgba(255, 255, 255, .85); border-radius: 50%; padding: .4rem; }
     &-banner .action-close span { &:extend(.abs-visually-hidden all); }
+    &-banner-text { display: flex; align-items: center; gap: 1.2rem 2rem; width: auto; min-height: 4.8rem; padding: .6rem 1.4rem; border: 1px solid; box-sizing: border-box; }
+    &-banner-text[hidden] { display: none; }
+    &-banner-text p { flex: 1; margin: 0; }
+    &-banner-text &-banner-cta { flex: none; padding: .7rem 1.6rem; border-radius: 3px; font-weight: 600; text-decoration: none; }
+    &-banner-text .action-close { position: static; flex: none; background: transparent; color: inherit; }
+    &-recommendations { margin: 2rem 0; }
+    &-recommendations-head { display: flex; justify-content: space-between; align-items: center; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    &-recommendations-head h3 { margin: 0; }
+    &-recommendations-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.4rem; }
+    &-recommendation { display: grid; gap: .6rem; justify-items: center; align-content: start; text-align: center; min-width: 0; padding: 1.6rem; background: #f4f4f6; border: 1px solid #e3e3e8; border-radius: 6px; box-shadow: 0 1px 2px rgba(0, 0, 0, .06); color: #444; text-decoration: none; }
+    &-recommendation:hover { border-color: #adadad; color: #444; text-decoration: none; }
+    &-recommendation img { display: block; max-width: 100%; height: auto; }
+    &-recommendation-image { position: relative; display: block; width: 100%; max-width: 20rem; }
+    &-recommendation-cart { position: absolute; left: 50%; bottom: 22%; transform: translateX(-50%); background: #5ddc76; color: #0b2a12; font-size: 1.3rem; font-weight: 600; padding: .8rem 1.8rem; border-radius: 2rem; white-space: nowrap; opacity: 0; transition: opacity .15s; }
+    &-recommendation:hover &-recommendation-cart,
+    &-recommendation:focus-visible &-recommendation-cart { opacity: 1; }
+    &-recommendation-name { margin-top: .8rem; font-size: 1.5rem; }
+    &-recommendation-price { color: #9a9a9a; font-size: 2rem; font-weight: 700; }
 }

@@ -1,7 +1,7 @@
 .mp-extensions .mp-extensions-toolbar-actions { gap: 10px; }
 .mp-extensions [data-role="check-now-control"] { display: inline-block; }
 .mp-extensions [data-role="check-now"],
-.mp-extensions .mp-extensions-toolbar-actions > .action-primary {
+.mp-extensions [data-role="request-feature"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -15,31 +15,22 @@
     white-space: nowrap;
 }
 .mp-extensions [data-role="check-now"] {
-    border: 1px solid #b4b4b4;
-    background: #f8f8f8;
-    padding: 9px 14px;
-    color: #222;
-    font-weight: 600;
-}
-.mp-extensions [data-role="check-now"]:hover { background: #f0f0f0; }
-.mp-extensions [data-role="check-now"]:disabled { opacity: .6; cursor: default; }
-.mp-extensions .mp-extensions-toolbar-actions > .action-primary {
-    border: 1px solid transparent;
+    border: 1px solid #eb5202;
     background: #eb5202;
     padding: 9px 16px;
     color: #fff;
-    font-weight: 700;
-}
-.mp-extensions .mp-extensions-toolbar-actions > .action-primary:hover { background: #d84900; color: #fff; }
-.mp-extensions .mp-extensions-upgrade {
-    border: 1px solid #b4b4b4;
-    background: #f8f8f8;
-    padding: 4px 8px;
-    color: #222;
     font-weight: 600;
-    text-decoration: none;
 }
-.mp-extensions .mp-extensions-upgrade:hover { background: #f0f0f0; text-decoration: none; }
+.mp-extensions [data-role="check-now"]:hover { background: #ba4000; border-color: #ba4000; }
+.mp-extensions [data-role="check-now"]:disabled { opacity: .6; cursor: default; }
+.mp-extensions [data-role="request-feature"] {
+    border: 1px solid #adadad;
+    background: #f2f2f2;
+    padding: 9px 16px;
+    color: #514943;
+    font-weight: 600;
+}
+.mp-extensions [data-role="request-feature"]:hover { background: #e5e5e5; }
 .mp-extensions [data-role="check-now"][aria-busy="true"]::before {
     content: "";
     width: 12px;
@@ -51,3 +42,66 @@
     animation: mp-extensions-check-spin 1s linear infinite;
 }
 @keyframes mp-extensions-check-spin { to { transform: rotate(360deg); } }
+
+.mp-extensions .mp-extensions-grid .mp-extensions-group th {
+    background: #ece9e6;
+    color: #514943;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+}
+
+.mp-extensions .mp-extensions-grid .mp-extensions-expiry-active .mp-extensions-expiry-remaining { color: #3a7d22; }
+.mp-extensions .mp-extensions-grid .mp-extensions-expiry-warning .mp-extensions-expiry-remaining { color: #b26a00; }
+.mp-extensions .mp-extensions-grid .mp-extensions-expiry-expired .mp-extensions-expiry-remaining { color: #d32f2f; }
+
+.modal-popup.mp-feature-modal .modal-content {
+    padding-bottom: 3rem;
+}
+.modal-popup.mp-feature-modal .modal-content label {
+    display: block;
+    margin-bottom: 1rem;
+}
+.modal-popup.mp-feature-modal [data-role="feature-extension"] {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    background-image: none;
+}
+.modal-popup.mp-feature-modal [data-role="feature-extension"] option {
+    padding: 6px 12px;
+}
+.modal-popup.mp-feature-modal [data-role="feature-extension"] option:checked {
+    background: #e8eef7 linear-gradient(#e8eef7, #e8eef7);
+    color: #303030 !important;
+    -webkit-text-fill-color: #303030;
+    font-weight: 600;
+}
+.modal-popup.mp-feature-modal .modal-content p {
+    margin: 2rem 0 0;
+}
+
+.mp-extensions .mp-extensions-recommendations { margin: 20px 0; }
+.mp-extensions .mp-extensions-recommendations-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.mp-extensions .mp-extensions-recommendations-head h3 { margin: 0; }
+.mp-extensions .mp-extensions-recommendations-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.mp-extensions .mp-extensions-recommendation { display: grid; gap: 6px; justify-items: center; align-content: start; text-align: center; min-width: 0; padding: 16px; background: #f4f4f6; border: 1px solid #e3e3e8; border-radius: 6px; box-shadow: 0 1px 2px rgba(0, 0, 0, .06); color: #444; text-decoration: none; }
+.mp-extensions .mp-extensions-recommendation:hover { border-color: #adadad; color: #444; text-decoration: none; }
+.mp-extensions .mp-extensions-recommendation img { display: block; max-width: 100%; height: auto; }
+.mp-extensions .mp-extensions-recommendation-image { position: relative; display: block; width: 100%; max-width: 200px; }
+.mp-extensions .mp-extensions-recommendation-cart { position: absolute; left: 50%; bottom: 22%; transform: translateX(-50%); background: #5ddc76; color: #0b2a12; font-size: 13px; font-weight: 600; padding: 8px 18px; border-radius: 20px; white-space: nowrap; opacity: 0; transition: opacity .15s; }
+.mp-extensions .mp-extensions-recommendation:hover .mp-extensions-recommendation-cart,
+.mp-extensions .mp-extensions-recommendation:focus-visible .mp-extensions-recommendation-cart { opacity: 1; }
+.mp-extensions .mp-extensions-recommendation-name { margin-top: 8px; font-size: 15px; }
+.mp-extensions .mp-extensions-recommendation-price { color: #9a9a9a; font-size: 20px; font-weight: 700; }
+.mp-extensions .mp-extensions-banner { position: relative; width: fit-content; max-width: 100%; margin: 20px 0; }
+.mp-extensions .mp-extensions-banner img { display: block; max-width: 100%; height: auto; max-height: 160px; }
+.mp-extensions .mp-extensions-banner .action-close { position: absolute; top: 5px; right: 5px; background: rgba(255, 255, 255, .85); border-radius: 50%; padding: 4px; }
+.mp-extensions .mp-extensions-banner .action-close span { border: 0; clip: rect(0, 0, 0, 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+.mp-extensions .mp-extensions-banner-text { display: flex; align-items: center; gap: 12px 20px; width: auto; min-height: 48px; padding: 6px 14px; border: 1px solid; box-sizing: border-box; }
+.mp-extensions .mp-extensions-banner-text[hidden] { display: none; }
+.mp-extensions .mp-extensions-banner-text p { flex: 1; margin: 0; }
+.mp-extensions .mp-extensions-banner-text .mp-extensions-banner-cta { flex: none; padding: 7px 16px; border-radius: 3px; font-weight: 600; text-decoration: none; }
+.mp-extensions .mp-extensions-banner-text .action-close { position: static; flex: none; background: transparent; color: inherit; }

@@ -30,6 +30,7 @@ class NoticeType extends AbstractSource
     const TYPE_ANNOUNCEMENT = 'announcement';
     const TYPE_NEWUPDATE    = 'new_update';
     const TYPE_MARKETING    = 'marketing';
+    const TYPE_RENEWAL      = 'renewal_reminder';
 
     /**
      * Get options in "key-value" format
@@ -40,8 +41,9 @@ class NoticeType extends AbstractSource
     {
         return [
             self::TYPE_ANNOUNCEMENT => __('Announcement'),
-            self::TYPE_NEWUPDATE    => __('New & Update extensions'),
-            self::TYPE_MARKETING    => __('Promotions ')
+            self::TYPE_NEWUPDATE    => __('Extension Updates'),
+            self::TYPE_MARKETING    => __('Promotions '),
+            self::TYPE_RENEWAL      => __('Support & Update Renewal Reminder')
         ];
     }
 }

@@ -1,0 +1,13 @@
+.mp-updates-link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border: 1px solid #cfe3f3;
+    background: #f4f9fd;
+}
+.mp-updates-link p { margin: 0; }
+.mp-updates-link .action-default { text-decoration: none; }

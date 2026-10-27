@@ -144,7 +144,7 @@ require([
 
     var url = window.location.href;
     for (var path in mpHelpDb) {
-        if (mpHelpDb.hasOwnProperty(path) && url.search(path)) {
+        if (mpHelpDb.hasOwnProperty(path) && url.indexOf(path) !== -1) {
             var datas = mpHelpDb[path];
             _.each(datas, function (data) {
                 var html = buildHtml(data);

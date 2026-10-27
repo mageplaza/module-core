@@ -53,7 +53,8 @@ class EventReporter
     public function send($eventName, $eventId, $package = null, $bannerId = null)
     {
         if (!in_array($eventName,
-            ['banner_click', 'upgrade_click', 'release_notes_click', 'request_feature_click'], true)
+            ['banner_click', 'upgrade_click', 'release_notes_click', 'request_feature_click',
+                'recommendation_click'], true)
             || !$this->isUuid($eventId)) {
             return false;
         }
@@ -66,7 +67,7 @@ class EventReporter
             return false;
         }
         if (($eventName === 'banner_click' && $bannerId === null)
-            || (in_array($eventName, ['upgrade_click', 'release_notes_click'], true) && $package === null)) {
+            || (in_array($eventName, ['upgrade_click', 'release_notes_click', 'recommendation_click'], true) && $package === null)) {
             return false;
         }
         $installationId = $this->installationId();
