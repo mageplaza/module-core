@@ -30,7 +30,6 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\State;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
@@ -432,40 +431,24 @@ HTML;
     public function checkHyvaTheme()
     {
         try {
-            $themeCode = $this->getThemeCodeByCache();
+            $theme = $this->objectManager->get(DesignInterface::class)->getDesignTheme();
         } catch (Exception $e) {
             try {
-                /** @var ThemeProviderInterface $themeProviderInterface */
-                $themeProviderInterface = $this->objectManager->create(ThemeProviderInterface::class);
-                $themeId                = $this->storeManager->getStore()->getConfig('design/theme/theme_id');
-                $theme                  = $themeProviderInterface->getThemeById($themeId);
-                $themeCode              = $theme->getCode();
-            } catch (NoSuchEntityException $noSuchEntityException) {
+                $themeId = $this->storeManager->getStore()->getConfig('design/theme/theme_id');
+                $theme   = $this->objectManager->get(ThemeProviderInterface::class)->getThemeById($themeId);
+            } catch (Exception $e) {
                 return false;
             }
         }
 
-        if (str_contains(strtolower($themeCode), 'hyva')) {
-            return true;
+        while ($theme) {
+            if (stripos((string) $theme->getCode(), 'Hyva/') === 0) {
+                return true;
+            }
+            $theme = $theme->getParentTheme();
         }
 
         return false;
-    }
-
-    /**
-     * GetThemeCode By Cache in DesignInterface
-     *
-     * @return string
-     */
-    private function getThemeCodeByCache()
-    {
-        /** @var DesignInterface $themeProviderInterface */
-        $themeProviderInterface = $this->objectManager->create(DesignInterface::class);
-        $theme                  = $themeProviderInterface->getDesignTheme();
-
-        $parentTheme = $theme->getParentTheme();
-
-        return $parentTheme ? $parentTheme->getCode() : $theme->getCode();
     }
 
     /**
