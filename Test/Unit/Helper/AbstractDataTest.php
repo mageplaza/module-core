@@ -13,6 +13,10 @@ namespace Mageplaza\Core\Test\Unit\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData;
 use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
@@ -231,5 +235,82 @@ class AbstractDataTest extends TestCase
         $html = AbstractData::getHtmlJqColorPicker('field_id', null);
 
         $this->assertStringContainsString('color: ""', $html);
+    }
+
+    /**
+     * @param string[] $codes theme codes from the rendered theme up to its root parent
+     */
+    private function buildThemeChain(array $codes): ?ThemeInterface
+    {
+        $parent = null;
+        foreach (array_reverse($codes) as $code) {
+            $theme = $this->createStub(ThemeInterface::class);
+            $theme->method('getCode')->willReturn($code);
+            $theme->method('getParentTheme')->willReturn($parent);
+            $parent = $theme;
+        }
+
+        return $parent;
+    }
+
+    /**
+     * @return array<string, array{0: string[], 1: bool}>
+     */
+    public static function hyvaThemeChainProvider(): array
+    {
+        return [
+            'hyva default'                   => [['Hyva/default'], true],
+            'child of hyva'                  => [['Acme/child', 'Hyva/default'], true],
+            'grandchild of hyva'             => [['Acme/grandchild', 'Acme/child', 'Hyva/default'], true],
+            'child of hyva csp'              => [['Acme/csp-child', 'Hyva/default-csp', 'Hyva/default'], true],
+            'child of hyva reset'            => [['Acme/reset-child', 'Hyva/reset'], true],
+            'luma'                           => [['Magento/luma', 'Magento/blank'], false],
+            'hyva in name but luma chain'    => [['Acme/hyva-migration', 'Magento/luma'], false],
+            'child of hyva-named luma theme' => [['Acme/hyva-child', 'Acme/hyva-migration', 'Magento/luma'], false],
+            'empty theme code'               => [[''], false],
+        ];
+    }
+
+    /**
+     * @param string[] $codes
+     */
+    #[DataProvider('hyvaThemeChainProvider')]
+    public function testCheckHyvaThemeWalksThemeChain(array $codes, bool $expected): void
+    {
+        $design = $this->createStub(DesignInterface::class);
+        $design->method('getDesignTheme')->willReturn($this->buildThemeChain($codes));
+        $this->objectManagerMock->method('get')->with(DesignInterface::class)->willReturn($design);
+
+        $this->assertSame($expected, $this->abstractData->checkHyvaTheme());
+    }
+
+    public function testCheckHyvaThemeFallsBackToConfiguredThemeChain(): void
+    {
+        $provider = $this->createStub(ThemeProviderInterface::class);
+        $provider->method('getThemeById')->with(7)->willReturn(
+            $this->buildThemeChain(['Acme/grandchild', 'Acme/child', 'Hyva/default'])
+        );
+        $this->objectManagerMock->method('get')->willReturnCallback(
+            static function (string $class) use ($provider) {
+                if ($class === DesignInterface::class) {
+                    throw new \RuntimeException('no design theme');
+                }
+
+                return $provider;
+            }
+        );
+        $store = $this->createStub(Store::class);
+        $store->method('getConfig')->with('design/theme/theme_id')->willReturn('7');
+        $this->storeManagerMock->method('getStore')->willReturn($store);
+
+        $this->assertTrue($this->abstractData->checkHyvaTheme());
+    }
+
+    public function testCheckHyvaThemeReturnsFalseWhenNoThemeCanBeResolved(): void
+    {
+        $this->objectManagerMock->method('get')->willThrowException(new \RuntimeException('no theme'));
+        $this->storeManagerMock->method('getStore')->willThrowException(new \RuntimeException('no store'));
+
+        $this->assertFalse($this->abstractData->checkHyvaTheme());
     }
 }
