@@ -19,6 +19,13 @@
  */
 
 var config = {
+    map: {
+        '*': {
+            owlCarousel: 'mageplaza/core/owl.carousel',
+            owlSlider: 'mageplaza/core/owl.carousel',
+            mp_productReviewSlider: 'mageplaza/core/owl.carousel'
+        }
+    },
     paths: {
         'jquery/file-uploader': 'Mageplaza_Core/lib/fileUploader/jquery.fileuploader',
         'mageplaza/core/jquery/popup': 'Mageplaza_Core/js/jquery.magnific-popup.min',
